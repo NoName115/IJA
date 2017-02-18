@@ -3,9 +3,14 @@ package src;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import java.lang.IndexOutOfBoundsException;
+import java.lang.NullPointerException;
+
 
 public class PlayGround
 {
+	private static final int NUMBER_OF_PILES = 12;
+
 	private int width;
 	private int height;
 	private int xStartPosition;
@@ -20,6 +25,8 @@ public class PlayGround
 	private ArrayList<DiscardPile> discardPiles;	// 8 decks
 	private ArrayList<LinkedPile> linkedPiles;		// 4 decks
 
+	private Pile[] allPiles;
+
 	public PlayGround(int xPos, int yPos, int width, int height)
 	{
 		this.xStartPosition = xPos;
@@ -30,21 +37,32 @@ public class PlayGround
 		this.actualCard = null;
 
 		// Decks
+		this.allPiles = new Pile[NUMBER_OF_PILES];	// 1 + 7 + 4
 		this.deckPile = new DeckPile();
 		this.drawPile = new DrawPile(10 + (80 + 70) * 6, 10, 80, 120);
 		this.discardPiles = new ArrayList<DiscardPile>();
 		this.linkedPiles = new ArrayList<LinkedPile>();
 
+		this.allPiles[0] = drawPile;
 		for (int i = 0; i < 7; ++i)
 		{
 			this.linkedPiles.add(new LinkedPile(10 + (80 + 70) * i, 140, 80, 120));
+			this.allPiles[i + 1] = this.linkedPiles.get(i);
 			if (i % 2 == 0)
 			{
 				this.discardPiles.add(new DiscardPile(10 + (80 + 70) * (i - i / 2), 10, 80, 120));
+				this.allPiles[8 + (i - i / 2)] = this.discardPiles.get(i - i / 2);
 			}
 		}
 
 		this.fillDecks();
+
+		/* DEBUG PRINT
+		for (int i = 0; i < NUMBER_OF_PILES; ++i)
+		{
+			System.out.println(i + ": " + this.allPiles[i].getClass().getSimpleName());
+		}
+		*/
 	}
 
 	private void fillDecks()
@@ -89,9 +107,36 @@ public class PlayGround
 		drawPile.render(g);
 	}
 
+	public boolean checkSection(int ix, int iy)
+	{
+		if (this.xStartPosition <= ix && this.xStartPosition + this.width >= ix)
+		{
+			if (this.yStartPosition <= iy && this.yStartPosition + this.height >= iy)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public void mousePressed(int ix, int iy)
 	{
-		System.out.println("X: " + ix + " Y: " + iy);
+		for (int i = 0; i < NUMBER_OF_PILES; ++i)
+		{
+			if (this.allPiles[i].isInPile(ix, iy))
+			{
+				//System.out.println("IN PILE: " + this.allPiles[i].getClass().getSimpleName());
+
+				this.actualCard = this.allPiles[i].selectPile(ix, iy);
+				if (this.actualCard == null)
+				{
+					break;
+				}
+
+				this.actualCard.printDebug();
+			}
+		}
 	}
 
 	public void mouseReleased(int ix, int iy)

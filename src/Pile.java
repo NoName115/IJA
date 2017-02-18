@@ -17,9 +17,9 @@ public abstract class Pile
 	// NEPREPISUJE SA
 	public boolean isInPile(int ix, int iy)
 	{
-		if (xPosition <= ix && xPosition + width >= ix)
+		if (this.xPosition <= ix && this.xPosition + this.width >= ix)
 		{
-			if (yPosition <= iy && yPosition + height >= iy)
+			if (this.yPosition <= iy && this.yPosition + this.height >= iy)
 			{
 				return true;
 			}

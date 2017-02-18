@@ -2,8 +2,10 @@ package src;
 
 import java.awt.Graphics;
 import java.awt.Color;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 
 
 public class DrawPile extends Pile
@@ -30,19 +32,29 @@ public class DrawPile extends Pile
 	// Render 2 vrchnych kariet z oboch ArrayList-ov
 	public void render(Graphics g)
 	{
+		g.clearRect(this.xPosition, this.yPosition, this.width, this.height);
+		g.clearRect(this.xPosition - 80 - 70, this.yPosition, this.width + 5, this.height + 5);
+
 		g.setColor(Color.BLACK);
 		g.drawRect(this.xPosition, this.yPosition, this.width, this.height);
 		g.drawOval(this.xPosition + this.width / 4, this.yPosition + this.height / 2 - this.width / 4,
 					this.width / 2, this.width / 2);
 
-		for (Card c : this.unReaveledCardList)
+		try
 		{
-			c.render(g);
-		}
+			for (Card c : this.unReaveledCardList)
+			{
+				c.render(g);
+			}
 
-		for (Card c : this.reaveledCardList)
+			for (Card c : this.reaveledCardList)
+			{
+				c.render(g);
+			}
+		}
+		catch (ConcurrentModificationException e)
 		{
-			c.render(g);
+			System.out.println("Ocakavana chyba: " + e);
 		}
 	}
 
@@ -57,8 +69,10 @@ public class DrawPile extends Pile
 			{
 				Card tempCard = reaveledCardList.get(0);
 				unReaveledCardList.add(tempCard);
-				tempCard.faceDown();
 				reaveledCardList.remove(0);
+
+				tempCard.faceDown();
+				tempCard.setDefaultPosition(this.xPosition, this.yPosition);
 			}
 
 			return null;
@@ -69,7 +83,9 @@ public class DrawPile extends Pile
 		Card tempCard = unReaveledCardList.get(indexOfTempCard);
 		unReaveledCardList.remove(indexOfTempCard);
 		reaveledCardList.add(tempCard);
+
 		tempCard.faceUp();
+		tempCard.setDefaultPosition(this.xPosition - 80 - 70, this.yPosition);
 
 		return null;
 	}

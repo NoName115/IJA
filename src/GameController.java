@@ -3,12 +3,15 @@ package src;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.image.BufferStrategy;
 import java.awt.Color;
+
+import java.awt.image.BufferStrategy;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+
+import java.lang.InterruptedException;
 
 
 public class GameController extends Canvas implements Runnable, MouseListener, MouseMotionListener
@@ -75,7 +78,7 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 			if (System.currentTimeMillis() - lastTimeOutput >= 1000)
 			{
 				lastTimeOutput += 1000;
-				System.out.println("Ticks: " + ticks + " FPS: " + frames);
+				//System.out.println("Ticks: " + ticks + " FPS: " + frames);
 				frames = 0;
 				ticks = 0;
 			}
@@ -134,7 +137,7 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 
 	public void mouseReleased(MouseEvent e)
 	{
-		System.out.println("R: " + e.getX() + " : " + e.getY());
+		//System.out.println("R: " + e.getX() + " : " + e.getY());
 	}
 
 	public void mouseMoved(MouseEvent e)

@@ -2,6 +2,7 @@ package src;
 
 import java.awt.Graphics;
 import java.awt.Color;
+
 import java.util.ArrayList;
 
 
@@ -15,12 +16,15 @@ public class LinkedPile extends Pile
 	private ArrayList<Card> unReaveledCardList;
 	private ArrayList<Card> reaveledCardList;
 
+	private static int defaultHeight;
+
 	public LinkedPile(int xPos, int yPos, int width, int height)
 	{
 		this.xPosition = xPos;
 		this.yPosition = yPos;
 		this.width = width;
 		this.height = height;
+		this.defaultHeight = height;
 
 		this.unReaveledCardList = new ArrayList<Card>();
 		this.reaveledCardList = new ArrayList<Card>();
@@ -52,7 +56,7 @@ public class LinkedPile extends Pile
 	public void render(Graphics g)
 	{
 		g.setColor(Color.BLACK);
-		g.drawRect(this.xPosition, this.yPosition + Y_CARD_SHIFT, this.width, this.height);
+		g.drawRect(this.xPosition, this.yPosition, this.width, this.height);
 
 		for (Card c : this.unReaveledCardList)
 		{
@@ -74,20 +78,27 @@ public class LinkedPile extends Pile
 
 	public boolean insertCard(Card inputCard)
 	{
-		reaveledCardList.add(inputCard);
 		inputCard.setDefaultPosition(
 			xPosition,
 			yPosition + Y_CARD_SHIFT * (unReaveledCardList.size() + reaveledCardList.size())
 			);
+		reaveledCardList.add(inputCard);
 		return true;
 	}
 
 	public void addCard(Card inputCard)
 	{
-		unReaveledCardList.add(inputCard);
 		inputCard.setDefaultPosition(
 			this.xPosition,
 			this.yPosition + Y_CARD_SHIFT * unReaveledCardList.size()
 			);
+		unReaveledCardList.add(inputCard);
+		this.calculateNewHeight();
+	}
+
+	private void calculateNewHeight()
+	{
+		int sizeOfLists = unReaveledCardList.size() + reaveledCardList.size();
+		this.height = sizeOfLists > 1 ? (sizeOfLists - 1) * Y_CARD_SHIFT + this.defaultHeight : this.defaultHeight;
 	}
 }
