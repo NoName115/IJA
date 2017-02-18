@@ -1,6 +1,7 @@
 package src;
 
 import java.awt.Graphics;
+import java.awt.Color;
 import java.util.ArrayList;
 
 
@@ -27,7 +28,9 @@ public class DiscardPile extends Pile
 	// lastIndex a lastIndex - 1
 	public void render(Graphics g)
 	{
-		return;
+		g.setColor(Color.BLACK);
+		g.drawRect(this.xPosition, this.yPosition, this.width, this.height);
+		g.drawString("A", this.xPosition + this.width / 2, this.yPosition + this.height / 2);
 	}
 
 	public Card selectPile(int ix, int iy)

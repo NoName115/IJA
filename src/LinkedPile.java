@@ -9,7 +9,7 @@ public class LinkedPile extends Pile
 	// TODO
 	// meni sa HEIGHT ked sa prida/odoberie karta
 
-	private static final int Y_CARD_SHIFT = 10;
+	private static final int Y_CARD_SHIFT = 40;
 	private ArrayList<Card> unReaveledCardList;
 	private ArrayList<Card> reaveledCardList;
 
@@ -24,16 +24,21 @@ public class LinkedPile extends Pile
 		this.reaveledCardList = new ArrayList<Card>();
 	}
 
+	// Ked je unReaveledCardList,
+	// tak prida kartu na top-e do reaveledCardList
 	public void update()
 	{
 		return;
 	}
 
 	// Render vsetkych kariet
-	// Najprv sa renderuje unRevealedCardList
-	public void render()
+	// Najprv sa renderuje unReaveledCardList
+	public void render(Graphics g)
 	{
-		return;
+		for (Card c : this.unReaveledCardList)
+		{
+			c.render(g);
+		}
 	}
 
 	// TODO
@@ -51,5 +56,14 @@ public class LinkedPile extends Pile
 			yPosition + Y_CARD_SHIFT * (unReaveledCardList.size() + reaveledCardList.size())
 			);
 		return true;
+	}
+
+	public void addCard(Card inputCard)
+	{
+		unReaveledCardList.add(inputCard);
+		inputCard.setDefaultPosition(
+			this.xPosition,
+			this.yPosition + Y_CARD_SHIFT * unReaveledCardList.size()
+			);
 	}
 }

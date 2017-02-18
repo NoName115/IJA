@@ -13,12 +13,14 @@ import java.awt.event.MouseMotionListener;
 
 public class GameController extends Canvas implements Runnable, MouseListener, MouseMotionListener
 {
-	private static final int WIDTH = 500;	//1500
-	private static final int HEIGHT = 270;	//800
+	private static final int WIDTH = 1000;	//1500
+	private static final int HEIGHT = 540;	//800
 	private boolean isRunning;
 
 	private static final int CARD_WIDTH = 20;
 	private static final int CARD_HEIGHT = 20;
+
+	private PlayGround firstPlayGround;
 
 	// Konstruktor
 	public GameController()
@@ -28,6 +30,8 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		this.setSize(new Dimension(WIDTH, HEIGHT));
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
+
+		firstPlayGround = new PlayGround(10, 10, WIDTH - 10, HEIGHT - 10);
 	}
 
 	// Loop pre hru
@@ -47,6 +51,7 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		{
 			long nowTimeCycle = System.nanoTime();
 			unproccesedTicks += (nowTimeCycle - lastTimeCycle) / nsPerTick;
+			lastTimeCycle = nowTimeCycle;
 
 			while (unproccesedTicks >= 1)
 			{
@@ -90,7 +95,7 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 	// Update pre logiku hry
 	private void update()
 	{
-		return;
+		firstPlayGround.update();
 	}
 
 	// Render hry
@@ -105,8 +110,9 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 
 		Graphics g = buffer.getDrawGraphics();
 
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, WIDTH, HEIGHT);
+		
+		firstPlayGround.render(g);
+
 
 		g.dispose();
 		buffer.show();
@@ -114,7 +120,16 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 
 	public void mousePressed(MouseEvent e)
 	{
-		System.out.println("P: " + e.getX() + " : " + e.getY());
+		// Check sector
+		if (firstPlayGround.getXStartPosition() <= e.getX() &&
+			firstPlayGround.getXStartPosition() + firstPlayGround.getWidth() >= e.getX())
+		{
+			if (firstPlayGround.getYStartPosition() <= e.getY() &&
+				firstPlayGround.getYStartPosition() + firstPlayGround.getHeight() >= e.getY())
+			{
+				firstPlayGround.mousePressed(e.getX(), e.getY());
+			}
+		}
 	}
 
 	public void mouseReleased(MouseEvent e)
@@ -130,7 +145,7 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 	// Nepotrebane funkcie, musia byt definovane
 	public void mouseClicked(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
-	public void mouseEntered(MouseEvent e){}
+	public void mouseEntered(MouseEvent e) {}
 	public void mouseDragged(MouseEvent e) {}
 
 	public int getWidth()
