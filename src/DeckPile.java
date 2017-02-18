@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
+// Trieda pre vygenerovanie celeho balicka kariet
 public class DeckPile extends Pile
 {
 	private ArrayList<Card> deck;

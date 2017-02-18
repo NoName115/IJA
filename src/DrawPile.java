@@ -1,6 +1,7 @@
 package src;
 
 import java.awt.Graphics;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -29,7 +30,20 @@ public class DrawPile extends Pile
 	// Render 2 vrchnych kariet z oboch ArrayList-ov
 	public void render(Graphics g)
 	{
-		return;
+		g.setColor(Color.BLACK);
+		g.drawRect(this.xPosition, this.yPosition, this.width, this.height);
+		g.drawOval(this.xPosition + this.width / 4, this.yPosition + this.height / 2 - this.width / 4,
+					this.width / 2, this.width / 2);
+
+		for (Card c : this.unReaveledCardList)
+		{
+			c.render(g);
+		}
+
+		for (Card c : this.reaveledCardList)
+		{
+			c.render(g);
+		}
 	}
 
 	public Card selectPile(int ix, int iy)
@@ -41,7 +55,9 @@ public class DrawPile extends Pile
 			Collections.reverse(reaveledCardList);
 			while (!reaveledCardList.isEmpty())
 			{
-				unReaveledCardList.add(reaveledCardList.get(0));
+				Card tempCard = reaveledCardList.get(0);
+				unReaveledCardList.add(tempCard);
+				tempCard.faceDown();
 				reaveledCardList.remove(0);
 			}
 
@@ -53,6 +69,7 @@ public class DrawPile extends Pile
 		Card tempCard = unReaveledCardList.get(indexOfTempCard);
 		unReaveledCardList.remove(indexOfTempCard);
 		reaveledCardList.add(tempCard);
+		tempCard.faceUp();
 
 		return null;
 	}
@@ -65,5 +82,6 @@ public class DrawPile extends Pile
 	public void addCard(Card inputCard)
 	{
 		this.unReaveledCardList.add(inputCard);
+		inputCard.setDefaultPosition(this.xPosition, this.yPosition);
 	}
 }

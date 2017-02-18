@@ -67,7 +67,10 @@ public class PlayGround
 	// Update pre logiku hry
 	public void update()
 	{
-		return;
+		for (LinkedPile lp : this.linkedPiles)
+		{
+			lp.update();
+		}
 	}
 
 	// Render hry
@@ -82,6 +85,8 @@ public class PlayGround
 		{
 			dp.render(g);
 		}
+
+		drawPile.render(g);
 	}
 
 	public void mousePressed(int ix, int iy)

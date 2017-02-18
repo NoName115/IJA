@@ -21,7 +21,7 @@ public class DiscardPile extends Pile
 
 	public void update()
 	{
-		return;
+		// NOTHING
 	}
 
 	// Render staci len vrchnych 2 kariet
@@ -31,6 +31,11 @@ public class DiscardPile extends Pile
 		g.setColor(Color.BLACK);
 		g.drawRect(this.xPosition, this.yPosition, this.width, this.height);
 		g.drawString("A", this.xPosition + this.width / 2, this.yPosition + this.height / 2);
+
+		for (Card c : this.cardList)
+		{
+			c.render(g);
+		}
 	}
 
 	public Card selectPile(int ix, int iy)
