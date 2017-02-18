@@ -32,7 +32,7 @@ public class LinkedPile extends Pile
 
 	public void update()
 	{
-		return;
+		// NOTHING
 	}
 
 	// Render vsetkych kariet
@@ -54,7 +54,7 @@ public class LinkedPile extends Pile
 	}
 
 	// Vytvorit objekt ktory obsahuje Card a ArrayList
-	public Card selectPile(int ix, int iy)
+	public CardOrList selectPile(int ix, int iy)
 	{
 		if (this.reaveledCardList.isEmpty())
 		{
@@ -66,37 +66,53 @@ public class LinkedPile extends Pile
 			int startYPos = this.reaveledCardList.get(0).getYDefaultPosition();
 			int endYPos = startYPos + (this.reaveledCardList.size() - 1) * Y_CARD_SHIFT + this.defaultHeight;
 
-			Card tempCard = null;
-			boolean returnCard = false;
+			CardOrList tempCardOrList = null;
 
 			if (startYPos <= iy && endYPos >= iy)
 			{
 				for (int i = 0; i <= (endYPos - startYPos - this.defaultHeight) / Y_CARD_SHIFT; ++i)
 				{
+					System.out.println("I: " + i);
+
 					// Karty kde vidno len vrch
 					if (this.reaveledCardList.size() - 1 != i)
 					{
+						System.out.println("_1_");
+
 						if ((startYPos + Y_CARD_SHIFT * i) <= iy && (startYPos + Y_CARD_SHIFT * (i + 1)) > iy)
 						{
-							returnCard = true;
+							System.out.println("TU SOM: " + i + " - " + this.reaveledCardList.size());
+
+							// Vrati cely zoznam kariet
+							int sizeOfReaveledList = this.reaveledCardList.size();
+							ArrayList<Card> outputCardList = new ArrayList<Card>();
+
+							for (int j = i; j < sizeOfReaveledList; ++j)
+							{
+								outputCardList.add(this.reaveledCardList.get(i));
+								this.reaveledCardList.remove(i);
+							}
+
+							tempCardOrList =  new CardOrList(null, outputCardList);
 						}
 					}
 					// Vrchna karta z reaveledCardList
 					else
 					{
+						System.out.println("_2_");
+
 						if ((startYPos + Y_CARD_SHIFT * i) <= iy && (startYPos + Y_CARD_SHIFT * i + this.defaultHeight) >= iy)
 						{
-							returnCard = true;
+							System.out.println("_22_");
+
+							// Vrati len samotnu kartu
+							tempCardOrList = new CardOrList(this.reaveledCardList.get(i), null);
+							this.reaveledCardList.remove(i);
 						}
 					}
 
-					if (returnCard)
-					{
-						tempCard = this.reaveledCardList.get(i);
-						this.reaveledCardList.remove(i);
-						this.calculateNewHeight();
-						return tempCard;
-					}
+					this.calculateNewHeight();
+					return tempCardOrList;
 				}
 			}
 		}
@@ -104,31 +120,69 @@ public class LinkedPile extends Pile
 		return null;
 	}
 
-	public boolean insertCard(Card inputCard)
+	// insertCardOrList
+	public boolean insertCard(CardOrList inputCardOrList)
 	{
-		if (inputCard == null)
+		if (inputCardOrList == null)
 		{
 			return false;
 		}
 
-		inputCard.setDefaultPosition(
-			xPosition,
-			yPosition + Y_CARD_SHIFT * (this.unReaveledCardList.size() + this.reaveledCardList.size())
-			);
-		this.reaveledCardList.add(inputCard);
-		this.calculateNewHeight();
-		return true;
-	}
-
-	public void returnCard(Card inputCard)
-	{
-		if (inputCard != null)
+		Card inputCard;
+		if ((inputCard = inputCardOrList.getCard()) != null)
 		{
 			inputCard.setDefaultPosition(
 				this.xPosition,
 				this.yPosition + Y_CARD_SHIFT * (this.unReaveledCardList.size() + this.reaveledCardList.size())
 				);
 			this.reaveledCardList.add(inputCard);
+		}
+
+		ArrayList<Card> listOfCards;
+		if ((listOfCards = inputCardOrList.getList()) != null)
+		{
+			for (int i = 0; i < listOfCards.size(); ++i)
+			{
+				listOfCards.get(i).setDefaultPosition(
+					this.xPosition,
+					this.yPosition + Y_CARD_SHIFT * (this.unReaveledCardList.size() + this.reaveledCardList.size()) 
+					);
+				this.reaveledCardList.add(listOfCards.get(i));
+			}
+		}
+
+		this.calculateNewHeight();
+		return true;
+	}
+
+	// returnCardOrListToPile
+	public void returnCard(CardOrList inputCardOrList)
+	{
+		if (inputCardOrList != null)
+		{
+			Card inputCard;
+			if ((inputCard = inputCardOrList.getCard()) != null)
+			{
+				inputCard.setDefaultPosition(
+					this.xPosition,
+					this.yPosition + Y_CARD_SHIFT * (this.unReaveledCardList.size() + this.reaveledCardList.size())
+					);
+				this.reaveledCardList.add(inputCard);
+			}
+
+			ArrayList<Card> listOfCards;
+			if ((listOfCards = inputCardOrList.getList()) != null)
+			{
+				for (int i = 0; i < listOfCards.size(); ++i)
+				{
+					listOfCards.get(i).setDefaultPosition(
+						this.xPosition,
+						this.yPosition + Y_CARD_SHIFT * (this.unReaveledCardList.size() + this.reaveledCardList.size()) 
+						);
+					this.reaveledCardList.add(listOfCards.get(i));
+				}
+			}
+
 			this.calculateNewHeight();
 		}
 	}

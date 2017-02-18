@@ -47,7 +47,7 @@ public class DrawPile extends Pile
 		}
 	}
 
-	public Card selectPile(int ix, int iy)
+	public CardOrList selectPile(int ix, int iy)
 	{
 		// Dotahovaci balicek je prazdny a treba vsetko
 		// z reaveledCardList dat do unReaveledCardList ale reveznute

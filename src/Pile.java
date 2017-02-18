@@ -30,28 +30,16 @@ public abstract class Pile
 
 	// Urobi akciu pri kliknuti na Pile
 	// ak je potrebne vrati Card
-	public Card selectPile(int ix, int iy)
-	{
-		return null;
-	}
+	public CardOrList selectPile(int ix, int iy) { return null; }
 
 	// Vlozi kartu do Pile-u
 	// Vrati true ak sa karta vlozila, inac false
 	// Pouziva sa pri pridani karty pocas hry
-	public boolean insertCard(Card inputCard)
-	{
-		return false;
-	}
+	public boolean insertCard(CardOrList inputCardOrList) { return false; }
 
-	public void returnCard(Card inputCard)
-	{
-		return;
-	}
+	public void returnCard(CardOrList inputCardOrList) {}
 
-	public void actionEnded()
-	{
-		return;
-	}
+	public void actionEnded() {}
 
 	// Pouziva sa pri pridani kariet na zaciatku hry
 	abstract public void addCard(Card inputCard);

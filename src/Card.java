@@ -71,6 +71,9 @@ public class Card
 	{
 		this.xActualPosition = x;
 		this.yActualPosition = y;
+
+		//this.xActualPosition = this.xDefaultPosition - x;
+		//this.yActualPosition = this.yDefaultPosition - y;
 	}
 
 	public void faceUp()

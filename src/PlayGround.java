@@ -21,7 +21,7 @@ public class PlayGround
 	private boolean firstUpdate = false;
 
 	// Aktualne selecnuta karta
-	private Card actualCard;
+	private CardOrList actualCardOrList;
 	private Pile actualPile;
 
 	// Vsetky decky potrebne pre hranie
@@ -39,7 +39,7 @@ public class PlayGround
 		this.width = width;
 		this.height = height;
 
-		this.actualCard = null;
+		this.actualCardOrList = null;
 		this.actualPile = null;
 
 		// Decks
@@ -115,9 +115,9 @@ public class PlayGround
 
 			drawPile.render(g);
 
-			if (this.actualCard != null)
+			if (this.actualCardOrList != null)
 			{
-				this.actualCard.render(g);
+				this.actualCardOrList.render(g);
 			}
 		}
 		catch (ConcurrentModificationException e)
@@ -148,12 +148,12 @@ public class PlayGround
 			if (this.allPiles[i].isInPile(ix, iy))
 			{
 				this.actualPile = this.allPiles[i];
-				this.actualCard = this.allPiles[i].selectPile(ix, iy);
+				this.actualCardOrList = this.allPiles[i].selectPile(ix, iy);
 
-				if (this.actualCard != null)
+				if (this.actualCardOrList != null)
 				{
-					this.actualCard.printDebug();
-					this.actualCard.setIsDragged(true);
+					//this.actualCardOrList.printDebug();
+					this.actualCardOrList.setIsDragged(true);
 				}
 			}
 		}
@@ -161,35 +161,41 @@ public class PlayGround
 
 	public void mouseReleased(int ix, int iy)
 	{
-		if (this.actualCard != null)
+		if (this.actualCardOrList != null)
 		{
 			for (int i = 0; i < NUMBER_OF_PILES; ++i)
 			{
 				if (this.allPiles[i].isInPile(ix, iy))
 				{
-					boolean wasInserted = this.allPiles[i].insertCard(this.actualCard);
+					boolean wasInserted = this.allPiles[i].insertCard(this.actualCardOrList);
+					if (!wasInserted)
+					{
+						// Urobi return kariet
+						break;
+					}
+
 					this.actualPile.actionEnded();
-					this.actualCard.setIsDragged(false);
+					this.actualCardOrList.setIsDragged(false);
 
 					this.actualPile = null;
-					this.actualCard = null;
+					this.actualCardOrList = null;
 					return;
 				}
 			}
 
-			this.actualPile.returnCard(this.actualCard);
-			this.actualCard.setIsDragged(false);
+			this.actualPile.returnCard(this.actualCardOrList);
+			this.actualCardOrList.setIsDragged(false);
 		}
 
 		this.actualPile = null;
-		this.actualCard = null;
+		this.actualCardOrList = null;
 	}
 
 	public void mouseDragged(int ix, int iy)
 	{
-		if (this.actualCard != null)
+		if (this.actualCardOrList != null)
 		{
-			this.actualCard.setActualPosition(ix, iy);
+			this.actualCardOrList.setActualPosition(ix, iy);
 		}
 	}
 
