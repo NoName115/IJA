@@ -45,7 +45,9 @@ public class DiscardPile extends Pile
 			return null;
 		}
 
-		return cardList.get(cardList.size() - 1);
+		Card tempCard = cardList.get(cardList.size() - 1);
+		cardList.remove(cardList.size() - 1);
+		return tempCard;
 	}
 
 	public boolean insertCard(Card inputCard)
@@ -55,12 +57,24 @@ public class DiscardPile extends Pile
 			return false;
 		}
 
-		cardList.add(inputCard);
 		inputCard.setDefaultPosition(
 			this.xPosition,
 			this.yPosition
 			);
+		this.cardList.add(inputCard);
 		return true;
+	}
+
+	public void returnCard(Card inputCard)
+	{
+		if (inputCard != null)
+		{
+			inputCard.setDefaultPosition(
+				this.xPosition,
+				this.yPosition
+				);
+			this.cardList.add(inputCard);
+		}
 	}
 
 	public void addCard(Card inputCard)

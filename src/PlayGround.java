@@ -1,7 +1,9 @@
 package src;
 
 import java.awt.Graphics;
+
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import java.lang.IndexOutOfBoundsException;
 import java.lang.NullPointerException;
@@ -18,6 +20,7 @@ public class PlayGround
 
 	// Aktualne selecnuta karta
 	private Card actualCard;
+	private Pile actualPile;
 
 	// Vsetky decky potrebne pre hranie
 	private DeckPile deckPile;
@@ -35,6 +38,7 @@ public class PlayGround
 		this.height = height;
 
 		this.actualCard = null;
+		this.actualPile = null;
 
 		// Decks
 		this.allPiles = new Pile[NUMBER_OF_PILES];	// 1 + 7 + 4
@@ -56,13 +60,6 @@ public class PlayGround
 		}
 
 		this.fillDecks();
-
-		/* DEBUG PRINT
-		for (int i = 0; i < NUMBER_OF_PILES; ++i)
-		{
-			System.out.println(i + ": " + this.allPiles[i].getClass().getSimpleName());
-		}
-		*/
 	}
 
 	private void fillDecks()
@@ -94,17 +91,33 @@ public class PlayGround
 	// Render hry
 	public void render(Graphics g)
 	{
-		for (LinkedPile lp : this.linkedPiles)
+		g.clearRect(this.xStartPosition, this.yStartPosition, this.width, this.width);
+
+		try
 		{
-			lp.render(g);
+			for (LinkedPile lp : this.linkedPiles)
+			{
+				lp.render(g);
+			}
+
+			for (DiscardPile dp : this.discardPiles)
+			{
+				dp.render(g);
+			}
+
+			drawPile.render(g);
+
+			if (this.actualCard != null)
+			{
+				this.actualCard.render(g);
+			}
+		}
+		catch (ConcurrentModificationException e)
+		{
+			System.out.println("Ocakavana chyba: " + e);
 		}
 
-		for (DiscardPile dp : this.discardPiles)
-		{
-			dp.render(g);
-		}
-
-		drawPile.render(g);
+		
 	}
 
 	public boolean checkSection(int ix, int iy)
@@ -126,27 +139,58 @@ public class PlayGround
 		{
 			if (this.allPiles[i].isInPile(ix, iy))
 			{
-				//System.out.println("IN PILE: " + this.allPiles[i].getClass().getSimpleName());
+				this.actualPile = this.allPiles[i];
 
 				this.actualCard = this.allPiles[i].selectPile(ix, iy);
-				if (this.actualCard == null)
+				if (this.actualCard != null)
 				{
-					break;
+					this.actualCard.printDebug();
+					this.actualCard.setIsDragged(true);
 				}
-
-				this.actualCard.printDebug();
 			}
 		}
 	}
 
 	public void mouseReleased(int ix, int iy)
 	{
-		return;
+		for (int i = 0; i < NUMBER_OF_PILES; ++i)
+		{
+			if (this.allPiles[i].isInPile(ix, iy))
+			{
+				boolean wasInserted = this.allPiles[i].insertCard(this.actualCard);
+
+				if (this.actualCard != null)
+				{
+					this.actualCard.setIsDragged(false);
+				}
+
+				this.actualPile = null;
+				this.actualCard = null;
+				return;
+			}
+		}
+
+		if (this.actualCard != null)
+		{
+			this.actualCard.setIsDragged(false);
+		}
+
+		if (this.actualPile != null)
+		{
+			this.actualPile.returnCard(this.actualCard);
+		}
+		
+		this.actualPile = null;
+		this.actualCard = null;
+
 	}
 
-	public void mouseMoved(int ix, int iy)
+	public void mouseDragged(int ix, int iy)
 	{
-		return;
+		if (this.actualCard != null)
+		{
+			this.actualCard.setActualPosition(ix, iy);
+		}
 	}
 
 	public int getXStartPosition()

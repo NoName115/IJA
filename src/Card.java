@@ -18,6 +18,8 @@ public class Card
 	private String type;
 	private boolean isReaveled;
 
+	private boolean isDragged;
+
 	//priavte Image
 
 	public Card(String cardNumber, String cardType)
@@ -25,6 +27,7 @@ public class Card
 		this.number = cardNumber;
 		this.type = cardType;
 		this.isReaveled = false;
+		this.isDragged = false;
 	}
 
 	public void update()
@@ -34,21 +37,27 @@ public class Card
 
 	public void render(Graphics g)
 	{
+		if (!this.isDragged)
+		{
+			this.xActualPosition = this.xDefaultPosition;
+			this.yActualPosition = this.yDefaultPosition;
+		}
+
 		g.setColor(Color.BLACK);
-		g.drawRect(this.xDefaultPosition, this.yDefaultPosition, this.width, this.height);
+		g.drawRect(this.xActualPosition, this.yActualPosition, this.width, this.height);
 
 		if (isReaveled)
 		{
 			g.setColor(Color.WHITE);
-			g.fillRect(this.xDefaultPosition + 1, this.yDefaultPosition + 1, this.width - 1, this.height - 1);
+			g.fillRect(this.xActualPosition + 1, this.yActualPosition + 1, this.width - 1, this.height - 1);
 
 			g.setColor(Color.BLACK);
-			g.drawString(number + " " + type, this.xDefaultPosition + 10, this.yDefaultPosition + 15);
+			g.drawString(number + " " + type, this.xActualPosition + 10, this.yActualPosition + 15);
 		}
 		else
 		{
 			g.setColor(Color.GRAY);
-			g.fillRect(this.xDefaultPosition + 1, this.yDefaultPosition + 1, this.width - 1, this.height - 1);
+			g.fillRect(this.xActualPosition + 1, this.yActualPosition + 1, this.width - 1, this.height - 1);
 		}
 	}
 
@@ -56,6 +65,12 @@ public class Card
 	{
 		this.xDefaultPosition = x;
 		this.yDefaultPosition = y;
+	}
+
+	public void setActualPosition(int x, int y)
+	{
+		this.xActualPosition = x;
+		this.yActualPosition = y;
 	}
 
 	public void faceUp()
@@ -68,8 +83,23 @@ public class Card
 		this.isReaveled = false;
 	}
 
+	public void setIsDragged(boolean iBool)
+	{
+		this.isDragged = iBool;
+	}
+
 	public void printDebug()
 	{
 		System.out.println(number + " : " + type);
+	}
+
+	public int getXDefaultPostion()
+	{
+		return this.xDefaultPosition;
+	}
+
+	public int getYDefaultPosition()
+	{
+		return this.yDefaultPosition;
 	}
 }

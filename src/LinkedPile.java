@@ -56,7 +56,7 @@ public class LinkedPile extends Pile
 	public void render(Graphics g)
 	{
 		g.setColor(Color.BLACK);
-		g.drawRect(this.xPosition, this.yPosition, this.width, this.height);
+		g.drawRect(this.xPosition, this.yPosition, this.width, this.defaultHeight);
 
 		for (Card c : this.unReaveledCardList)
 		{
@@ -69,36 +69,97 @@ public class LinkedPile extends Pile
 		}
 	}
 
-	// TODO
 	// Vytvorit objekt ktory obsahuje Card a ArrayList
 	public Card selectPile(int ix, int iy)
 	{
+		if (this.reaveledCardList.isEmpty())
+		{
+			return null;
+		}
+
+		if (this.xPosition <= ix && this.xPosition + this.width >= ix)
+		{
+			int startYPos = this.reaveledCardList.get(0).getYDefaultPosition();
+			int endYPos = startYPos + (this.reaveledCardList.size() - 1) * Y_CARD_SHIFT + this.defaultHeight;
+
+			Card tempCard = null;
+			boolean returnCard = false;
+
+			if (startYPos <= iy && endYPos >= iy)
+			{
+				for (int i = 0; i <= (endYPos - startYPos - this.defaultHeight) / Y_CARD_SHIFT; ++i)
+				{
+					// Karty kde vidno len vrch
+					if (this.reaveledCardList.size() - 1 != i)
+					{
+						if ((startYPos + Y_CARD_SHIFT * i) <= iy && (startYPos + Y_CARD_SHIFT * (i + 1)) > iy)
+						{
+							returnCard = true;
+						}
+					}
+					// Vrchna karta z reaveledCardList
+					else
+					{
+						if ((startYPos + Y_CARD_SHIFT * i) <= iy && (startYPos + Y_CARD_SHIFT * i + this.defaultHeight) >= iy)
+						{
+							returnCard = true;
+						}
+					}
+
+					if (returnCard)
+					{
+						tempCard = this.reaveledCardList.get(i);
+						this.reaveledCardList.remove(i);
+						return tempCard;
+					}
+				}
+			}
+		}
 		return null;
 	}
 
 	public boolean insertCard(Card inputCard)
 	{
+		if (inputCard == null)
+		{
+			return false;
+		}
+
 		inputCard.setDefaultPosition(
 			xPosition,
-			yPosition + Y_CARD_SHIFT * (unReaveledCardList.size() + reaveledCardList.size())
+			yPosition + Y_CARD_SHIFT * (this.unReaveledCardList.size() + this.reaveledCardList.size())
 			);
-		reaveledCardList.add(inputCard);
+		this.reaveledCardList.add(inputCard);
+		this.calculateNewHeight();
 		return true;
+	}
+
+	public void returnCard(Card inputCard)
+	{
+		if (inputCard != null)
+		{
+			inputCard.setDefaultPosition(
+				this.xPosition,
+				this.yPosition + Y_CARD_SHIFT * (this.unReaveledCardList.size() + this.reaveledCardList.size())
+				);
+			this.reaveledCardList.add(inputCard);
+			this.calculateNewHeight();
+		}
 	}
 
 	public void addCard(Card inputCard)
 	{
 		inputCard.setDefaultPosition(
 			this.xPosition,
-			this.yPosition + Y_CARD_SHIFT * unReaveledCardList.size()
+			this.yPosition + Y_CARD_SHIFT * this.unReaveledCardList.size()
 			);
-		unReaveledCardList.add(inputCard);
+		this.unReaveledCardList.add(inputCard);
 		this.calculateNewHeight();
 	}
 
 	private void calculateNewHeight()
 	{
-		int sizeOfLists = unReaveledCardList.size() + reaveledCardList.size();
+		int sizeOfLists = this.unReaveledCardList.size() + this.reaveledCardList.size();
 		this.height = sizeOfLists > 1 ? (sizeOfLists - 1) * Y_CARD_SHIFT + this.defaultHeight : this.defaultHeight;
 	}
 }

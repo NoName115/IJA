@@ -34,7 +34,7 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 
-		firstPlayGround = new PlayGround(10, 10, WIDTH - 10, HEIGHT - 10);
+		firstPlayGround = new PlayGround(0, 0, WIDTH, HEIGHT);
 	}
 
 	// Loop pre hru
@@ -137,19 +137,20 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 
 	public void mouseReleased(MouseEvent e)
 	{
-		//System.out.println("R: " + e.getX() + " : " + e.getY());
+		firstPlayGround.mouseReleased(e.getX(), e.getY());
 	}
 
-	public void mouseMoved(MouseEvent e)
+	public void mouseDragged(MouseEvent e)
 	{
-		// TODO
+		firstPlayGround.mouseDragged(e.getX(), e.getY());
 	}
 
 	// Nepotrebane funkcie, musia byt definovane
 	public void mouseClicked(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
-	public void mouseDragged(MouseEvent e) {}
+	public void mouseMoved(MouseEvent e) {}
+	
 
 	public int getWidth()
 	{

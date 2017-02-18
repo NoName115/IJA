@@ -43,6 +43,11 @@ public abstract class Pile
 		return false;
 	}
 
+	public void returnCard(Card inputCard)
+	{
+		return;
+	}
+
 	// Pouziva sa pri pridani kariet na zaciatku hry
 	abstract public void addCard(Card inputCard);
 }
