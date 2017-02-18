@@ -18,6 +18,8 @@ public class PlayGround
 	private int xStartPosition;
 	private int yStartPosition;
 
+	private boolean firstUpdate = false;
+
 	// Aktualne selecnuta karta
 	private Card actualCard;
 	private Pile actualPile;
@@ -60,6 +62,7 @@ public class PlayGround
 		}
 
 		this.fillDecks();
+		this.firstUpdate = true;
 	}
 
 	private void fillDecks()
@@ -82,9 +85,14 @@ public class PlayGround
 	// Update pre logiku hry
 	public void update()
 	{
-		for (LinkedPile lp : this.linkedPiles)
+		if (this.firstUpdate)
 		{
-			lp.update();
+			// Reavel first cards
+			for (LinkedPile lp : this.linkedPiles)
+			{
+				lp.actionEnded();
+			}
+			this.firstUpdate = false;
 		}
 	}
 
@@ -140,8 +148,8 @@ public class PlayGround
 			if (this.allPiles[i].isInPile(ix, iy))
 			{
 				this.actualPile = this.allPiles[i];
-
 				this.actualCard = this.allPiles[i].selectPile(ix, iy);
+
 				if (this.actualCard != null)
 				{
 					this.actualCard.printDebug();
@@ -153,36 +161,28 @@ public class PlayGround
 
 	public void mouseReleased(int ix, int iy)
 	{
-		for (int i = 0; i < NUMBER_OF_PILES; ++i)
-		{
-			if (this.allPiles[i].isInPile(ix, iy))
-			{
-				boolean wasInserted = this.allPiles[i].insertCard(this.actualCard);
-
-				if (this.actualCard != null)
-				{
-					this.actualCard.setIsDragged(false);
-				}
-
-				this.actualPile = null;
-				this.actualCard = null;
-				return;
-			}
-		}
-
 		if (this.actualCard != null)
 		{
+			for (int i = 0; i < NUMBER_OF_PILES; ++i)
+			{
+				if (this.allPiles[i].isInPile(ix, iy))
+				{
+					boolean wasInserted = this.allPiles[i].insertCard(this.actualCard);
+					this.actualPile.actionEnded();
+					this.actualCard.setIsDragged(false);
+
+					this.actualPile = null;
+					this.actualCard = null;
+					return;
+				}
+			}
+
+			this.actualPile.returnCard(this.actualCard);
 			this.actualCard.setIsDragged(false);
 		}
 
-		if (this.actualPile != null)
-		{
-			this.actualPile.returnCard(this.actualCard);
-		}
-		
 		this.actualPile = null;
 		this.actualCard = null;
-
 	}
 
 	public void mouseDragged(int ix, int iy)

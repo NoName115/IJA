@@ -30,25 +30,9 @@ public class LinkedPile extends Pile
 		this.reaveledCardList = new ArrayList<Card>();
 	}
 
-	// Ked je reaveledCardList prazdny,
-	// tak prida kartu z unReaveledCardList do reaveledCardList
 	public void update()
 	{
-		if (unReaveledCardList.isEmpty())
-		{
-			return;
-		}
-
-		if (reaveledCardList.size() >= 1)
-		{
-			return;
-		}
-
-		int lastCardIndex = unReaveledCardList.size() - 1;
-		Card tempCard = unReaveledCardList.get(lastCardIndex);
-		unReaveledCardList.remove(lastCardIndex);
-		reaveledCardList.add(tempCard);
-		tempCard.faceUp();
+		return;
 	}
 
 	// Render vsetkych kariet
@@ -110,11 +94,13 @@ public class LinkedPile extends Pile
 					{
 						tempCard = this.reaveledCardList.get(i);
 						this.reaveledCardList.remove(i);
+						this.calculateNewHeight();
 						return tempCard;
 					}
 				}
 			}
 		}
+
 		return null;
 	}
 
@@ -145,6 +131,22 @@ public class LinkedPile extends Pile
 			this.reaveledCardList.add(inputCard);
 			this.calculateNewHeight();
 		}
+	}
+
+	// Otoci vrchnu kartu z unReaveledCardList
+	public void actionEnded()
+	{
+		if (unReaveledCardList.isEmpty() || reaveledCardList.size() >= 1)
+		{
+			return;
+		}
+
+		// Reavel top card
+		int lastCardIndex = this.unReaveledCardList.size() - 1;
+		Card tempCard = this.unReaveledCardList.get(lastCardIndex);
+		this.unReaveledCardList.remove(lastCardIndex);
+		this.reaveledCardList.add(tempCard);
+		tempCard.faceUp();
 	}
 
 	public void addCard(Card inputCard)
