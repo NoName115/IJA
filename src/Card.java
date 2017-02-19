@@ -17,10 +17,9 @@ public class Card
 	private String number;
 	private String type;
 	private boolean isReaveled;
-
 	private boolean isDragged;
 
-	//priavte Image
+	//private Image
 
 	public Card(String cardNumber, String cardType)
 	{

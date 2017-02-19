@@ -11,7 +11,7 @@ import java.lang.NullPointerException;
 
 public class PlayGround
 {
-	private static final int NUMBER_OF_PILES = 12;
+	private static final int NUMBER_OF_PILES = 13;
 
 	private int width;
 	private int height;
@@ -27,6 +27,7 @@ public class PlayGround
 	// Vsetky decky potrebne pre hranie
 	private DeckPile deckPile;
 	private DrawPile drawPile;
+	private DrawHelpPile drawHelpPile;
 	private ArrayList<DiscardPile> discardPiles;	// 8 decks
 	private ArrayList<LinkedPile> linkedPiles;		// 4 decks
 
@@ -43,13 +44,15 @@ public class PlayGround
 		this.actualPile = null;
 
 		// Decks
-		this.allPiles = new Pile[NUMBER_OF_PILES];	// 1 + 7 + 4
-		this.deckPile = new DeckPile();
-		this.drawPile = new DrawPile(10 + (80 + 70) * 6, 10, 80, 120);
+		this.allPiles = new Pile[NUMBER_OF_PILES];	// 1 + 1 + 7 + 4
+		this.deckPile = new DeckPile(0, 0, 0, 0);
+		this.drawHelpPile = new DrawHelpPile(10 + (80 + 70) * 5, 10, 80, 120);
+		this.drawPile = new DrawPile(10 + (80 + 70) * 6, 10, 80, 120, this.drawHelpPile);
 		this.discardPiles = new ArrayList<DiscardPile>();
 		this.linkedPiles = new ArrayList<LinkedPile>();
 
-		this.allPiles[0] = drawPile;
+		this.allPiles[0] = this.drawPile;
+		this.allPiles[NUMBER_OF_PILES - 1] = this.drawHelpPile;
 		for (int i = 0; i < 7; ++i)
 		{
 			this.linkedPiles.add(new LinkedPile(10 + (80 + 70) * i, 140, 80, 120));

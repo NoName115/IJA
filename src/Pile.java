@@ -10,6 +10,14 @@ public abstract class Pile
 	protected int width;
 	protected int height;
 
+	public Pile(int xPos, int yPos, int width, int height)
+	{
+		this.xPosition = xPos;
+		this.yPosition = yPos;
+		this.width = width;
+		this.height = height;
+	}
+
 	// Pouziva sa pri pridani kariet na zaciatku hry
 	abstract public void addCard(Card inputCard);
 	abstract public void update();

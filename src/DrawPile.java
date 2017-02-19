@@ -9,18 +9,15 @@ import java.util.Collections;
 
 public class DrawPile extends Pile
 {
-	private ArrayList<Card> unReaveledCardList;
-	private ArrayList<Card> reaveledCardList;
+	private ArrayList<Card> cardList;
+	private DrawHelpPile helpPile;
 
-	public DrawPile(int xPos, int yPos, int width, int height)
+	public DrawPile(int xPos, int yPos, int width, int height, DrawHelpPile helpPile)
 	{
-		this.xPosition = xPos;
-		this.yPosition = yPos;
-		this.width = width;
-		this.height = height;
+		super(xPos, yPos, width, height);
 
-		this.unReaveledCardList = new ArrayList<Card>();
-		this.reaveledCardList = new ArrayList<Card>();
+		this.helpPile = helpPile;
+		this.cardList = new ArrayList<Card>();
 	}
 
 	public void update()
@@ -36,52 +33,48 @@ public class DrawPile extends Pile
 		g.drawOval(this.xPosition + this.width / 4, this.yPosition + this.height / 2 - this.width / 4,
 					this.width / 2, this.width / 2);
 
-		for (Card c : this.unReaveledCardList)
+		for (Card c : this.cardList)
 		{
 			c.render(g);
 		}
 
-		for (Card c : this.reaveledCardList)
+		if (this.helpPile != null)
 		{
-			c.render(g);
+			this.helpPile.render(g);
 		}
 	}
 
 	public ListOfCards selectPile(int ix, int iy)
 	{
 		// Dotahovaci balicek je prazdny a treba vsetko
-		// z reaveledCardList dat do unReaveledCardList ale reveznute
-		if (unReaveledCardList.isEmpty())
+		// z DrawHelpPile dat do DrawPile ale revezne
+		if (this.cardList.isEmpty())
 		{
-			Collections.reverse(reaveledCardList);
-			while (!reaveledCardList.isEmpty())
+			Card inputCard;
+			while((inputCard = this.helpPile.getLastCard()) != null)
 			{
-				Card tempCard = reaveledCardList.get(0);
-				unReaveledCardList.add(tempCard);
-				reaveledCardList.remove(0);
+				this.cardList.add(inputCard);
 
-				tempCard.faceDown();
-				tempCard.setDefaultPosition(this.xPosition, this.yPosition);
+				inputCard.faceDown();
+				inputCard.setDefaultPosition(this.xPosition, this.yPosition);
 			}
 
 			return null;
 		}
 
-		// Prehodi vrchnu kartu z unReaveledCardList do reaveledCardList
-		int indexOfTempCard = unReaveledCardList.size() - 1;
-		Card tempCard = unReaveledCardList.get(indexOfTempCard);
-		unReaveledCardList.remove(indexOfTempCard);
-		reaveledCardList.add(tempCard);
+		// Prehodi vrchnu kartu z DrawPile do DrawHelpPile
+		int lastIndex = this.cardList.size() - 1;
+		Card tempCard = this.cardList.get(lastIndex);
+		this.cardList.remove(lastIndex);
+		this.helpPile.addCard(tempCard);
 
 		tempCard.faceUp();
-		tempCard.setDefaultPosition(this.xPosition - 80 - 70, this.yPosition);
-
 		return null;
 	}
 
 	public void addCard(Card inputCard)
 	{
-		this.unReaveledCardList.add(inputCard);
+		this.cardList.add(inputCard);
 		inputCard.setDefaultPosition(this.xPosition, this.yPosition);
 	}
 }

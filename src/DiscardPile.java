@@ -11,10 +11,7 @@ public class DiscardPile extends Pile
 
 	public DiscardPile(int xPos, int yPos, int width, int height)
 	{
-		this.xPosition = xPos;
-		this.yPosition = yPos;
-		this.width = width;
-		this.height = height;
+		super(xPos, yPos, width, height);
 
 		this.cardList = new ArrayList<Card>();
 	}
@@ -45,8 +42,10 @@ public class DiscardPile extends Pile
 			return null;
 		}
 
-		Card tempCard = cardList.get(cardList.size() - 1);
-		cardList.remove(cardList.size() - 1);
+		int lastIndex = this.cardList.size() - 1;
+		Card tempCard = cardList.get(lastIndex);
+		this.cardList.remove(lastIndex);
+
 		return new ListOfCards(null, tempCard);
 	}
 

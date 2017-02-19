@@ -28,7 +28,7 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 	// Konstruktor
 	public GameController()
 	{
-		//super();	// Konstruktor pre Canvas
+		super();	// Konstruktor pre Canvas
 		this.isRunning = false;
 		this.setSize(new Dimension(WIDTH, HEIGHT));
 		this.addMouseListener(this);

@@ -16,12 +16,9 @@ public class LinkedPile extends Pile
 
 	public LinkedPile(int xPos, int yPos, int width, int height)
 	{
-		this.xPosition = xPos;
-		this.yPosition = yPos;
-		this.width = width;
-		this.height = height;
-		this.defaultHeight = height;
+		super(xPos, yPos, width, height);
 
+		this.defaultHeight = height;
 		this.unReaveledCardList = new ArrayList<Card>();
 		this.reaveledCardList = new ArrayList<Card>();
 	}

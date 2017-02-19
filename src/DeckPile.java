@@ -18,8 +18,10 @@ public class DeckPile extends Pile
 	};
 
 	// Generuje deck o 52 kartach
-	public DeckPile()
+	public DeckPile(int xPos, int yPos, int width, int height)
 	{
+		super(xPos, yPos, width, height);
+
 		this.deck = new ArrayList<Card>();
 
 		// Create whole deck
