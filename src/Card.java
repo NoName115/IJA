@@ -11,8 +11,8 @@ public class Card
 	private int xDefaultPosition;
 	private int yDefaultPosition;
 
-	private static final int width = 80;
-	private static final int height = 120;
+	private static final int width = 70;
+	private static final int height = 100;
 
 	private String number;
 	private String type;

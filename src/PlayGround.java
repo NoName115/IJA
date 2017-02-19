@@ -12,6 +12,10 @@ import java.lang.NullPointerException;
 public class PlayGround
 {
 	private static final int NUMBER_OF_PILES = 13;
+	private static final int PANDING = 15;
+	private static final int Y_CARD_SHIFT = 30;
+	private static final int CARD_WIDTH = 70;
+	private static final int CARD_HEIGHT = 100;
 
 	private int width;
 	private int height;
@@ -46,8 +50,19 @@ public class PlayGround
 		// Decks
 		this.allPiles = new Pile[NUMBER_OF_PILES];	// 1 + 1 + 7 + 4
 		this.deckPile = new DeckPile(0, 0, 0, 0);
-		this.drawHelpPile = new DrawHelpPile(10 + (80 + 70) * 5, 10, 80, 120);
-		this.drawPile = new DrawPile(10 + (80 + 70) * 6, 10, 80, 120, this.drawHelpPile);
+		this.drawHelpPile = new DrawHelpPile(
+			this.xStartPosition + PANDING + (CARD_WIDTH + PANDING) * 5,
+			this.yStartPosition + PANDING,
+			CARD_WIDTH,
+			CARD_HEIGHT
+			);
+		this.drawPile = new DrawPile(
+			this.xStartPosition + PANDING + (CARD_WIDTH + PANDING) * 6,
+			this.yStartPosition + PANDING,
+			CARD_WIDTH,
+			CARD_HEIGHT,
+			this.drawHelpPile
+			);
 		this.discardPiles = new ArrayList<DiscardPile>();
 		this.linkedPiles = new ArrayList<LinkedPile>();
 
@@ -55,11 +70,23 @@ public class PlayGround
 		this.allPiles[NUMBER_OF_PILES - 1] = this.drawHelpPile;
 		for (int i = 0; i < 7; ++i)
 		{
-			this.linkedPiles.add(new LinkedPile(10 + (80 + 70) * i, 140, 80, 120));
+			this.linkedPiles.add(new LinkedPile(
+				this.xStartPosition + PANDING + (CARD_WIDTH + PANDING) * i,
+				this.yStartPosition + PANDING * 2 + CARD_HEIGHT,
+				CARD_WIDTH,
+				CARD_HEIGHT
+				)
+			);
 			this.allPiles[i + 1] = this.linkedPiles.get(i);
 			if (i % 2 == 0)
 			{
-				this.discardPiles.add(new DiscardPile(10 + (80 + 70) * (i - i / 2), 10, 80, 120));
+				this.discardPiles.add(new DiscardPile(
+					this.xStartPosition + PANDING + (CARD_WIDTH + PANDING) * (i - i / 2),
+					this.yStartPosition + PANDING,
+					CARD_WIDTH,
+					CARD_HEIGHT
+					)
+				);
 				this.allPiles[8 + (i - i / 2)] = this.discardPiles.get(i - i / 2);
 			}
 		}
@@ -102,7 +129,7 @@ public class PlayGround
 	// Render hry
 	public void render(Graphics g)
 	{
-		g.clearRect(this.xStartPosition, this.yStartPosition, this.width, this.width);
+		g.clearRect(this.xStartPosition, this.yStartPosition, this.width, this.height);
 
 		try
 		{
@@ -154,7 +181,7 @@ public class PlayGround
 
 				if (this.actualList != null)
 				{
-					this.actualList.printDebug();
+					//this.actualList.printDebug();
 					this.actualList.setIsDragged(true);
 				}
 			}

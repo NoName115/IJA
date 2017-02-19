@@ -11,19 +11,20 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import java.util.ArrayList;
+
 import java.lang.InterruptedException;
 
 
 public class GameController extends Canvas implements Runnable, MouseListener, MouseMotionListener
 {
-	private static final int WIDTH = 1000;	//1500
-	private static final int HEIGHT = 540;	//800
+	private static final int WIDTH = 1220;
+	private static final int HEIGHT = 900;
+	private static final int NUMBER_OF_GAMES = 4;
+
 	private boolean isRunning;
-
-	private static final int CARD_WIDTH = 20;
-	private static final int CARD_HEIGHT = 20;
-
-	private PlayGround firstPlayGround;
+	private ArrayList<PlayGround> listOfGames;
+	private int actualGameIndex;
 
 	// Konstruktor
 	public GameController()
@@ -34,7 +35,72 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 
-		firstPlayGround = new PlayGround(0, 0, WIDTH, HEIGHT);
+		this.actualGameIndex = -1;
+		this.listOfGames = new ArrayList<PlayGround>();
+
+		for (int i = 0; i < NUMBER_OF_GAMES; ++i)
+		{
+			this.listOfGames.add(null);
+		}
+		
+		this.addGame();
+		this.addGame();
+		this.addGame();
+		this.addGame();
+
+		this.addGame();
+		this.addGame();
+	}
+
+	public void addGame()
+	{
+		if (listOfGames.get(0) == null)
+		{
+			this.listOfGames.set(0, new PlayGround(
+				0,
+				0,
+				WIDTH / 2,
+				HEIGHT / 2
+				)
+			);
+			return;
+		}
+
+		if (listOfGames.get(1) == null)
+		{
+			this.listOfGames.set(1, new PlayGround(
+				WIDTH / 2,
+				0,
+				WIDTH / 2,
+				HEIGHT / 2
+				)
+			);
+			return;
+		}
+
+		if (listOfGames.get(2) == null)
+		{
+			this.listOfGames.set(2, new PlayGround(
+				0,
+				HEIGHT / 2,
+				WIDTH / 2,
+				HEIGHT / 2
+				)
+			);
+			return;
+		}
+
+		if (listOfGames.get(3) == null)
+		{
+			this.listOfGames.set(3, new PlayGround(
+				WIDTH / 2,
+				HEIGHT / 2,
+				WIDTH / 2,
+				HEIGHT / 2
+				)
+			);
+			return;
+		}
 	}
 
 	// Loop pre hru
@@ -98,7 +164,13 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 	// Update pre logiku hry
 	private void update()
 	{
-		firstPlayGround.update();
+		for (PlayGround pg : this.listOfGames)
+		{
+			if (pg != null)
+			{
+				pg.update();
+			}
+		}
 	}
 
 	// Render hry
@@ -113,9 +185,13 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 
 		Graphics g = buffer.getDrawGraphics();
 
-		
-		firstPlayGround.render(g);
-
+		for (PlayGround pg : this.listOfGames)
+		{
+			if (pg != null)
+			{
+				pg.render(g);
+			}
+		}
 
 		g.dispose();
 		buffer.show();
@@ -123,26 +199,35 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 
 	public void mousePressed(MouseEvent e)
 	{
-		// Check sector
-		if (firstPlayGround.getXStartPosition() <= e.getX() &&
-			firstPlayGround.getXStartPosition() + firstPlayGround.getWidth() >= e.getX())
+		for (int i = 0; i < listOfGames.size(); ++i)
 		{
-			if (firstPlayGround.getYStartPosition() <= e.getY() &&
-				firstPlayGround.getYStartPosition() + firstPlayGround.getHeight() >= e.getY())
+			PlayGround tempPg;
+			if ((tempPg = listOfGames.get(i)) != null)
 			{
-				firstPlayGround.mousePressed(e.getX(), e.getY());
+				if (tempPg.checkSection(e.getX(), e.getY()))
+				{
+					this.actualGameIndex = i;
+					tempPg.mousePressed(e.getX(), e.getY());
+				}
 			}
 		}
 	}
 
 	public void mouseReleased(MouseEvent e)
 	{
-		firstPlayGround.mouseReleased(e.getX(), e.getY());
+		if (this.actualGameIndex != -1 && listOfGames.get(this.actualGameIndex) != null)
+		{
+			listOfGames.get(this.actualGameIndex).mouseReleased(e.getX(), e.getY());
+			this.actualGameIndex = -1;
+		}
 	}
 
 	public void mouseDragged(MouseEvent e)
 	{
-		firstPlayGround.mouseDragged(e.getX(), e.getY());
+		if (this.actualGameIndex != -1 && listOfGames.get(this.actualGameIndex) != null)
+		{
+			listOfGames.get(this.actualGameIndex).mouseDragged(e.getX(), e.getY());
+		}
 	}
 
 	// Nepotrebane funkcie, musia byt definovane

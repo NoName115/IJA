@@ -1,8 +1,7 @@
  - Mockup
 	- 1 obrazovka, 4 obrazovky
 	- horne menu ako file, option, ....
- - Struktura hry
-	- Triedy, funkcie - viazanost na seba
-	- Render (1/4), Update
-	- GameStateManager? - vzhladom na mockup
-	- 
+ - Hra
+ 	- undo (aspon 5 tahov)
+ 	- ulozit a nacitat hru
+ 	- zobrazit hint

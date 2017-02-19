@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class LinkedPile extends Pile
 {
-	private static final int Y_CARD_SHIFT = 30;
+	private static final int Y_CARD_SHIFT = 20;
 	private ArrayList<Card> unReaveledCardList;
 	private ArrayList<Card> reaveledCardList;
 
