@@ -70,50 +70,34 @@ public class LinkedPile extends Pile
 
 			if (startYPos <= iy && endYPos >= iy)
 			{
-				for (int i = 0; i <= (endYPos - startYPos - this.defaultHeight) / Y_CARD_SHIFT; ++i)
+				int summaryYShift = (this.reaveledCardList.size() - 1 + this.unReaveledCardList.size()) * Y_CARD_SHIFT + this.yPosition;
+
+				// Vrati zoznam kariet do index po koniec zoznamu
+				if (iy < summaryYShift)
 				{
-					System.out.println("I: " + i);
+					int index = (iy - this.yPosition - this.unReaveledCardList.size() * Y_CARD_SHIFT) / Y_CARD_SHIFT;
+					int listSize = this.reaveledCardList.size();
 
-					// Karty kde vidno len vrch
-					if (this.reaveledCardList.size() - 1 != i)
+					ArrayList<Card> outputCardList = new ArrayList<Card>();
+
+					for (int i = index; i < listSize; ++i)
 					{
-						System.out.println("_1_");
-
-						if ((startYPos + Y_CARD_SHIFT * i) <= iy && (startYPos + Y_CARD_SHIFT * (i + 1)) > iy)
-						{
-							System.out.println("TU SOM: " + i + " - " + this.reaveledCardList.size());
-
-							// Vrati cely zoznam kariet
-							int sizeOfReaveledList = this.reaveledCardList.size();
-							ArrayList<Card> outputCardList = new ArrayList<Card>();
-
-							for (int j = i; j < sizeOfReaveledList; ++j)
-							{
-								outputCardList.add(this.reaveledCardList.get(i));
-								this.reaveledCardList.remove(i);
-							}
-
-							tempCardOrList =  new CardOrList(null, outputCardList);
-						}
-					}
-					// Vrchna karta z reaveledCardList
-					else
-					{
-						System.out.println("_2_");
-
-						if ((startYPos + Y_CARD_SHIFT * i) <= iy && (startYPos + Y_CARD_SHIFT * i + this.defaultHeight) >= iy)
-						{
-							System.out.println("_22_");
-
-							// Vrati len samotnu kartu
-							tempCardOrList = new CardOrList(this.reaveledCardList.get(i), null);
-							this.reaveledCardList.remove(i);
-						}
+						outputCardList.add(this.reaveledCardList.get(index));
+						this.reaveledCardList.remove(index);
 					}
 
-					this.calculateNewHeight();
-					return tempCardOrList;
+					tempCardOrList = new CardOrList(null, outputCardList);
 				}
+				// Vrati len 1, poslednu kartu
+				else if (iy >= summaryYShift && iy <= (summaryYShift + this.defaultHeight))
+				{
+					int lastCardIndex = this.reaveledCardList.size() - 1;
+					tempCardOrList = new CardOrList(this.reaveledCardList.get(lastCardIndex), null);
+					this.reaveledCardList.remove(lastCardIndex);
+				}
+
+				this.calculateNewHeight();
+				return tempCardOrList;
 			}
 		}
 
