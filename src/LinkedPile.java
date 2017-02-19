@@ -8,10 +8,6 @@ import java.util.ArrayList;
 
 public class LinkedPile extends Pile
 {
-	// TODO
-	// meni sa HEIGHT ked sa prida/odoberie karta
-	// kvoli funkcii isInPile
-
 	private static final int Y_CARD_SHIFT = 30;
 	private ArrayList<Card> unReaveledCardList;
 	private ArrayList<Card> reaveledCardList;
@@ -54,7 +50,7 @@ public class LinkedPile extends Pile
 	}
 
 	// Vytvorit objekt ktory obsahuje Card a ArrayList
-	public CardOrList selectPile(int ix, int iy)
+	public ListOfCards selectPile(int ix, int iy)
 	{
 		if (this.reaveledCardList.isEmpty())
 		{
@@ -66,7 +62,7 @@ public class LinkedPile extends Pile
 			int startYPos = this.reaveledCardList.get(0).getYDefaultPosition();
 			int endYPos = startYPos + (this.reaveledCardList.size() - 1) * Y_CARD_SHIFT + this.defaultHeight;
 
-			CardOrList tempCardOrList = null;
+			ListOfCards tempList = null;
 
 			if (startYPos <= iy && endYPos >= iy)
 			{
@@ -86,89 +82,64 @@ public class LinkedPile extends Pile
 						this.reaveledCardList.remove(index);
 					}
 
-					tempCardOrList = new CardOrList(null, outputCardList);
+					tempList = new ListOfCards(outputCardList, null);
 				}
 				// Vrati len 1, poslednu kartu
 				else if (iy >= summaryYShift && iy <= (summaryYShift + this.defaultHeight))
 				{
 					int lastCardIndex = this.reaveledCardList.size() - 1;
-					tempCardOrList = new CardOrList(this.reaveledCardList.get(lastCardIndex), null);
+					tempList = new ListOfCards(null, this.reaveledCardList.get(lastCardIndex));
 					this.reaveledCardList.remove(lastCardIndex);
 				}
 
 				this.calculateNewHeight();
-				return tempCardOrList;
+				return tempList;
 			}
 		}
 
 		return null;
 	}
 
-	// insertCardOrList
-	public boolean insertCard(CardOrList inputCardOrList)
+	// insertListOfCards
+	public boolean insertCard(ListOfCards inputList)
 	{
-		if (inputCardOrList == null)
+		if (inputList == null || inputList.isEmpty())
 		{
 			return false;
 		}
 
-		Card inputCard;
-		if ((inputCard = inputCardOrList.getCard()) != null)
+		int counter = 0;
+		for (Card c : inputList.getList())
 		{
-			inputCard.setDefaultPosition(
+			c.setDefaultPosition(
 				this.xPosition,
-				this.yPosition + Y_CARD_SHIFT * (this.unReaveledCardList.size() + this.reaveledCardList.size())
+				this.yPosition + (this.unReaveledCardList.size() + this.reaveledCardList.size()) * Y_CARD_SHIFT
 				);
-			this.reaveledCardList.add(inputCard);
-		}
-
-		ArrayList<Card> listOfCards;
-		if ((listOfCards = inputCardOrList.getList()) != null)
-		{
-			for (int i = 0; i < listOfCards.size(); ++i)
-			{
-				listOfCards.get(i).setDefaultPosition(
-					this.xPosition,
-					this.yPosition + Y_CARD_SHIFT * (this.unReaveledCardList.size() + this.reaveledCardList.size()) 
-					);
-				this.reaveledCardList.add(listOfCards.get(i));
-			}
+			this.reaveledCardList.add(c);
 		}
 
 		this.calculateNewHeight();
 		return true;
 	}
 
-	// returnCardOrListToPile
-	public void returnCard(CardOrList inputCardOrList)
+	// returnListOfCardsToPile
+	public void returnCard(ListOfCards inputList)
 	{
-		if (inputCardOrList != null)
+		if (inputList == null)
 		{
-			Card inputCard;
-			if ((inputCard = inputCardOrList.getCard()) != null)
-			{
-				inputCard.setDefaultPosition(
-					this.xPosition,
-					this.yPosition + Y_CARD_SHIFT * (this.unReaveledCardList.size() + this.reaveledCardList.size())
-					);
-				this.reaveledCardList.add(inputCard);
-			}
-
-			ArrayList<Card> listOfCards;
-			if ((listOfCards = inputCardOrList.getList()) != null)
-			{
-				for (int i = 0; i < listOfCards.size(); ++i)
-				{
-					listOfCards.get(i).setDefaultPosition(
-						this.xPosition,
-						this.yPosition + Y_CARD_SHIFT * (this.unReaveledCardList.size() + this.reaveledCardList.size()) 
-						);
-					this.reaveledCardList.add(listOfCards.get(i));
-				}
-			}
-
-			this.calculateNewHeight();
+			return;
 		}
+
+		for (Card c : inputList.getList())
+		{
+			c.setDefaultPosition(
+				this.xPosition,
+				this.yPosition + (this.unReaveledCardList.size() + this.reaveledCardList.size()) * Y_CARD_SHIFT
+				);
+			this.reaveledCardList.add(c);
+		}
+
+		this.calculateNewHeight();
 	}
 
 	// Otoci vrchnu kartu z unReaveledCardList

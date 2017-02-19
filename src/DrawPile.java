@@ -47,7 +47,7 @@ public class DrawPile extends Pile
 		}
 	}
 
-	public CardOrList selectPile(int ix, int iy)
+	public ListOfCards selectPile(int ix, int iy)
 	{
 		// Dotahovaci balicek je prazdny a treba vsetko
 		// z reaveledCardList dat do unReaveledCardList ale reveznute
@@ -77,11 +77,6 @@ public class DrawPile extends Pile
 		tempCard.setDefaultPosition(this.xPosition - 80 - 70, this.yPosition);
 
 		return null;
-	}
-
-	public boolean insertCard(Card inputCard)
-	{
-		return false;
 	}
 
 	public void addCard(Card inputCard)

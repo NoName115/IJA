@@ -21,7 +21,7 @@ public class PlayGround
 	private boolean firstUpdate = false;
 
 	// Aktualne selecnuta karta
-	private CardOrList actualCardOrList;
+	private ListOfCards actualList;
 	private Pile actualPile;
 
 	// Vsetky decky potrebne pre hranie
@@ -39,7 +39,7 @@ public class PlayGround
 		this.width = width;
 		this.height = height;
 
-		this.actualCardOrList = null;
+		this.actualList = null;
 		this.actualPile = null;
 
 		// Decks
@@ -115,17 +115,15 @@ public class PlayGround
 
 			drawPile.render(g);
 
-			if (this.actualCardOrList != null)
+			if (this.actualList != null)
 			{
-				this.actualCardOrList.render(g);
+				this.actualList.render(g);
 			}
 		}
 		catch (ConcurrentModificationException e)
 		{
 			System.out.println("Ocakavana chyba: " + e);
 		}
-
-		
 	}
 
 	public boolean checkSection(int ix, int iy)
@@ -141,6 +139,7 @@ public class PlayGround
 		return false;
 	}
 
+	// Zachytenie karty
 	public void mousePressed(int ix, int iy)
 	{
 		for (int i = 0; i < NUMBER_OF_PILES; ++i)
@@ -148,26 +147,27 @@ public class PlayGround
 			if (this.allPiles[i].isInPile(ix, iy))
 			{
 				this.actualPile = this.allPiles[i];
-				this.actualCardOrList = this.allPiles[i].selectPile(ix, iy);
+				this.actualList = this.allPiles[i].selectPile(ix, iy);
 
-				if (this.actualCardOrList != null)
+				if (this.actualList != null)
 				{
-					//this.actualCardOrList.printDebug();
-					this.actualCardOrList.setIsDragged(true);
+					this.actualList.printDebug();
+					this.actualList.setIsDragged(true);
 				}
 			}
 		}
 	}
 
+	// Pustenie karty
 	public void mouseReleased(int ix, int iy)
 	{
-		if (this.actualCardOrList != null)
+		if (this.actualList != null)
 		{
 			for (int i = 0; i < NUMBER_OF_PILES; ++i)
 			{
 				if (this.allPiles[i].isInPile(ix, iy))
 				{
-					boolean wasInserted = this.allPiles[i].insertCard(this.actualCardOrList);
+					boolean wasInserted = this.allPiles[i].insertCard(this.actualList);
 					if (!wasInserted)
 					{
 						// Urobi return kariet
@@ -175,27 +175,28 @@ public class PlayGround
 					}
 
 					this.actualPile.actionEnded();
-					this.actualCardOrList.setIsDragged(false);
+					this.actualList.setIsDragged(false);
 
 					this.actualPile = null;
-					this.actualCardOrList = null;
+					this.actualList = null;
 					return;
 				}
 			}
 
-			this.actualPile.returnCard(this.actualCardOrList);
-			this.actualCardOrList.setIsDragged(false);
+			this.actualPile.returnCard(this.actualList);
+			this.actualList.setIsDragged(false);
 		}
 
 		this.actualPile = null;
-		this.actualCardOrList = null;
+		this.actualList = null;
 	}
 
+	// Pohyb karty
 	public void mouseDragged(int ix, int iy)
 	{
-		if (this.actualCardOrList != null)
+		if (this.actualList != null)
 		{
-			this.actualCardOrList.setActualPosition(ix, iy);
+			this.actualList.setActualPosition(ix, iy);
 		}
 	}
 

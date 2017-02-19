@@ -38,7 +38,7 @@ public class DiscardPile extends Pile
 		}
 	}
 
-	public CardOrList selectPile(int ix, int iy)
+	public ListOfCards selectPile(int ix, int iy)
 	{
 		if (cardList.isEmpty())
 		{
@@ -47,43 +47,39 @@ public class DiscardPile extends Pile
 
 		Card tempCard = cardList.get(cardList.size() - 1);
 		cardList.remove(cardList.size() - 1);
-		return new CardOrList(tempCard, null);
+		return new ListOfCards(null, tempCard);
 	}
 
-	public boolean insertCard(CardOrList inputCardOrList)
+	public boolean insertCard(ListOfCards inputList)
 	{
-		if (inputCardOrList == null)
+		if (inputList == null || inputList.isEmpty() || inputList.size() > 1)
 		{
 			return false;
 		}
 
-		Card inputCard = null;
-		if ((inputCard = inputCardOrList.getCard()) != null)
+		for (Card c : inputList.getList())
 		{
-			inputCard.setDefaultPosition(
+			c.setDefaultPosition(
 				this.xPosition,
 				this.yPosition
 				);
-			this.cardList.add(inputCard);
-
-			return true;
+			this.cardList.add(c);
 		}
 
-		return false;
+		return true;
 	}
 
-	public void returnCard(CardOrList inputCardOrList)
+	public void returnCard(ListOfCards inputList)
 	{
-		if (inputCardOrList != null)
+		if (inputList != null)
 		{
-			Card inputCard = null;
-			if ((inputCard = inputCardOrList.getCard()) != null)
+			for (Card c : inputList.getList())
 			{
-				inputCard.setDefaultPosition(
+				c.setDefaultPosition(
 					this.xPosition,
 					this.yPosition
-				);
-				this.cardList.add(inputCard);
+					);
+				this.cardList.add(c);
 			}
 		}
 	}

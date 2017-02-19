@@ -10,6 +10,8 @@ public abstract class Pile
 	protected int width;
 	protected int height;
 
+	// Pouziva sa pri pridani kariet na zaciatku hry
+	abstract public void addCard(Card inputCard);
 	abstract public void update();
 	abstract public void render(Graphics g);
 
@@ -30,17 +32,14 @@ public abstract class Pile
 
 	// Urobi akciu pri kliknuti na Pile
 	// ak je potrebne vrati Card
-	public CardOrList selectPile(int ix, int iy) { return null; }
+	public ListOfCards selectPile(int ix, int iy) { return null; }
 
 	// Vlozi kartu do Pile-u
 	// Vrati true ak sa karta vlozila, inac false
 	// Pouziva sa pri pridani karty pocas hry
-	public boolean insertCard(CardOrList inputCardOrList) { return false; }
+	public boolean insertCard(ListOfCards inputList) { return false; }
 
-	public void returnCard(CardOrList inputCardOrList) {}
+	public void returnCard(ListOfCards inputList) {}
 
 	public void actionEnded() {}
-
-	// Pouziva sa pri pridani kariet na zaciatku hry
-	abstract public void addCard(Card inputCard);
 }
