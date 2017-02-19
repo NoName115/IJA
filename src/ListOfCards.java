@@ -31,11 +31,17 @@ public class ListOfCards
 		}
 	}
 
-	public void setIsDragged(boolean iBool)
+	public void setIsDragged(boolean iBool, int x, int y)
 	{
 		for (Card c : this.listOfCards)
 		{
 			c.setIsDragged(iBool);
+			/*
+			if (iBool)
+			{
+				c.setDifPosition(x, y);
+			}
+			*/
 		}
 	}
 
@@ -43,7 +49,10 @@ public class ListOfCards
 	{
 		for (int i = 0; i < this.listOfCards.size(); ++i)
 		{
-			this.listOfCards.get(i).setActualPosition(x, y + i * Y_CARD_SHIFT);
+			this.listOfCards.get(i).setActualPosition(
+				x,
+				y + i * Y_CARD_SHIFT
+				);
 		}
 	}
 

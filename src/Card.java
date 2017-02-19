@@ -11,6 +11,9 @@ public class Card
 	private int xDefaultPosition;
 	private int yDefaultPosition;
 
+	private int xDifPos;
+	private int yDifPos;
+
 	private static final int width = 70;
 	private static final int height = 100;
 
@@ -66,14 +69,26 @@ public class Card
 		this.yDefaultPosition = y;
 	}
 
+	// Volane pri mouseDragged
 	public void setActualPosition(int x, int y)
 	{
-		this.xActualPosition = x;
-		this.yActualPosition = y;
+		this.xActualPosition = x - this.width / 2;
+		this.yActualPosition = y - this.height / 8;
 
-		//this.xActualPosition = this.xDefaultPosition - x;
-		//this.yActualPosition = this.yDefaultPosition - y;
+		/*
+		this.xActualPosition = x - this.xDifPos;
+		this.yActualPosition = y - this.yDifPos;
+		*/
 	}
+
+	/*
+	// Volane pri mousePressed
+	public void setDifPosition(int x, int y)
+	{
+		this.xDifPos = x - this.xDefaultPosition;
+		this.yDifPos = y - this.yDefaultPosition;
+	}
+	*/
 
 	public void faceUp()
 	{
@@ -103,5 +118,10 @@ public class Card
 	public int getYDefaultPosition()
 	{
 		return this.yDefaultPosition;
+	}
+
+	public int getYDifPos()
+	{
+		return this.yDifPos;
 	}
 }

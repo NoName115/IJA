@@ -42,14 +42,6 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		{
 			this.listOfGames.add(null);
 		}
-		
-		this.addGame();
-		this.addGame();
-		this.addGame();
-		this.addGame();
-
-		this.addGame();
-		this.addGame();
 	}
 
 	public void addGame()
@@ -101,6 +93,11 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 			);
 			return;
 		}
+	}
+
+	public void closeGame(int index)
+	{
+		listOfGames.set(index, null);
 	}
 
 	// Loop pre hru
@@ -184,6 +181,8 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		}
 
 		Graphics g = buffer.getDrawGraphics();
+
+		g.clearRect(0, 0, WIDTH, HEIGHT);
 
 		for (PlayGround pg : this.listOfGames)
 		{

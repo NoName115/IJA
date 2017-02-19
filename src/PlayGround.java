@@ -182,7 +182,7 @@ public class PlayGround
 				if (this.actualList != null)
 				{
 					//this.actualList.printDebug();
-					this.actualList.setIsDragged(true);
+					this.actualList.setIsDragged(true, ix, iy);
 				}
 			}
 		}
@@ -205,7 +205,7 @@ public class PlayGround
 					}
 
 					this.actualPile.actionEnded();
-					this.actualList.setIsDragged(false);
+					this.actualList.setIsDragged(false, ix, iy);
 
 					this.actualPile = null;
 					this.actualList = null;
@@ -214,7 +214,7 @@ public class PlayGround
 			}
 
 			this.actualPile.returnCard(this.actualList);
-			this.actualList.setIsDragged(false);
+			this.actualList.setIsDragged(false, ix, iy);
 		}
 
 		this.actualPile = null;
