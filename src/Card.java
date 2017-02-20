@@ -72,23 +72,25 @@ public class Card
 	// Volane pri mouseDragged
 	public void setActualPosition(int x, int y)
 	{
-		this.xActualPosition = x - this.width / 2;
-		this.yActualPosition = y - this.height / 8;
-
-		/*
-		this.xActualPosition = x - this.xDifPos;
-		this.yActualPosition = y - this.yDifPos;
-		*/
+		this.xActualPosition = x;
+		this.yActualPosition = y;
 	}
 
-	/*
 	// Volane pri mousePressed
 	public void setDifPosition(int x, int y)
 	{
 		this.xDifPos = x - this.xDefaultPosition;
 		this.yDifPos = y - this.yDefaultPosition;
 	}
-	*/
+
+	// Vola sa len pre 0-tu kartu v liste
+	public void setHandlePosition(int x, int y)
+	{
+		this.xActualPosition = x - this.xDifPos;
+		this.yActualPosition = y - this.yDifPos;
+	}
+	public int getHandleXPos(int x) { return x - this.xDifPos; }
+	public int getHandleYPos(int y) { return y - this.yDifPos; }
 
 	public void faceUp()
 	{

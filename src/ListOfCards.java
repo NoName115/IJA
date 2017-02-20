@@ -36,22 +36,30 @@ public class ListOfCards
 		for (Card c : this.listOfCards)
 		{
 			c.setIsDragged(iBool);
-			/*
-			if (iBool)
-			{
-				c.setDifPosition(x, y);
-			}
-			*/
+		}
+
+		if (iBool)
+		{
+			this.listOfCards.get(0).setDifPosition(x, y);
 		}
 	}
 
 	public void setActualPosition(int x, int y)
 	{
-		for (int i = 0; i < this.listOfCards.size(); ++i)
+		if (this.listOfCards.isEmpty())
+		{
+			return;
+		}
+
+		this.listOfCards.get(0).setHandlePosition(x, y);
+		int xPos = this.listOfCards.get(0).getHandleXPos(x);
+		int yPos = this.listOfCards.get(0).getHandleYPos(y);
+
+		for (int i = 1; i < this.listOfCards.size(); ++i)
 		{
 			this.listOfCards.get(i).setActualPosition(
-				x,
-				y + i * Y_CARD_SHIFT
+				xPos,
+				yPos + i * Y_CARD_SHIFT
 				);
 		}
 	}
