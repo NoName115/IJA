@@ -9,17 +9,21 @@ public abstract class Pile
 	protected int yPosition;
 	protected int width;
 	protected int height;
+	protected PlayGround pg;
 
-	public Pile(int xPos, int yPos, int width, int height)
+	public Pile(int xPos, int yPos, int width, int height, PlayGround pg)
 	{
 		this.xPosition = xPos;
 		this.yPosition = yPos;
 		this.width = width;
 		this.height = height;
+		this.pg = pg;
 	}
 
 	// Pouziva sa pri pridani kariet na zaciatku hry
 	abstract public void addCard(Card inputCard);
+	// Nastavi nove defaultPosition pre zoznamy kariet v Pile-e
+	abstract public void setNewDefaultPosition();
 	abstract public void update();
 	abstract public void render(Graphics g);
 
@@ -36,6 +40,15 @@ public abstract class Pile
 		}
 
 		return false;
+	}
+
+	// Iba v LinkedPile sa prepisuje
+	public void setNewResolution(int xPos, int yPos, int width, int height)
+	{
+		this.xPosition = xPos;
+		this.yPosition = yPos;
+		this.width = width;
+		this.height = height;
 	}
 
 	// Urobi akciu pri kliknuti na Pile

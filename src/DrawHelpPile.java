@@ -9,11 +9,19 @@ public class DrawHelpPile extends Pile
 {
 	ArrayList<Card> cardList;
 
-	public DrawHelpPile(int xPos, int yPos, int width, int height)
+	public DrawHelpPile(int xPos, int yPos, int width, int height, PlayGround pg)
 	{
-		super(xPos, yPos, width, height);
+		super(xPos, yPos, width, height, pg);
 
 		this.cardList =  new ArrayList<Card>();
+	}
+
+	public void setNewDefaultPosition()
+	{
+		for (Card c : this.cardList)
+		{
+			c.setDefaultPosition(this.xPosition, this.yPosition);
+		}
 	}
 
 	public void update()
@@ -40,7 +48,7 @@ public class DrawHelpPile extends Pile
 		Card tempCard = this.cardList.get(lastIndex);
 		this.cardList.remove(lastIndex);
 
-		return new ListOfCards(null, tempCard);
+		return new ListOfCards(null, tempCard, this.pg.getCardShift());
 	}
 
 	public void returnCard(ListOfCards inputList)

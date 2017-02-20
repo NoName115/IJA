@@ -22,9 +22,10 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 	private static final int HEIGHT = 900;
 	private static final int NUMBER_OF_GAMES = 4;
 
-	private boolean isRunning;
-	private ArrayList<PlayGround> listOfGames;
+	private static boolean isRunning;
+
 	private int actualGameIndex;
+	private ArrayList<PlayGround> listOfGames;
 
 	// Konstruktor
 	public GameController()
@@ -46,58 +47,109 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 
 	public void addGame()
 	{
-		if (listOfGames.get(0) == null)
+		// 0 Games
+		if (this.getNumberOfGames() == 0)
 		{
-			this.listOfGames.set(0, new PlayGround(
-				0,
-				0,
-				WIDTH / 2,
-				HEIGHT / 2
-				)
-			);
+			this.listOfGames.set(0, new PlayGround(0, 0, WIDTH, HEIGHT, 0));
 			return;
 		}
 
-		if (listOfGames.get(1) == null)
+		boolean gameAdded = false;
+
+		// 1-4 Games
+		if (listOfGames.get(0) == null && !gameAdded)
 		{
-			this.listOfGames.set(1, new PlayGround(
-				WIDTH / 2,
-				0,
-				WIDTH / 2,
-				HEIGHT / 2
-				)
-			);
-			return;
+			this.listOfGames.set(0, new PlayGround(0, 0, WIDTH / 2, HEIGHT / 2, 1));
+			gameAdded = true;
 		}
 
-		if (listOfGames.get(2) == null)
+		if (listOfGames.get(1) == null && !gameAdded)
 		{
-			this.listOfGames.set(2, new PlayGround(
-				0,
-				HEIGHT / 2,
-				WIDTH / 2,
-				HEIGHT / 2
-				)
-			);
-			return;
+			this.listOfGames.set(1, new PlayGround(WIDTH / 2, 0, WIDTH / 2, HEIGHT / 2, 1));
+			gameAdded = true;
 		}
 
-		if (listOfGames.get(3) == null)
+		if (listOfGames.get(2) == null && !gameAdded)
 		{
-			this.listOfGames.set(3, new PlayGround(
-				WIDTH / 2,
-				HEIGHT / 2,
-				WIDTH / 2,
-				HEIGHT / 2
-				)
-			);
-			return;
+			this.listOfGames.set(2, new PlayGround(0, HEIGHT / 2, WIDTH / 2, HEIGHT / 2, 1));
+			gameAdded = true;
+		}
+
+		if (listOfGames.get(3) == null && !gameAdded)
+		{
+			this.listOfGames.set(3, new PlayGround(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT / 2, 1));
+			gameAdded = true;
+		}
+
+		if (gameAdded && this.getNumberOfGames() == 2)
+		{
+			this.setGamesSize();
+		}
+	}
+
+	private void setGamesSize()
+	{
+		System.out.println("NOG: " + this.getNumberOfGames());
+
+		// 0-1 hra bezi
+		if (this.getNumberOfGames() == 1)
+		{
+			for (PlayGround pg : this.listOfGames)
+			{
+				if (pg != null)
+				{
+					pg.changeGameMod(0, 0, WIDTH, HEIGHT, 0);
+					return;
+				}
+			}
+		}
+
+		// 2-4 hry bezia
+		if (listOfGames.get(0) != null)
+		{
+			this.listOfGames.get(0).changeGameMod(0, 0, WIDTH / 2, HEIGHT / 2, 1);
+		}
+
+		if (listOfGames.get(1) != null)
+		{
+			this.listOfGames.get(1).changeGameMod(WIDTH / 2, 0, WIDTH / 2, HEIGHT / 2, 1);
+		}
+
+		if (listOfGames.get(2) != null)
+		{
+			this.listOfGames.get(2).changeGameMod(0, HEIGHT / 2, WIDTH / 2, HEIGHT / 2, 1);
+		}
+
+		if (listOfGames.get(3) != null)
+		{
+			this.listOfGames.get(3).changeGameMod(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT / 2, 1);
 		}
 	}
 
 	public void closeGame(int index)
 	{
 		listOfGames.set(index, null);
+
+		// Pri zatvarani sa zmeni rozlozenie len z 2 na 1 pocte hier
+		if (this.getNumberOfGames() == 1)
+		{
+			this.setGamesSize();
+		}
+	}
+
+	// Vrati realny pocet beziacich hier
+	private int getNumberOfGames()
+	{
+		int counter = 0;
+		for (PlayGround pg : this.listOfGames)
+		{
+			if (pg != null)
+			{
+				counter++;
+			}
+		}
+
+		return counter;
 	}
 
 	// Loop pre hru

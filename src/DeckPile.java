@@ -18,18 +18,18 @@ public class DeckPile extends Pile
 	};
 
 	// Generuje deck o 52 kartach
-	public DeckPile(int xPos, int yPos, int width, int height)
+	public DeckPile(int xPos, int yPos, int width, int height, PlayGround pg)
 	{
-		super(xPos, yPos, width, height);
+		super(xPos, yPos, width, height, pg);
 
 		this.deck = new ArrayList<Card>();
 
 		// Create whole deck
-		for (int i = 0; i < types.length; ++i)
+		for (int i = 0; i < this.types.length; ++i)
 		{
-			for (int j = 0; j < numbers.length; ++j)
+			for (int j = 0; j < this.numbers.length; ++j)
 			{
-				deck.add(new Card(numbers[j], types[i]));
+				this.deck.add(new Card(this.numbers[j], this.types[i], this.pg));
 			}
 		}
 	}
@@ -37,6 +37,7 @@ public class DeckPile extends Pile
 	public void update() {}
 	public void render(Graphics g) {}
 	public void addCard(Card inputCard) {}
+	public void setNewDefaultPosition() {}
 
 	// Return random card from deck
 	// return null if deck is empty

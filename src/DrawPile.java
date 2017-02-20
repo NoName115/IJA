@@ -12,12 +12,20 @@ public class DrawPile extends Pile
 	private ArrayList<Card> cardList;
 	private DrawHelpPile helpPile;
 
-	public DrawPile(int xPos, int yPos, int width, int height, DrawHelpPile helpPile)
+	public DrawPile(int xPos, int yPos, int width, int height, PlayGround pg, DrawHelpPile helpPile)
 	{
-		super(xPos, yPos, width, height);
+		super(xPos, yPos, width, height, pg);
 
 		this.helpPile = helpPile;
 		this.cardList = new ArrayList<Card>();
+	}
+
+	public void setNewDefaultPosition()
+	{
+		for (Card c : this.cardList)
+		{
+			c.setDefaultPosition(this.xPosition, this.yPosition);
+		}
 	}
 
 	public void update()

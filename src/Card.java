@@ -14,22 +14,29 @@ public class Card
 	private int xDifPos;
 	private int yDifPos;
 
-	private static final int width = 70;
-	private static final int height = 100;
+	private int width;
+	private int height;
 
 	private String number;
 	private String type;
 	private boolean isReaveled;
 	private boolean isDragged;
 
+	private PlayGround pg;
+
 	//private Image
 
-	public Card(String cardNumber, String cardType)
+	public Card(String cardNumber, String cardType, PlayGround pg)
 	{
 		this.number = cardNumber;
 		this.type = cardType;
 		this.isReaveled = false;
 		this.isDragged = false;
+
+		this.width = pg.getCardWidth();
+		this.height = pg.getCardHeight();
+
+		this.pg = pg;
 	}
 
 	public void update()
@@ -67,6 +74,9 @@ public class Card
 	{
 		this.xDefaultPosition = x;
 		this.yDefaultPosition = y;
+
+		this.width = this.pg.getCardWidth();
+		this.height =  this.pg.getCardHeight();
 	}
 
 	// Volane pri mouseDragged

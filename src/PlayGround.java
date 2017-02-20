@@ -11,11 +11,16 @@ import java.lang.NullPointerException;
 
 public class PlayGround
 {
+	// index 0 - 1 Game mod
+	// index 1 - 4 Game mod
 	private static final int NUMBER_OF_PILES = 13;
-	private static final int PANDING = 15;
-	private static final int Y_CARD_SHIFT = 30;
-	private static final int CARD_WIDTH = 70;
-	private static final int CARD_HEIGHT = 100;
+	private static final int NUMBER_OF_LINKED_PILES = 7;
+	private static final int[] PANDING = new int[] { 30, 15 };
+	private static final int[] Y_CARD_SHIFT = new int[] { 20, 20 };
+	private static final int[] CARD_WIDTH = new int[] { 140, 70 };
+	private static final int[] CARD_HEIGHT = new int[] { 200, 100 };
+
+	private int gameMod;
 
 	private int width;
 	private int height;
@@ -37,30 +42,33 @@ public class PlayGround
 
 	private Pile[] allPiles;
 
-	public PlayGround(int xPos, int yPos, int width, int height)
+	public PlayGround(int xPos, int yPos, int width, int height, int gameMod)
 	{
 		this.xStartPosition = xPos;
 		this.yStartPosition = yPos;
 		this.width = width;
 		this.height = height;
 
+		this.gameMod = gameMod;
 		this.actualList = null;
 		this.actualPile = null;
 
 		// Decks
-		this.allPiles = new Pile[NUMBER_OF_PILES];	// 1 + 1 + 7 + 4
-		this.deckPile = new DeckPile(0, 0, 0, 0);
+		this.allPiles = new Pile[NUMBER_OF_PILES];	// 1 + 1 + NUMBER_OF_LINKED_PILES + 4
+		this.deckPile = new DeckPile(0, 0, 0, 0, this);
 		this.drawHelpPile = new DrawHelpPile(
-			this.xStartPosition + PANDING + (CARD_WIDTH + PANDING) * 5,
-			this.yStartPosition + PANDING,
-			CARD_WIDTH,
-			CARD_HEIGHT
+			this.xStartPosition + PANDING[this.gameMod] + (CARD_WIDTH[this.gameMod] + PANDING[this.gameMod]) * 5,
+			this.yStartPosition + PANDING[this.gameMod],
+			CARD_WIDTH[this.gameMod],
+			CARD_HEIGHT[this.gameMod],
+			this
 			);
 		this.drawPile = new DrawPile(
-			this.xStartPosition + PANDING + (CARD_WIDTH + PANDING) * 6,
-			this.yStartPosition + PANDING,
-			CARD_WIDTH,
-			CARD_HEIGHT,
+			this.xStartPosition + PANDING[this.gameMod] + (CARD_WIDTH[this.gameMod] + PANDING[this.gameMod]) * 6,
+			this.yStartPosition + PANDING[this.gameMod],
+			CARD_WIDTH[this.gameMod],
+			CARD_HEIGHT[this.gameMod],
+			this,
 			this.drawHelpPile
 			);
 		this.discardPiles = new ArrayList<DiscardPile>();
@@ -68,31 +76,80 @@ public class PlayGround
 
 		this.allPiles[0] = this.drawPile;
 		this.allPiles[NUMBER_OF_PILES - 1] = this.drawHelpPile;
-		for (int i = 0; i < 7; ++i)
+		for (int i = 0; i < NUMBER_OF_LINKED_PILES; ++i)
 		{
 			this.linkedPiles.add(new LinkedPile(
-				this.xStartPosition + PANDING + (CARD_WIDTH + PANDING) * i,
-				this.yStartPosition + PANDING * 2 + CARD_HEIGHT,
-				CARD_WIDTH,
-				CARD_HEIGHT
+				this.xStartPosition + PANDING[this.gameMod] + (CARD_WIDTH[this.gameMod] + PANDING[this.gameMod]) * i,
+				this.yStartPosition + PANDING[this.gameMod] * 2 + CARD_HEIGHT[this.gameMod],
+				CARD_WIDTH[this.gameMod],
+				CARD_HEIGHT[this.gameMod],
+				this
 				)
 			);
 			this.allPiles[i + 1] = this.linkedPiles.get(i);
 			if (i % 2 == 0)
 			{
 				this.discardPiles.add(new DiscardPile(
-					this.xStartPosition + PANDING + (CARD_WIDTH + PANDING) * (i - i / 2),
-					this.yStartPosition + PANDING,
-					CARD_WIDTH,
-					CARD_HEIGHT
+					this.xStartPosition + PANDING[this.gameMod] + (CARD_WIDTH[this.gameMod] + PANDING[this.gameMod]) * (i - i / 2),
+					this.yStartPosition + PANDING[this.gameMod],
+					CARD_WIDTH[this.gameMod],
+					CARD_HEIGHT[this.gameMod],
+					this
 					)
 				);
-				this.allPiles[8 + (i - i / 2)] = this.discardPiles.get(i - i / 2);
+				this.allPiles[NUMBER_OF_LINKED_PILES + 1 + (i - i / 2)] = this.discardPiles.get(i - i / 2);
 			}
 		}
 
 		this.fillDecks();
 		this.firstUpdate = true;
+	}
+
+	public void changeGameMod(int xPos, int yPos, int width, int height, int gameMod)
+	{
+		this.xStartPosition = xPos;
+		this.yStartPosition = yPos;
+		this.width = width;
+		this.height = height;
+
+		this.gameMod = gameMod;
+
+		// Set new resolution to all piles
+		this.allPiles[0].setNewResolution(
+			this.xStartPosition + PANDING[this.gameMod] + (CARD_WIDTH[this.gameMod] + PANDING[this.gameMod]) * 6,
+			this.yStartPosition + PANDING[this.gameMod],
+			CARD_WIDTH[this.gameMod],
+			CARD_HEIGHT[this.gameMod]
+			);
+		this.allPiles[NUMBER_OF_PILES - 1].setNewResolution(
+			this.xStartPosition + PANDING[this.gameMod] + (CARD_WIDTH[this.gameMod] + PANDING[this.gameMod]) * 5,
+			this.yStartPosition + PANDING[this.gameMod],
+			CARD_WIDTH[this.gameMod],
+			CARD_HEIGHT[this.gameMod]
+			);
+		for (int i = 0; i < NUMBER_OF_LINKED_PILES; ++i)
+		{
+			this.allPiles[i + 1].setNewResolution(
+				this.xStartPosition + PANDING[this.gameMod] + (CARD_WIDTH[this.gameMod] + PANDING[this.gameMod]) * i,
+				this.yStartPosition + PANDING[this.gameMod] * 2 + CARD_HEIGHT[this.gameMod],
+				CARD_WIDTH[this.gameMod],
+				CARD_HEIGHT[this.gameMod]
+				);
+			if (i % 2 == 0)
+			{
+				this.allPiles[NUMBER_OF_LINKED_PILES + 1 + (i - i / 2)].setNewResolution(
+					this.xStartPosition + PANDING[this.gameMod] + (CARD_WIDTH[this.gameMod] + PANDING[this.gameMod]) * (i - i / 2),
+					this.yStartPosition + PANDING[this.gameMod],
+					CARD_WIDTH[this.gameMod],
+					CARD_HEIGHT[this.gameMod]
+					);
+			}
+		}
+
+		for (int i = 0; i < NUMBER_OF_PILES; ++i)
+		{
+			this.allPiles[i].setNewDefaultPosition();
+		}
 	}
 
 	private void fillDecks()
@@ -249,5 +306,10 @@ public class PlayGround
 	{
 		return height;
 	}
+
+	public int getCardWidth() { return CARD_WIDTH[this.gameMod]; }
+	public int getCardHeight() { return CARD_HEIGHT[this.gameMod]; }
+
+	public int getCardShift() { return Y_CARD_SHIFT[this.gameMod]; }
 
 }

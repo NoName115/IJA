@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 public class ListOfCards
 {
-	private static final int Y_CARD_SHIFT = 20;
-
+	private int Y_CARD_SHIFT;
 	private ArrayList<Card> listOfCards;
 	private boolean isDragged;
 
-	public ListOfCards(ArrayList<Card> inputCardList, Card inputCard)
+	public ListOfCards(ArrayList<Card> inputCardList, Card inputCard, int cardShift)
 	{
 		this.listOfCards = inputCardList;
+		this.Y_CARD_SHIFT = cardShift;
 		this.isDragged = false;
 
 		if (inputCard != null)

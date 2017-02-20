@@ -9,11 +9,19 @@ public class DiscardPile extends Pile
 {
 	private ArrayList<Card> cardList;
 
-	public DiscardPile(int xPos, int yPos, int width, int height)
+	public DiscardPile(int xPos, int yPos, int width, int height, PlayGround pg)
 	{
-		super(xPos, yPos, width, height);
+		super(xPos, yPos, width, height, pg);
 
 		this.cardList = new ArrayList<Card>();
+	}
+
+	public void setNewDefaultPosition()
+	{
+		for (Card c : this.cardList)
+		{
+			c.setDefaultPosition(this.xPosition, this.yPosition);
+		}
 	}
 
 	public void update()
@@ -46,7 +54,7 @@ public class DiscardPile extends Pile
 		Card tempCard = cardList.get(lastIndex);
 		this.cardList.remove(lastIndex);
 
-		return new ListOfCards(null, tempCard);
+		return new ListOfCards(null, tempCard, this.pg.getCardShift());
 	}
 
 	public boolean insertCard(ListOfCards inputList)

@@ -8,19 +8,49 @@ import java.util.ArrayList;
 
 public class LinkedPile extends Pile
 {
-	private static final int Y_CARD_SHIFT = 20;
+	private int Y_CARD_SHIFT;
 	private ArrayList<Card> unReaveledCardList;
 	private ArrayList<Card> reaveledCardList;
 
 	private static int defaultHeight;
 
-	public LinkedPile(int xPos, int yPos, int width, int height)
+	public LinkedPile(int xPos, int yPos, int width, int height, PlayGround pg)
 	{
-		super(xPos, yPos, width, height);
+		super(xPos, yPos, width, height, pg);
 
 		this.defaultHeight = height;
 		this.unReaveledCardList = new ArrayList<Card>();
 		this.reaveledCardList = new ArrayList<Card>();
+		this.Y_CARD_SHIFT = this.pg.getCardShift();
+	}
+
+	public void setNewResolution(int xPos, int yPos, int width, int height)
+	{
+		this.xPosition = xPos;
+		this.yPosition = yPos;
+		this.width = width;
+
+		this.defaultHeight = height;
+		this.calculateNewHeight();
+	}
+
+	public void setNewDefaultPosition()
+	{
+		for (int i = 0; i < this.unReaveledCardList.size(); ++i)
+		{
+			this.unReaveledCardList.get(i).setDefaultPosition(
+				this.xPosition,
+				this.yPosition + i * this.Y_CARD_SHIFT
+				);
+		}
+
+		for (int i = 0; i < this.reaveledCardList.size(); ++i)
+		{
+			this.reaveledCardList.get(i).setDefaultPosition(
+				this.xPosition,
+				this.yPosition + (i + this.unReaveledCardList.size()) * this.Y_CARD_SHIFT
+				);
+		}
 	}
 
 	public void update()
@@ -60,7 +90,6 @@ public class LinkedPile extends Pile
 			int endYPos = startYPos + (this.reaveledCardList.size() - 1) * Y_CARD_SHIFT + this.defaultHeight;
 
 			ListOfCards tempList = null;
-
 			if (startYPos <= iy && endYPos >= iy)
 			{
 				int summaryYShift = (this.reaveledCardList.size() - 1 + this.unReaveledCardList.size()) * Y_CARD_SHIFT + this.yPosition;
@@ -79,13 +108,13 @@ public class LinkedPile extends Pile
 						this.reaveledCardList.remove(index);
 					}
 
-					tempList = new ListOfCards(outputCardList, null);
+					tempList = new ListOfCards(outputCardList, null, Y_CARD_SHIFT);
 				}
 				// Vrati len 1, poslednu kartu
 				else if (iy >= summaryYShift && iy <= (summaryYShift + this.defaultHeight))
 				{
 					int lastCardIndex = this.reaveledCardList.size() - 1;
-					tempList = new ListOfCards(null, this.reaveledCardList.get(lastCardIndex));
+					tempList = new ListOfCards(null, this.reaveledCardList.get(lastCardIndex), Y_CARD_SHIFT);
 					this.reaveledCardList.remove(lastCardIndex);
 				}
 
