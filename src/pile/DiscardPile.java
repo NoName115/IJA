@@ -10,22 +10,9 @@ import src.PlayGround;
 
 public class DiscardPile extends Pile
 {
-	private ArrayList<Card> cardList;
-
 	public DiscardPile(int xPos, int yPos, int width, int height, PlayGround pg)
 	{
 		super(xPos, yPos, width, height, pg);
-
-		this.cardList = new ArrayList<Card>();
-	}
-
-	@Override
-	public void setNewDefaultPosition()
-	{
-		for (Card c : this.cardList)
-		{
-			c.setDefaultPosition(this.xPosition, this.yPosition);
-		}
 	}
 
 	@Override
@@ -95,6 +82,4 @@ public class DiscardPile extends Pile
 			}
 		}
 	}
-
-	public void addCard(Card card) {}
 }

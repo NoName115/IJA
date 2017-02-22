@@ -12,7 +12,6 @@ import src.PlayGround;
 
 public class DrawPile extends Pile
 {
-	private ArrayList<Card> cardList;
 	// Pile kde sa nachadza list odhalenych kariet
 	private DrawHelpPile helpPile;
 
@@ -21,16 +20,6 @@ public class DrawPile extends Pile
 		super(xPos, yPos, width, height, pg);
 
 		this.helpPile = helpPile;
-		this.cardList = new ArrayList<Card>();
-	}
-
-	@Override
-	public void setNewDefaultPosition()
-	{
-		for (Card c : this.cardList)
-		{
-			c.setDefaultPosition(this.xPosition, this.yPosition);
-		}
 	}
 
 	@Override
@@ -92,12 +81,5 @@ public class DrawPile extends Pile
 
 		tempCard.faceUp();
 		return null;
-	}
-
-	@Override
-	public void addCard(Card inputCard)
-	{
-		this.cardList.add(inputCard);
-		inputCard.setDefaultPosition(this.xPosition, this.yPosition);
 	}
 }

@@ -2,6 +2,8 @@ package src.pile;
 
 import java.awt.Graphics;
 
+import java.util.ArrayList;
+
 import src.card.*;
 import src.PlayGround;
 
@@ -16,6 +18,7 @@ public abstract class Pile
 	protected int width;
 	protected int height;
 	protected PlayGround pg;
+	protected ArrayList<Card> cardList;
 
 	public Pile(int xPos, int yPos, int width, int height, PlayGround pg)
 	{
@@ -24,14 +27,21 @@ public abstract class Pile
 		this.width = width;
 		this.height = height;
 		this.pg = pg;
+		this.cardList = new ArrayList<Card>();
 	}
 
 	abstract public void update();
 	abstract public void render(Graphics g);
-	// Pouziva sa pri pridani kariet na zaciatku hry
-	abstract public void addCard(Card inputCard);
-	// Nastavi nove defaultPosition pre zoznamy kariet v Pile-e
-	abstract public void setNewDefaultPosition();
+
+	/**
+	 * Prida kartu na koniec balicku
+	 * a vola setDefaultPosition pre danu kartu
+	 */
+	public void addCard(Card inputCard)
+	{
+		this.cardList.add(inputCard);
+		inputCard.setDefaultPosition(this.xPosition, this.yPosition);
+	}
 
 	/**
 	 * Kontroluje ci sa myska nachadza v Pile-e
@@ -62,6 +72,17 @@ public abstract class Pile
 		this.height = height;
 
 		this.setNewDefaultPosition();
+	}
+
+	/**
+	 * Nastavi nove defaultPosition pre zoznamy kariet v Pile-e
+	 */
+	public void setNewDefaultPosition()
+	{
+		for (Card c : this.cardList)
+		{
+			c.setDefaultPosition(this.xPosition, this.yPosition);
+		}
 	}
 
 	/**

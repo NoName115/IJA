@@ -10,22 +10,9 @@ import src.PlayGround;
 
 public class DrawHelpPile extends Pile
 {
-	ArrayList<Card> cardList;
-
 	public DrawHelpPile(int xPos, int yPos, int width, int height, PlayGround pg)
 	{
 		super(xPos, yPos, width, height, pg);
-
-		this.cardList =  new ArrayList<Card>();
-	}
-
-	@Override
-	public void setNewDefaultPosition()
-	{
-		for (Card c : this.cardList)
-		{
-			c.setDefaultPosition(this.xPosition, this.yPosition);
-		}
 	}
 
 	@Override
@@ -70,16 +57,6 @@ public class DrawHelpPile extends Pile
 		{
 			this.cardList.add(c);
 		}
-	}
-
-	@Override
-	public void addCard(Card inputCard)
-	{
-		this.cardList.add(inputCard);
-		inputCard.setDefaultPosition(
-			this.xPosition,
-			this.yPosition
-			);
 	}
 
 	/**

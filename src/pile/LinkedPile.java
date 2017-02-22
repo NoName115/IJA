@@ -12,8 +12,8 @@ import src.PlayGround;
 public class LinkedPile extends Pile
 {
 	private int Y_CARD_SHIFT;
-	private ArrayList<Card> unReaveledCardList;
-	private ArrayList<Card> reaveledCardList;
+	private ArrayList<Card> faceDownCardList;
+	private ArrayList<Card> faceUpCardList;
 
 	// Obsahuje zakladnu vysku Pile-u
 	private static int defaultHeight;
@@ -23,15 +23,15 @@ public class LinkedPile extends Pile
 		super(xPos, yPos, width, height, pg);
 
 		this.defaultHeight = height;
-		this.unReaveledCardList = new ArrayList<Card>();
-		this.reaveledCardList = new ArrayList<Card>();
+		this.faceDownCardList = new ArrayList<Card>();
+		this.faceUpCardList = new ArrayList<Card>();
 		this.Y_CARD_SHIFT = this.pg.getCardShift();
 	}
 
 	public void update() {}
 
 	/**
-	 * Najprv sa renderuje unReaveledCardList a tak reaveled
+	 * Najprv sa renderuje faceDownCardList a tak reaveled
 	 */
 	@Override
 	public void render(Graphics g)
@@ -39,12 +39,12 @@ public class LinkedPile extends Pile
 		g.setColor(Color.BLACK);
 		g.drawRect(this.xPosition, this.yPosition, this.width, this.defaultHeight);
 
-		for (Card c : this.unReaveledCardList)
+		for (Card c : this.faceDownCardList)
 		{
 			c.render(g);
 		}
 
-		for (Card c : this.reaveledCardList)
+		for (Card c : this.faceUpCardList)
 		{
 			c.render(g);
 		}
@@ -66,19 +66,19 @@ public class LinkedPile extends Pile
 	@Override
 	public void setNewDefaultPosition()
 	{
-		for (int i = 0; i < this.unReaveledCardList.size(); ++i)
+		for (int i = 0; i < this.faceDownCardList.size(); ++i)
 		{
-			this.unReaveledCardList.get(i).setDefaultPosition(
+			this.faceDownCardList.get(i).setDefaultPosition(
 				this.xPosition,
 				this.yPosition + i * this.Y_CARD_SHIFT
 				);
 		}
 
-		for (int i = 0; i < this.reaveledCardList.size(); ++i)
+		for (int i = 0; i < this.faceUpCardList.size(); ++i)
 		{
-			this.reaveledCardList.get(i).setDefaultPosition(
+			this.faceUpCardList.get(i).setDefaultPosition(
 				this.xPosition,
-				this.yPosition + (i + this.unReaveledCardList.size()) * this.Y_CARD_SHIFT
+				this.yPosition + (i + this.faceDownCardList.size()) * this.Y_CARD_SHIFT
 				);
 		}
 	}
@@ -86,7 +86,7 @@ public class LinkedPile extends Pile
 	@Override
 	public ListOfCards selectPile(int ix, int iy)
 	{
-		if (this.reaveledCardList.isEmpty())
+		if (this.faceUpCardList.isEmpty())
 		{
 			return null;
 		}
@@ -95,27 +95,27 @@ public class LinkedPile extends Pile
 		if (this.xPosition <= ix && this.xPosition + this.width >= ix)
 		{
 			// Horny a Dolny bod zoznamu odhalenych kariet
-			int startYPos = this.reaveledCardList.get(0).getYDefaultPosition();
-			int endYPos = startYPos + (this.reaveledCardList.size() - 1) * Y_CARD_SHIFT + this.defaultHeight;
+			int startYPos = this.faceUpCardList.get(0).getYDefaultPosition();
+			int endYPos = startYPos + (this.faceUpCardList.size() - 1) * Y_CARD_SHIFT + this.defaultHeight;
 
 			ListOfCards tempList = null;
 			if (startYPos <= iy && endYPos >= iy)
 			{
 				// Celkova vyska odhaleneho balicka kariet
-				int summaryYShift = (this.reaveledCardList.size() - 1 + this.unReaveledCardList.size()) * Y_CARD_SHIFT + this.yPosition;
+				int summaryYShift = (this.faceUpCardList.size() - 1 + this.faceDownCardList.size()) * Y_CARD_SHIFT + this.yPosition;
 
 				// Vrati zoznam kariet do index po koniec zoznamu
 				if (iy < summaryYShift)
 				{
-					int index = (iy - this.yPosition - this.unReaveledCardList.size() * Y_CARD_SHIFT) / Y_CARD_SHIFT;
-					int listSize = this.reaveledCardList.size();
+					int index = (iy - this.yPosition - this.faceDownCardList.size() * Y_CARD_SHIFT) / Y_CARD_SHIFT;
+					int listSize = this.faceUpCardList.size();
 
 					ArrayList<Card> outputCardList = new ArrayList<Card>();
 
 					for (int i = index; i < listSize; ++i)
 					{
-						outputCardList.add(this.reaveledCardList.get(index));
-						this.reaveledCardList.remove(index);
+						outputCardList.add(this.faceUpCardList.get(index));
+						this.faceUpCardList.remove(index);
 					}
 
 					tempList = new ListOfCards(outputCardList, null, Y_CARD_SHIFT);
@@ -123,9 +123,9 @@ public class LinkedPile extends Pile
 				// Vrati len 1, poslednu kartu (vrchnu kartu)
 				else if (iy >= summaryYShift && iy <= (summaryYShift + this.defaultHeight))
 				{
-					int lastCardIndex = this.reaveledCardList.size() - 1;
-					tempList = new ListOfCards(null, this.reaveledCardList.get(lastCardIndex), Y_CARD_SHIFT);
-					this.reaveledCardList.remove(lastCardIndex);
+					int lastCardIndex = this.faceUpCardList.size() - 1;
+					tempList = new ListOfCards(null, this.faceUpCardList.get(lastCardIndex), Y_CARD_SHIFT);
+					this.faceUpCardList.remove(lastCardIndex);
 				}
 
 				this.calculateNewHeight();
@@ -149,9 +149,9 @@ public class LinkedPile extends Pile
 		{
 			c.setDefaultPosition(
 				this.xPosition,
-				this.yPosition + (this.unReaveledCardList.size() + this.reaveledCardList.size()) * Y_CARD_SHIFT
+				this.yPosition + (this.faceDownCardList.size() + this.faceUpCardList.size()) * Y_CARD_SHIFT
 				);
-			this.reaveledCardList.add(c);
+			this.faceUpCardList.add(c);
 		}
 
 		this.calculateNewHeight();
@@ -170,30 +170,30 @@ public class LinkedPile extends Pile
 		{
 			c.setDefaultPosition(
 				this.xPosition,
-				this.yPosition + (this.unReaveledCardList.size() + this.reaveledCardList.size()) * Y_CARD_SHIFT
+				this.yPosition + (this.faceDownCardList.size() + this.faceUpCardList.size()) * Y_CARD_SHIFT
 				);
-			this.reaveledCardList.add(c);
+			this.faceUpCardList.add(c);
 		}
 
 		this.calculateNewHeight();
 	}
 
 	/**
-	 * Otoci vrchnu kartu z unReaveledCardList
-	 * a prida ju do reaveledCardList
+	 * Otoci vrchnu kartu z faceDownCardList
+	 * a prida ju do faceUpCardList
 	 */
 	public void actionEnded()
 	{
-		if (unReaveledCardList.isEmpty() || reaveledCardList.size() >= 1)
+		if (faceDownCardList.isEmpty() || faceUpCardList.size() >= 1)
 		{
 			return;
 		}
 
 		// Reavel top card
-		int lastCardIndex = this.unReaveledCardList.size() - 1;
-		Card tempCard = this.unReaveledCardList.get(lastCardIndex);
-		this.unReaveledCardList.remove(lastCardIndex);
-		this.reaveledCardList.add(tempCard);
+		int lastCardIndex = this.faceDownCardList.size() - 1;
+		Card tempCard = this.faceDownCardList.get(lastCardIndex);
+		this.faceDownCardList.remove(lastCardIndex);
+		this.faceUpCardList.add(tempCard);
 		tempCard.faceUp();
 	}
 
@@ -201,9 +201,9 @@ public class LinkedPile extends Pile
 	{
 		inputCard.setDefaultPosition(
 			this.xPosition,
-			this.yPosition + Y_CARD_SHIFT * this.unReaveledCardList.size()
+			this.yPosition + Y_CARD_SHIFT * this.faceDownCardList.size()
 			);
-		this.unReaveledCardList.add(inputCard);
+		this.faceDownCardList.add(inputCard);
 		this.calculateNewHeight();
 	}
 
@@ -213,7 +213,7 @@ public class LinkedPile extends Pile
 	 */
 	private void calculateNewHeight()
 	{
-		int sizeOfLists = this.unReaveledCardList.size() + this.reaveledCardList.size();
+		int sizeOfLists = this.faceDownCardList.size() + this.faceUpCardList.size();
 		this.height = sizeOfLists > 1 ? (sizeOfLists - 1) * Y_CARD_SHIFT + this.defaultHeight : this.defaultHeight;
 	}
 }
