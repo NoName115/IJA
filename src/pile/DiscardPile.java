@@ -1,8 +1,11 @@
-package src;
+package src.pile;
 
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.ArrayList;
+
+import src.card.*;
+import src.PlayGround;
 
 
 public class DiscardPile extends Pile

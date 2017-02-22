@@ -1,8 +1,11 @@
-package src;
+package src.pile;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
+
+import src.card.*;
+import src.PlayGround;
 
 
 // Trieda pre vygenerovanie celeho balicka kariet

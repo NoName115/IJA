@@ -1,7 +1,10 @@
-package src;
+package src.card;
 
 import java.awt.Graphics;
 import java.awt.Color;
+
+import src.GameController;
+import src.PlayGround;
 
 
 public class Card

@@ -1,6 +1,9 @@
-package src;
+package src.pile;
 
 import java.awt.Graphics;
+
+import src.card.*;
+import src.PlayGround;
 
 
 public abstract class Pile

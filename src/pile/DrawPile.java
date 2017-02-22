@@ -1,10 +1,13 @@
-package src;
+package src.pile;
 
 import java.awt.Graphics;
 import java.awt.Color;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import src.card.*;
+import src.PlayGround;
 
 
 public class DrawPile extends Pile
