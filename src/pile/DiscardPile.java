@@ -19,6 +19,7 @@ public class DiscardPile extends Pile
 		this.cardList = new ArrayList<Card>();
 	}
 
+	@Override
 	public void setNewDefaultPosition()
 	{
 		for (Card c : this.cardList)
@@ -27,15 +28,13 @@ public class DiscardPile extends Pile
 		}
 	}
 
-	public void update()
-	{
-		// NOTHING
-	}
+	@Override
+	public void update() {}
 
-	// Render staci len vrchnych 2 kariet
-	// lastIndex a lastIndex - 1
+	@Override
 	public void render(Graphics g)
 	{
+		// Render spodku balicka
 		g.setColor(Color.BLACK);
 		g.drawRect(this.xPosition, this.yPosition, this.width, this.height);
 		g.drawString("A", this.xPosition + this.width / 2, this.yPosition + this.height / 2);
@@ -46,6 +45,7 @@ public class DiscardPile extends Pile
 		}
 	}
 
+	@Override
 	public ListOfCards selectPile(int ix, int iy)
 	{
 		if (cardList.isEmpty())
@@ -60,6 +60,7 @@ public class DiscardPile extends Pile
 		return new ListOfCards(null, tempCard, this.pg.getCardShift());
 	}
 
+	@Override
 	public boolean insertCard(ListOfCards inputList)
 	{
 		if (inputList == null || inputList.isEmpty() || inputList.size() > 1)
@@ -79,7 +80,8 @@ public class DiscardPile extends Pile
 		return true;
 	}
 
-	public void returnCard(ListOfCards inputList)
+	@Override
+	public void returnListOfCardsToPile(ListOfCards inputList)
 	{
 		if (inputList != null)
 		{
@@ -94,8 +96,5 @@ public class DiscardPile extends Pile
 		}
 	}
 
-	public void addCard(Card inputCard)
-	{
-		this.cardList.add(inputCard);
-	}
+	public void addCard(Card card) {}
 }

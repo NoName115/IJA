@@ -18,6 +18,7 @@ import java.lang.InterruptedException;
 
 public class GameController extends Canvas implements Runnable, MouseListener, MouseMotionListener
 {
+	// Celkova sirka/vyska okna a max. pocet hier
 	private static final int WIDTH = 1220;
 	private static final int HEIGHT = 900;
 	private static final int NUMBER_OF_GAMES = 4;
@@ -27,10 +28,9 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 	private int actualGameIndex;
 	private ArrayList<PlayGround> listOfGames;
 
-	// Konstruktor
 	public GameController()
 	{
-		super();	// Konstruktor pre Canvas
+		super();
 		this.isRunning = false;
 		this.setSize(new Dimension(WIDTH, HEIGHT));
 		this.addMouseListener(this);
@@ -39,6 +39,7 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		this.actualGameIndex = -1;
 		this.listOfGames = new ArrayList<PlayGround>();
 
+		// Vyplni list 4 praznymi hrami
 		for (int i = 0; i < NUMBER_OF_GAMES; ++i)
 		{
 			this.listOfGames.add(null);
@@ -81,6 +82,8 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 			gameAdded = true;
 		}
 
+		// Zmenil sa pocet hier
+		// Prepocita sa velkost okien
 		if (gameAdded && this.getNumberOfGames() == 2)
 		{
 			this.setGamesSize();
@@ -89,8 +92,6 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 
 	private void setGamesSize()
 	{
-		System.out.println("NOG: " + this.getNumberOfGames());
-
 		// 0-1 hra bezi
 		if (this.getNumberOfGames() == 1)
 		{
@@ -137,7 +138,9 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		}
 	}
 
-	// Vrati realny pocet beziacich hier
+	/**
+	 * Vrati realny pocet beziacich hier
+	 */
 	private int getNumberOfGames()
 	{
 		int counter = 0;
@@ -152,8 +155,10 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		return counter;
 	}
 
-	// Loop pre hru
-	// Spusti sa pri vytvoreni vlakna
+	/**
+	 * Infinity loop pre hru
+	 * Spusti sa pri vytvoreni vlakna
+	 */
 	public void run()
 	{
 		long lastTimeCycle = System.nanoTime();
@@ -192,25 +197,30 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 
 			if (System.currentTimeMillis() - lastTimeOutput >= 1000)
 			{
-				lastTimeOutput += 1000;
 				//System.out.println("Ticks: " + ticks + " FPS: " + frames);
+				lastTimeOutput += 1000;
 				frames = 0;
 				ticks = 0;
 			}
 		}
 	}
 
+	/**
+	 * Vytvori nove vlakno a spusti hru
+	 */
 	public void start()
 	{
 		if (!this.isRunning)
 		{
 			this.isRunning = true;
-			// Spusti sa run()
+			// Vola sa run()
 			new Thread(this).start();
 		}
 	}
 
-	// Update pre logiku hry
+	/**
+	 * Update pre logiku hry
+	 */
 	private void update()
 	{
 		for (PlayGround pg : this.listOfGames)
@@ -222,7 +232,9 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		}
 	}
 
-	// Render hry
+	/**
+	 * Render pre vsetky objekty hry
+	 */
 	private void render()
 	{
 		BufferStrategy buffer = this.getBufferStrategy();
@@ -248,6 +260,10 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		buffer.show();
 	}
 
+	/**
+	 * Kontroluje do ktorej hry hrac klikol
+	 * Ulozi index hry
+	 */
 	public void mousePressed(MouseEvent e)
 	{
 		for (int i = 0; i < listOfGames.size(); ++i)
@@ -264,6 +280,9 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		}
 	}
 
+	/**
+	 * Pre ulozeny index hry vola funkciu mouseReleased
+	 */
 	public void mouseReleased(MouseEvent e)
 	{
 		if (this.actualGameIndex != -1 && listOfGames.get(this.actualGameIndex) != null)
@@ -273,6 +292,9 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		}
 	}
 
+	/**
+	 * Pre ulozeny index hry vola funkciu mouseDragged
+	 */
 	public void mouseDragged(MouseEvent e)
 	{
 		if (this.actualGameIndex != -1 && listOfGames.get(this.actualGameIndex) != null)
@@ -281,21 +303,9 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		}
 	}
 
-	// Nepotrebane funkcie, musia byt definovane
+	// Nepotrebne funkcie, musia byt definovane
 	public void mouseClicked(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseMoved(MouseEvent e) {}
-	
-
-	public int getWidth()
-	{
-		return WIDTH;
-	}
-
-	public int getHeight()
-	{
-		return HEIGHT;
-	}
-
 }

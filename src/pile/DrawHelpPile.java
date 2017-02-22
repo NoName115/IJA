@@ -19,6 +19,7 @@ public class DrawHelpPile extends Pile
 		this.cardList =  new ArrayList<Card>();
 	}
 
+	@Override
 	public void setNewDefaultPosition()
 	{
 		for (Card c : this.cardList)
@@ -27,11 +28,10 @@ public class DrawHelpPile extends Pile
 		}
 	}
 
-	public void update()
-	{
-		// NOTHING
-	}
+	@Override
+	public void update() {}
 
+	@Override
 	public void render(Graphics g)
 	{
 		for (Card c : this.cardList)
@@ -40,6 +40,10 @@ public class DrawHelpPile extends Pile
 		}
 	}
 
+	/**
+	 * Vrati jednu vrchnu(poslednu) kartu
+	 */
+	@Override
 	public ListOfCards selectPile(int ix, int iy)
 	{
 		if (this.cardList.isEmpty())
@@ -54,7 +58,8 @@ public class DrawHelpPile extends Pile
 		return new ListOfCards(null, tempCard, this.pg.getCardShift());
 	}
 
-	public void returnCard(ListOfCards inputList)
+	@Override
+	public void returnListOfCardsToPile(ListOfCards inputList)
 	{
 		if (inputList == null || inputList.isEmpty() || inputList.size() > 1)
 		{
@@ -67,6 +72,7 @@ public class DrawHelpPile extends Pile
 		}
 	}
 
+	@Override
 	public void addCard(Card inputCard)
 	{
 		this.cardList.add(inputCard);
@@ -76,7 +82,10 @@ public class DrawHelpPile extends Pile
 			);
 	}
 
-	// return null if cardList is empty
+	/**
+	 * Vrati null ak je list kariet prazny
+	 * Inac vrati vrchnu(poslednu) kartu
+	 */
 	public Card getLastCard()
 	{
 		if (this.cardList.isEmpty())

@@ -10,6 +10,7 @@ public class ListOfCards
 	private ArrayList<Card> listOfCards;
 	private boolean isDragged;
 
+	// 0 index je karta na spodku balicku
 	public ListOfCards(ArrayList<Card> inputCardList, Card inputCard, int cardShift)
 	{
 		this.listOfCards = inputCardList;

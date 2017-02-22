@@ -15,6 +15,7 @@ public class LinkedPile extends Pile
 	private ArrayList<Card> unReaveledCardList;
 	private ArrayList<Card> reaveledCardList;
 
+	// Obsahuje zakladnu vysku Pile-u
 	private static int defaultHeight;
 
 	public LinkedPile(int xPos, int yPos, int width, int height, PlayGround pg)
@@ -27,6 +28,29 @@ public class LinkedPile extends Pile
 		this.Y_CARD_SHIFT = this.pg.getCardShift();
 	}
 
+	public void update() {}
+
+	/**
+	 * Najprv sa renderuje unReaveledCardList a tak reaveled
+	 */
+	@Override
+	public void render(Graphics g)
+	{
+		g.setColor(Color.BLACK);
+		g.drawRect(this.xPosition, this.yPosition, this.width, this.defaultHeight);
+
+		for (Card c : this.unReaveledCardList)
+		{
+			c.render(g);
+		}
+
+		for (Card c : this.reaveledCardList)
+		{
+			c.render(g);
+		}
+	}
+
+	@Override
 	public void setNewResolution(int xPos, int yPos, int width, int height)
 	{
 		this.xPosition = xPos;
@@ -35,8 +59,11 @@ public class LinkedPile extends Pile
 
 		this.defaultHeight = height;
 		this.calculateNewHeight();
+
+		this.setNewDefaultPosition();
 	}
 
+	@Override
 	public void setNewDefaultPosition()
 	{
 		for (int i = 0; i < this.unReaveledCardList.size(); ++i)
@@ -56,30 +83,7 @@ public class LinkedPile extends Pile
 		}
 	}
 
-	public void update()
-	{
-		// NOTHING
-	}
-
-	// Render vsetkych kariet
-	// Najprv sa renderuje unReaveledCardList
-	public void render(Graphics g)
-	{
-		g.setColor(Color.BLACK);
-		g.drawRect(this.xPosition, this.yPosition, this.width, this.defaultHeight);
-
-		for (Card c : this.unReaveledCardList)
-		{
-			c.render(g);
-		}
-
-		for (Card c : this.reaveledCardList)
-		{
-			c.render(g);
-		}
-	}
-
-	// Vytvorit objekt ktory obsahuje Card a ArrayList
+	@Override
 	public ListOfCards selectPile(int ix, int iy)
 	{
 		if (this.reaveledCardList.isEmpty())
@@ -87,14 +91,17 @@ public class LinkedPile extends Pile
 			return null;
 		}
 
+		// Nachadzam sa v casti odhalenych kariet
 		if (this.xPosition <= ix && this.xPosition + this.width >= ix)
 		{
+			// Horny a Dolny bod zoznamu odhalenych kariet
 			int startYPos = this.reaveledCardList.get(0).getYDefaultPosition();
 			int endYPos = startYPos + (this.reaveledCardList.size() - 1) * Y_CARD_SHIFT + this.defaultHeight;
 
 			ListOfCards tempList = null;
 			if (startYPos <= iy && endYPos >= iy)
 			{
+				// Celkova vyska odhaleneho balicka kariet
 				int summaryYShift = (this.reaveledCardList.size() - 1 + this.unReaveledCardList.size()) * Y_CARD_SHIFT + this.yPosition;
 
 				// Vrati zoznam kariet do index po koniec zoznamu
@@ -113,7 +120,7 @@ public class LinkedPile extends Pile
 
 					tempList = new ListOfCards(outputCardList, null, Y_CARD_SHIFT);
 				}
-				// Vrati len 1, poslednu kartu
+				// Vrati len 1, poslednu kartu (vrchnu kartu)
 				else if (iy >= summaryYShift && iy <= (summaryYShift + this.defaultHeight))
 				{
 					int lastCardIndex = this.reaveledCardList.size() - 1;
@@ -129,7 +136,7 @@ public class LinkedPile extends Pile
 		return null;
 	}
 
-	// insertListOfCards
+	@Override
 	public boolean insertCard(ListOfCards inputList)
 	{
 		if (inputList == null || inputList.isEmpty())
@@ -151,8 +158,8 @@ public class LinkedPile extends Pile
 		return true;
 	}
 
-	// returnListOfCardsToPile
-	public void returnCard(ListOfCards inputList)
+	@Override
+	public void returnListOfCardsToPile(ListOfCards inputList)
 	{
 		if (inputList == null)
 		{
@@ -171,7 +178,10 @@ public class LinkedPile extends Pile
 		this.calculateNewHeight();
 	}
 
-	// Otoci vrchnu kartu z unReaveledCardList
+	/**
+	 * Otoci vrchnu kartu z unReaveledCardList
+	 * a prida ju do reaveledCardList
+	 */
 	public void actionEnded()
 	{
 		if (unReaveledCardList.isEmpty() || reaveledCardList.size() >= 1)
@@ -197,6 +207,10 @@ public class LinkedPile extends Pile
 		this.calculateNewHeight();
 	}
 
+	/**
+	 * Prepocitava vysku balicka vzhladom na pocet kariet
+	 * v oboch listoch
+	 */
 	private void calculateNewHeight()
 	{
 		int sizeOfLists = this.unReaveledCardList.size() + this.reaveledCardList.size();

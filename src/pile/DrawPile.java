@@ -13,6 +13,7 @@ import src.PlayGround;
 public class DrawPile extends Pile
 {
 	private ArrayList<Card> cardList;
+	// Pile kde sa nachadza list odhalenych kariet
 	private DrawHelpPile helpPile;
 
 	public DrawPile(int xPos, int yPos, int width, int height, PlayGround pg, DrawHelpPile helpPile)
@@ -23,6 +24,7 @@ public class DrawPile extends Pile
 		this.cardList = new ArrayList<Card>();
 	}
 
+	@Override
 	public void setNewDefaultPosition()
 	{
 		for (Card c : this.cardList)
@@ -31,34 +33,43 @@ public class DrawPile extends Pile
 		}
 	}
 
-	public void update()
-	{
-		return;
-	}
+	@Override
+	public void update() {}
 
-	// Render 2 vrchnych kariet z oboch ArrayList-ov
+	/**
+	 * Render balicku kariet a helpPile objektu
+	 */
+	@Override
 	public void render(Graphics g)
 	{
+		// Zakladne pozadie spodku balicka
 		g.setColor(Color.BLACK);
 		g.drawRect(this.xPosition, this.yPosition, this.width, this.height);
 		g.drawOval(this.xPosition + this.width / 4, this.yPosition + this.height / 2 - this.width / 4,
 					this.width / 2, this.width / 2);
 
+		// Render kariet
 		for (Card c : this.cardList)
 		{
 			c.render(g);
 		}
 
+		// Render helpPile-u
 		if (this.helpPile != null)
 		{
 			this.helpPile.render(g);
 		}
 	}
 
+	/**
+	 * Vzdy vracia null
+	 * Prehadzuje karty medzi totou Pile-ou a helpPile-ou
+	 */
+	@Override
 	public ListOfCards selectPile(int ix, int iy)
 	{
 		// Dotahovaci balicek je prazdny a treba vsetko
-		// z DrawHelpPile dat do DrawPile ale revezne
+		// z helpPile dat do drawPile ale revezne
 		if (this.cardList.isEmpty())
 		{
 			Card inputCard;
@@ -73,7 +84,7 @@ public class DrawPile extends Pile
 			return null;
 		}
 
-		// Prehodi vrchnu kartu z DrawPile do DrawHelpPile
+		// Prehodi vrchnu kartu z drawPile do helpPile
 		int lastIndex = this.cardList.size() - 1;
 		Card tempCard = this.cardList.get(lastIndex);
 		this.cardList.remove(lastIndex);
@@ -83,6 +94,7 @@ public class DrawPile extends Pile
 		return null;
 	}
 
+	@Override
 	public void addCard(Card inputCard)
 	{
 		this.cardList.add(inputCard);

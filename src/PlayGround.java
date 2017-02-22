@@ -12,12 +12,16 @@ import src.pile.*;
 import src.card.*;
 
 
+/**
+ * Object reprezentujuci jednu hraciu plochu
+*/
 public class PlayGround
 {
-	// index 0 - 1 Game mod
-	// index 1 - 4 Game mod
 	private static final int NUMBER_OF_PILES = 13;
 	private static final int NUMBER_OF_LINKED_PILES = 7;
+
+	// index 0 - rozmery pre 1 hru
+	// index 1 - rozmery pre 2-4 hry
 	private static final int[] PANDING = new int[] { 30, 15 };
 	private static final int[] Y_CARD_SHIFT = new int[] { 20, 20 };
 	private static final int[] CARD_WIDTH = new int[] { 140, 70 };
@@ -32,8 +36,9 @@ public class PlayGround
 
 	private boolean firstUpdate = false;
 
-	// Aktualne selecnuta karta
+	// Aktualne vybrana karta alebo list kariet
 	private ListOfCards actualList;
+	// Aktualny pile z ktoreho bola karta zobrata
 	private Pile actualPile;
 
 	// Vsetky decky potrebne pre hranie
@@ -43,6 +48,7 @@ public class PlayGround
 	private ArrayList<DiscardPile> discardPiles;	// 8 decks
 	private ArrayList<LinkedPile> linkedPiles;		// 4 decks
 
+	// Pole vsetkych Pile-ov
 	private Pile[] allPiles;
 
 	public PlayGround(int xPos, int yPos, int width, int height, int gameMod)
@@ -108,6 +114,10 @@ public class PlayGround
 		this.firstUpdate = true;
 	}
 
+	/**
+	 * Vola sa pri zmene herneho modu z 2 na 1 pocet hier alebo opacne
+	 * Vola funkciu setNewResolution pre kazdy Pile
+	 */
 	public void changeGameMod(int xPos, int yPos, int width, int height, int gameMod)
 	{
 		this.xStartPosition = xPos;
@@ -148,13 +158,12 @@ public class PlayGround
 					);
 			}
 		}
-
-		for (int i = 0; i < NUMBER_OF_PILES; ++i)
-		{
-			this.allPiles[i].setNewDefaultPosition();
-		}
 	}
 
+	/**
+	 * Naplni kazdy deck potrebnym poctom kariet
+	 * Funkcia popCard vracia nahodnu kartu z balicka
+	 */
 	private void fillDecks()
 	{
 		for (int i = 0; i < 7; ++i)
@@ -172,7 +181,9 @@ public class PlayGround
 		}
 	}
 
-	// Update pre logiku hry
+	/**
+	 * Update pre logiku hry
+	 */
 	public void update()
 	{
 		if (this.firstUpdate)
@@ -186,7 +197,9 @@ public class PlayGround
 		}
 	}
 
-	// Render hry
+	/**
+	 * Render pre vsetky objekty hry
+	 */
 	public void render(Graphics g)
 	{
 		g.clearRect(this.xStartPosition, this.yStartPosition, this.width, this.height);
@@ -216,6 +229,10 @@ public class PlayGround
 		}
 	}
 
+	/**
+	 * Volane z triedy GameController
+	 * Kontroluje ci uzivatel klikol do spravneho hracieho pola
+	 */
 	public boolean checkSection(int ix, int iy)
 	{
 		if (this.xStartPosition <= ix && this.xStartPosition + this.width >= ix)
@@ -229,7 +246,9 @@ public class PlayGround
 		return false;
 	}
 
-	// Zachytenie karty
+	/**
+	 * Zachytenie karty a pile-u
+	 */
 	public void mousePressed(int ix, int iy)
 	{
 		for (int i = 0; i < NUMBER_OF_PILES; ++i)
@@ -248,7 +267,9 @@ public class PlayGround
 		}
 	}
 
-	// Pustenie karty
+	/**
+	 * Vypustenie aktualnej karty a pile-u
+	 */
 	public void mouseReleased(int ix, int iy)
 	{
 		if (this.actualList != null)
@@ -260,7 +281,7 @@ public class PlayGround
 					boolean wasInserted = this.allPiles[i].insertCard(this.actualList);
 					if (!wasInserted)
 					{
-						// Urobi return kariet
+						// Vyskoci a urobit return karty
 						break;
 					}
 
@@ -273,7 +294,7 @@ public class PlayGround
 				}
 			}
 
-			this.actualPile.returnCard(this.actualList);
+			this.actualPile.returnListOfCardsToPile(this.actualList);
 			this.actualList.setIsDragged(false, ix, iy);
 		}
 
@@ -281,7 +302,10 @@ public class PlayGround
 		this.actualList = null;
 	}
 
-	// Pohyb karty
+	/**
+	 * Pohyb karty
+	 * Nastanovanie actualPosition pre kartu
+	 */
 	public void mouseDragged(int ix, int iy)
 	{
 		if (this.actualList != null)

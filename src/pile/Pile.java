@@ -6,6 +6,9 @@ import src.card.*;
 import src.PlayGround;
 
 
+/**
+ * Trieda z ktorej dedia vsetky ostatne xxxPile
+ */
 public abstract class Pile
 {
 	protected int xPosition;
@@ -23,15 +26,17 @@ public abstract class Pile
 		this.pg = pg;
 	}
 
+	abstract public void update();
+	abstract public void render(Graphics g);
 	// Pouziva sa pri pridani kariet na zaciatku hry
 	abstract public void addCard(Card inputCard);
 	// Nastavi nove defaultPosition pre zoznamy kariet v Pile-e
 	abstract public void setNewDefaultPosition();
-	abstract public void update();
-	abstract public void render(Graphics g);
 
-	// Skontroluje ci mouse je v Pile
-	// NEPREPISUJE SA
+	/**
+	 * Kontroluje ci sa myska nachadza v Pile-e
+	 * NEPREPISUJE SA
+	 */
 	public boolean isInPile(int ix, int iy)
 	{
 		if (this.xPosition <= ix && this.xPosition + this.width >= ix)
@@ -45,25 +50,40 @@ public abstract class Pile
 		return false;
 	}
 
-	// Iba v LinkedPile sa prepisuje
+	/**
+	 * Funkcia pre nastavenie noveho rozlisenia okna hry pri zmene pocte hier
+	 * 
+	 */
 	public void setNewResolution(int xPos, int yPos, int width, int height)
 	{
 		this.xPosition = xPos;
 		this.yPosition = yPos;
 		this.width = width;
 		this.height = height;
+
+		this.setNewDefaultPosition();
 	}
 
-	// Urobi akciu pri kliknuti na Pile
-	// ak je potrebne vrati Card
+	/**
+	 * Urobit akciu pri kliknuti na Pile
+	 * Ak je potrebne vrati object ListOfCards
+	 */
 	public ListOfCards selectPile(int ix, int iy) { return null; }
 
-	// Vlozi kartu do Pile-u
-	// Vrati true ak sa karta vlozila, inac false
-	// Pouziva sa pri pridani karty pocas hry
+	/**
+	 * Vola sa pocas hry
+	 * Vlozi kartu do Pile-u
+	 * Vrati true ak karta bola vlozena, inac false
+	 */
 	public boolean insertCard(ListOfCards inputList) { return false; }
 
-	public void returnCard(ListOfCards inputList) {}
+	/**
+	 * Do balicku kariet v danej Pile-e ulozi vstupny zoznam kariet
+	 */
+	public void returnListOfCardsToPile(ListOfCards inputList) {}
 
+	/**
+	 * Vola sa len pri linkedPile
+	 */
 	public void actionEnded() {}
 }

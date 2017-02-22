@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 
-// Hlavna trieda a Main
 public class Solitaire extends JFrame implements ActionListener
 {
 	private static final String GAME_TITLE = "Solitaire";
@@ -30,12 +29,20 @@ public class Solitaire extends JFrame implements ActionListener
 	MenuItem closeGame_3 = new MenuItem("Close Game_3");
 	MenuItem closeGame_4 = new MenuItem("Close Game_4");
 
+	/**
+	 * Hlavna funkcia main, vytvara object hry Solitaire
+	 */
 	public static void main(String[] args)
 	{
 		Solitaire game = new Solitaire();
 		game.init();
 	}
 
+	/**
+	 * Inicializacia zakladneho grafickeho rozhranie
+	 * pre pridanie/odobranie hry
+	 * A spustenie hry
+	 */
 	private void init()
 	{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,6 +69,7 @@ public class Solitaire extends JFrame implements ActionListener
 		this.setResizable(false);
 		this.setVisible(true);
 
+		// Spustenie hry
 		gameController.start();
 	}
 

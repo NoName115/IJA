@@ -8,7 +8,9 @@ import src.card.*;
 import src.PlayGround;
 
 
-// Trieda pre vygenerovanie celeho balicka kariet
+/**
+ * Trieda pre vygenerovanie celeho balicka kariet
+ */
 public class DeckPile extends Pile
 {
 	private ArrayList<Card> deck;
@@ -20,14 +22,14 @@ public class DeckPile extends Pile
 		"heart", "diamond", "spade", "club"
 	};
 
-	// Generuje deck o 52 kartach
+	/**
+	 * Generuje balicek 52 kariet
+	 */
 	public DeckPile(int xPos, int yPos, int width, int height, PlayGround pg)
 	{
 		super(xPos, yPos, width, height, pg);
-
 		this.deck = new ArrayList<Card>();
 
-		// Create whole deck
 		for (int i = 0; i < this.types.length; ++i)
 		{
 			for (int j = 0; j < this.numbers.length; ++j)
@@ -42,8 +44,10 @@ public class DeckPile extends Pile
 	public void addCard(Card inputCard) {}
 	public void setNewDefaultPosition() {}
 
-	// Return random card from deck
-	// return null if deck is empty
+	/**
+	 * Vrati nahodnu kartu z balicka
+	 * Vrati null ak je balicek prazny
+	 */
 	public Card popCard()
 	{
 		if (deck.isEmpty())
