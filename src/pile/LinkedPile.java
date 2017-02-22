@@ -144,6 +144,9 @@ public class LinkedPile extends Pile
 			return false;
 		}
 
+		// TODO
+		// Kontrola typu kariet
+
 		int counter = 0;
 		for (Card c : inputList.getList())
 		{

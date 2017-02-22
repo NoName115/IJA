@@ -55,6 +55,9 @@ public class DiscardPile extends Pile
 			return false;
 		}
 
+		// TODO
+		// Kontrola typu kariet
+
 		for (Card c : inputList.getList())
 		{
 			c.setDefaultPosition(

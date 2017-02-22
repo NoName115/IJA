@@ -1,6 +1,7 @@
 package src.pile;
 
 import java.awt.Graphics;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -13,12 +14,45 @@ import src.PlayGround;
  */
 public class DeckPile extends Pile
 {
-	private static String[] numbers = new String[] {
+	private static String[] numberList = new String[] {
 		"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"
 	};
-	private static String[] types = new String[] {
-		"heart", "diamond", "spade", "club"
-	};
+	public static enum Type
+	{
+		CLUBS, DIAMONDS, HEARTS, SPADES;
+
+		public Color toColor()
+		{
+			switch(this)
+			{
+				case DIAMONDS:
+				case HEARTS:
+					return Color.RED;
+				case CLUBS:
+				case SPADES:
+					return Color.BLACK;
+				default:
+					return Color.WHITE;
+			}
+		}
+
+		public String toString()
+		{
+			switch(this)
+			{
+				case DIAMONDS:
+					return "Diamonds";
+				case HEARTS:
+					return "Hearts";
+				case CLUBS:
+					return "Clubs";
+				case SPADES:
+					return "Spades";
+				default:
+					return "Error";
+			}
+		}
+	}
 
 	/**
 	 * Generuje balicek 52 kariet
@@ -27,11 +61,11 @@ public class DeckPile extends Pile
 	{
 		super(xPos, yPos, width, height, pg);
 
-		for (int i = 0; i < this.types.length; ++i)
+		for (DeckPile.Type t : DeckPile.Type.values())
 		{
-			for (int j = 0; j < this.numbers.length; ++j)
+			for (int j = 0; j < this.numberList.length; ++j)
 			{
-				this.cardList.add(new Card(this.numbers[j], this.types[i], this.pg));
+				this.cardList.add(new Card(this.numberList[j], t, this.pg));
 			}
 		}
 	}

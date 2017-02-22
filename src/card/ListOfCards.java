@@ -1,6 +1,7 @@
 package src.card;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.util.ArrayList;
 
 
@@ -32,16 +33,23 @@ public class ListOfCards
 		}
 	}
 
-	public void setIsDragged(boolean iBool, int x, int y)
+	public void setIsDragged(boolean iBool)
 	{
+		this.isDragged = iBool;
 		for (Card c : this.listOfCards)
 		{
 			c.setIsDragged(iBool);
 		}
+	}
 
-		if (iBool)
+	/**
+	 * Nastavuje dif position pre 0.kartu
+	 */
+	public void setDifPosition(int ix, int iy)
+	{
+		if (this.isDragged)
 		{
-			this.listOfCards.get(0).setDifPosition(x, y);
+			this.listOfCards.get(0).setDifPosition(ix, iy);
 		}
 	}
 
@@ -52,15 +60,13 @@ public class ListOfCards
 			return;
 		}
 
-		this.listOfCards.get(0).setHandlePosition(x, y);
-		int xPos = this.listOfCards.get(0).getHandleXPos(x);
-		int yPos = this.listOfCards.get(0).getHandleYPos(y);
+		Point handlePoint = this.listOfCards.get(0).handlePosition(x, y);
 
 		for (int i = 1; i < this.listOfCards.size(); ++i)
 		{
 			this.listOfCards.get(i).setActualPosition(
-				xPos,
-				yPos + i * Y_CARD_SHIFT
+				(int) handlePoint.getX(),
+				(int) handlePoint.getY() + i * Y_CARD_SHIFT
 				);
 		}
 	}

@@ -2,7 +2,9 @@ package src.card;
 
 import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Point;
 
+import src.pile.DeckPile;
 import src.GameController;
 import src.PlayGround;
 
@@ -21,7 +23,7 @@ public class Card
 	private int height;
 
 	private String number;
-	private String type;
+	private DeckPile.Type type;
 	private boolean isReaveled;
 	private boolean isDragged;
 
@@ -29,7 +31,7 @@ public class Card
 
 	//private Image
 
-	public Card(String cardNumber, String cardType, PlayGround pg)
+	public Card(String cardNumber, DeckPile.Type cardType, PlayGround pg)
 	{
 		this.number = cardNumber;
 		this.type = cardType;
@@ -44,7 +46,8 @@ public class Card
 
 	public void update()
 	{
-		// NOTHING
+		// TODO
+		// Animacia vratenia karty do povodnej pozicie
 	}
 
 	public void render(Graphics g)
@@ -63,8 +66,9 @@ public class Card
 			g.setColor(Color.WHITE);
 			g.fillRect(this.xActualPosition + 1, this.yActualPosition + 1, this.width - 1, this.height - 1);
 
-			g.setColor(Color.BLACK);
-			g.drawString(number + " " + type, this.xActualPosition + 10, this.yActualPosition + 15);
+			g.setColor(this.type.toColor());
+			g.drawString(this.number, this.xActualPosition + 10, this.yActualPosition + 15);
+			g.drawString(this.type.toString(), this.xActualPosition + 20, this.yActualPosition + 15);
 		}
 		else
 		{
@@ -97,46 +101,31 @@ public class Card
 	}
 
 	// Vola sa len pre 0-tu kartu v liste
-	public void setHandlePosition(int x, int y)
+	public Point handlePosition(int x, int y)
 	{
 		this.xActualPosition = x - this.xDifPos;
 		this.yActualPosition = y - this.yDifPos;
-	}
-	public int getHandleXPos(int x) { return x - this.xDifPos; }
-	public int getHandleYPos(int y) { return y - this.yDifPos; }
 
-	public void faceUp()
-	{
-		this.isReaveled = true;
+		return new Point(this.xActualPosition, this.yActualPosition);
 	}
 
-	public void faceDown()
-	{
-		this.isReaveled = false;
-	}
+	public void faceUp() { this.isReaveled = true; }
+	public void faceDown() { this.isReaveled = false; }
 
 	public void setIsDragged(boolean iBool)
 	{
 		this.isDragged = iBool;
 	}
 
+	// Pouzite v LinkedPile
+	public int getXDefaultPostion() { return this.xDefaultPosition; }
+	public int getYDefaultPosition() { return this.yDefaultPosition; }
+
+	public int getXDifPos() { return this.xDifPos; }
+	public int getYDifPos() { return this.yDifPos; }
+
 	public void printDebug()
 	{
 		System.out.println(number + " : " + type);
-	}
-
-	public int getXDefaultPostion()
-	{
-		return this.xDefaultPosition;
-	}
-
-	public int getYDefaultPosition()
-	{
-		return this.yDefaultPosition;
-	}
-
-	public int getYDifPos()
-	{
-		return this.yDifPos;
 	}
 }

@@ -261,7 +261,8 @@ public class PlayGround
 				if (this.actualList != null)
 				{
 					//this.actualList.printDebug();
-					this.actualList.setIsDragged(true, ix, iy);
+					this.actualList.setIsDragged(true);
+					this.actualList.setDifPosition(ix, iy);
 				}
 			}
 		}
@@ -286,7 +287,7 @@ public class PlayGround
 					}
 
 					this.actualPile.actionEnded();
-					this.actualList.setIsDragged(false, ix, iy);
+					this.actualList.setIsDragged(false);
 
 					this.actualPile = null;
 					this.actualList = null;
@@ -295,7 +296,7 @@ public class PlayGround
 			}
 
 			this.actualPile.returnListOfCardsToPile(this.actualList);
-			this.actualList.setIsDragged(false, ix, iy);
+			this.actualList.setIsDragged(false);
 		}
 
 		this.actualPile = null;
