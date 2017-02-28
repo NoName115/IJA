@@ -1,6 +1,5 @@
 # TODO
 ### Mockup
-	- 1 obrazovka, 4 obrazovky
 	- pridanie hry, ukoncenie hry, reset hry, ulozit hru, nacitat hru, hint
 	- koniec hry(vyhra)
 
