@@ -41,13 +41,13 @@ public class DeckPile extends Pile
 			switch(this)
 			{
 				case DIAMONDS:
-					return "Diamonds";
+					return "D";
 				case HEARTS:
-					return "Hearts";
+					return "H";
 				case CLUBS:
-					return "Clubs";
+					return "C";
 				case SPADES:
-					return "Spades";
+					return "S";
 				default:
 					return "Error";
 			}

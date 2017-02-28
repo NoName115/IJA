@@ -24,7 +24,7 @@ public class DiscardPile extends Pile
 		// Render spodku balicka
 		g.setColor(Color.BLACK);
 		g.drawRect(this.xPosition, this.yPosition, this.width, this.height);
-		g.drawString("A", this.xPosition + this.width / 2, this.yPosition + this.height / 2);
+		g.drawString("A", this.xPosition + this.width / 2 - 4, this.yPosition + this.height / 2 + 5);
 
 		for (Card c : this.cardList)
 		{

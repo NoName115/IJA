@@ -62,7 +62,6 @@ public abstract class Pile
 
 	/**
 	 * Funkcia pre nastavenie noveho rozlisenia okna hry pri zmene pocte hier
-	 * 
 	 */
 	public void setNewResolution(int xPos, int yPos, int width, int height)
 	{

@@ -67,14 +67,18 @@ public class Card
 			g.fillRect(this.xActualPosition + 1, this.yActualPosition + 1, this.width - 1, this.height - 1);
 
 			g.setColor(this.type.toColor());
-			g.drawString(this.number, this.xActualPosition + 10, this.yActualPosition + 15);
-			g.drawString(this.type.toString(), this.xActualPosition + 20, this.yActualPosition + 15);
+			g.drawString(this.toString(), this.xActualPosition + 8, this.yActualPosition + 15);
 		}
 		else
 		{
 			g.setColor(Color.GRAY);
 			g.fillRect(this.xActualPosition + 1, this.yActualPosition + 1, this.width - 1, this.height - 1);
 		}
+	}
+
+	public String toString()
+	{
+		return this.number + "  -  " + this.type.toString();
 	}
 
 	public void setDefaultPosition(int x, int y)
