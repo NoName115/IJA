@@ -14,9 +14,8 @@ import src.PlayGround;
  */
 public class DeckPile extends Pile
 {
-	private static String[] numberList = new String[] {
-		"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"
-	};
+	private static final int NUMBER_OF_CARDS = 13;
+
 	public static enum Type
 	{
 		CLUBS, DIAMONDS, HEARTS, SPADES;
@@ -52,6 +51,26 @@ public class DeckPile extends Pile
 					return "Error";
 			}
 		}
+
+		public boolean equalColor(DeckPile.Type iColor)
+		{
+			if (this == iColor)
+			{
+				return true;
+			}
+
+			if ((this == CLUBS && iColor == SPADES) || (this == SPADES && iColor == CLUBS))
+			{
+				return true;
+			}
+
+			if ((this == DIAMONDS && iColor == HEARTS) || (this == HEARTS && iColor == DIAMONDS))
+			{
+				return true;
+			}
+
+			return false;
+		}
 	}
 
 	/**
@@ -63,9 +82,9 @@ public class DeckPile extends Pile
 
 		for (DeckPile.Type t : DeckPile.Type.values())
 		{
-			for (int j = 0; j < this.numberList.length; ++j)
+			for (int j = 0; j < NUMBER_OF_CARDS; ++j)
 			{
-				this.cardList.add(new Card(this.numberList[j], t, this.pg));
+				this.cardList.add(new Card(j + 1, t, this.pg));
 			}
 		}
 	}

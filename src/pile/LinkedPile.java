@@ -144,8 +144,36 @@ public class LinkedPile extends Pile
 			return false;
 		}
 
-		// TODO
-		// Kontrola typu kariet
+		// Kontrola spravneho typu kariet
+		if (!this.isEmpty())
+		{
+			if (!this.faceUpCardList.isEmpty())
+			{
+				Card tempCard = inputList.getFirstCard();
+				Card topCard = this.faceUpCardList.get(this.faceUpCardList.size() - 1);
+
+				// Kontrola farby
+				if (topCard.colorEqual(tempCard))
+				{
+					return false;
+				}
+
+				// Kontrola hodnoty, rozdiel musi byt 1
+				if (topCard.getValue() - tempCard.getValue() != 1)
+				{
+					return false;
+				}
+			}
+			
+		}
+		// Prva karta musi byt King
+		else
+		{
+			if (inputList.getFirstCard().getValue() != 13)
+			{
+				return false;
+			}
+		}
 
 		int counter = 0;
 		for (Card c : inputList.getList())
@@ -218,5 +246,13 @@ public class LinkedPile extends Pile
 	{
 		int sizeOfLists = this.faceDownCardList.size() + this.faceUpCardList.size();
 		this.height = sizeOfLists > 1 ? (sizeOfLists - 1) * Y_CARD_SHIFT + this.defaultHeight : this.defaultHeight;
+	}
+
+	/*
+	 * Vrati true ak obydva zoznamy su prazdne
+	 */
+	private boolean isEmpty()
+	{
+		return this.faceDownCardList.isEmpty() && this.faceUpCardList.isEmpty();
 	}
 }

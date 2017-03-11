@@ -86,6 +86,19 @@ public class ListOfCards
 		return this.listOfCards.size();
 	}
 
+	/*
+	 * Vrati spodnu kartu, ak je zoznam prazdny vrati null
+	 */
+	public Card getFirstCard()
+	{
+		if (this.listOfCards.isEmpty())
+		{
+			return null;
+		}
+
+		return this.listOfCards.get(0);
+	}
+
 
 	public void printDebug()
 	{

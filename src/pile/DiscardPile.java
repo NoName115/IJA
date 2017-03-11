@@ -55,8 +55,31 @@ public class DiscardPile extends Pile
 			return false;
 		}
 
-		// TODO
-		// Kontrola typu kariet
+		// Kontrola spravneho typu kariet
+		if (!this.cardList.isEmpty())
+		{
+			Card tempCard = inputList.getFirstCard();
+
+			// Rovnaka farba karty
+			if (!this.cardList.get(0).typeEqual(tempCard))
+			{
+				return false;
+			}
+
+			// Hodnota karty o 1 vyssia
+			if (tempCard.getValue() - this.cardList.get(this.cardList.size() - 1).getValue() != 1)
+			{
+				return false;
+			}
+		}
+		// Prva karta musi byt Eso(A)
+		else
+		{
+			if (inputList.getFirstCard().getValue() != 1)
+			{
+				return false;
+			}
+		}
 
 		for (Card c : inputList.getList())
 		{
