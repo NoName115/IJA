@@ -46,7 +46,7 @@ public class DrawHelpPile extends Pile
 	}
 
 	@Override
-	public void returnListOfCardsToPile(ListOfCards inputList)
+	public void returnListOfCardsToPile(ListOfCards inputList, boolean action)
 	{
 		if (inputList == null || inputList.isEmpty() || inputList.size() > 1)
 		{
@@ -56,6 +56,7 @@ public class DrawHelpPile extends Pile
 		for (Card c : inputList.getList())
 		{
 			this.cardList.add(c);
+			c.setDefaultPosition(this.xPosition, this.yPosition);
 		}
 	}
 

@@ -190,11 +190,35 @@ public class LinkedPile extends Pile
 	}
 
 	@Override
-	public void returnListOfCardsToPile(ListOfCards inputList)
+	public void removeCard(ListOfCards inputList)
+	{
+		int numberOfCardsToRemove = inputList.size();
+		for (int i = 0; i < numberOfCardsToRemove; ++i)
+		{
+			int lastCardIndex = this.faceUpCardList.size() - 1;
+			this.faceUpCardList.remove(lastCardIndex);
+		}
+
+		this.calculateNewHeight();
+	}
+
+	@Override
+	public void returnListOfCardsToPile(ListOfCards inputList, boolean action)
 	{
 		if (inputList == null)
 		{
 			return;
+		}
+
+		if (action && !this.faceUpCardList.isEmpty())
+		{
+			int lastCardIndex = this.faceUpCardList.size() - 1;
+			Card tempCard = this.faceUpCardList.get(lastCardIndex);
+
+			this.faceUpCardList.remove(lastCardIndex);
+			this.faceDownCardList.add(tempCard);
+
+			tempCard.faceDown();
 		}
 
 		for (Card c : inputList.getList())
@@ -213,19 +237,23 @@ public class LinkedPile extends Pile
 	 * Otoci vrchnu kartu z faceDownCardList
 	 * a prida ju do faceUpCardList
 	 */
-	public void actionEnded()
+	public boolean actionEnded()
 	{
 		if (faceDownCardList.isEmpty() || faceUpCardList.size() >= 1)
 		{
-			return;
+			return false;
 		}
 
 		// Reavel top card
 		int lastCardIndex = this.faceDownCardList.size() - 1;
 		Card tempCard = this.faceDownCardList.get(lastCardIndex);
+
 		this.faceDownCardList.remove(lastCardIndex);
 		this.faceUpCardList.add(tempCard);
+
 		tempCard.faceUp();
+
+		return true;
 	}
 
 	public void addCard(Card inputCard)

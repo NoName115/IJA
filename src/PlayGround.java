@@ -35,6 +35,7 @@ public class PlayGround
 	private int yStartPosition;
 
 	private boolean firstUpdate = false;
+	private boolean gameEnded = false;
 
 	// Aktualne vybrana karta alebo list kariet
 	private ListOfCards actualList;
@@ -45,11 +46,13 @@ public class PlayGround
 	private DeckPile deckPile;
 	private DrawPile drawPile;
 	private DrawHelpPile drawHelpPile;
-	private ArrayList<DiscardPile> discardPiles;	// 8 decks
-	private ArrayList<LinkedPile> linkedPiles;		// 4 decks
+	private ArrayList<DiscardPile> discardPiles;	// 4 decks
+	private ArrayList<LinkedPile> linkedPiles;		// 8 decks
 
 	// Pole vsetkych Pile-ov
 	private Pile[] allPiles;
+	// List undo commandov
+	private ArrayList<Command> undoList;
 
 	public PlayGround(int xPos, int yPos, int width, int height, int gameMod)
 	{
@@ -61,6 +64,8 @@ public class PlayGround
 		this.gameMod = gameMod;
 		this.actualList = null;
 		this.actualPile = null;
+
+		this.undoList = new ArrayList<Command>();
 
 		// Decks
 		this.allPiles = new Pile[NUMBER_OF_PILES];	// 1 + 1 + NUMBER_OF_LINKED_PILES + 4
@@ -182,6 +187,23 @@ public class PlayGround
 	}
 
 	/**
+	 * Funkcie kontroluje ci je hra dohrata
+	 */
+	private void checkGameEnded()
+	{
+		for (DiscardPile lp : this.discardPiles)
+		{
+			if (!lp.containAllCards())
+			{
+				return;
+			}
+		}
+
+		// Kazdy discard pile obsahuje vsetky karty
+		this.gameEnded = true;
+	}
+
+	/**
 	 * Update pre logiku hry
 	 */
 	public void update()
@@ -195,6 +217,8 @@ public class PlayGround
 			}
 			this.firstUpdate = false;
 		}
+
+		checkGameEnded();
 	}
 
 	/**
@@ -226,6 +250,15 @@ public class PlayGround
 		catch (ConcurrentModificationException e)
 		{
 			System.out.println("Ocakavana chyba: " + e);
+		}
+
+		if (gameEnded)
+		{
+			g.drawString(
+				"Vyhral si !!!",
+				this.xStartPosition + this.width / 3,
+				this.yStartPosition + this.height / 2
+				);
 		}
 	}
 
@@ -286,8 +319,17 @@ public class PlayGround
 						break;
 					}
 
-					this.actualPile.actionEnded();
+					boolean actionEnded = this.actualPile.actionEnded();
 					this.actualList.setIsDragged(false);
+
+					// Generuje UNDO command
+					if (this.allPiles[i] != this.actualPile)
+					{
+						this.undoList.add(new Command(
+							this.actualPile, this.allPiles[i],
+							this.actualList, actionEnded
+							));
+					}
 
 					this.actualPile = null;
 					this.actualList = null;
@@ -295,7 +337,7 @@ public class PlayGround
 				}
 			}
 
-			this.actualPile.returnListOfCardsToPile(this.actualList);
+			this.actualPile.returnListOfCardsToPile(this.actualList, false);
 			this.actualList.setIsDragged(false);
 		}
 
@@ -340,4 +382,15 @@ public class PlayGround
 
 	public int getCardShift() { return Y_CARD_SHIFT[this.gameMod]; }
 
+	public boolean getGameEnded() { return this.gameEnded; }
+
+	public void undoTest()
+	{
+		if (!this.undoList.isEmpty())
+		{
+			int lastIndex = this.undoList.size() - 1;
+			this.undoList.get(lastIndex).undo();
+			this.undoList.remove(lastIndex);
+		}
+	}
 }

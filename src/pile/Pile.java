@@ -98,12 +98,20 @@ public abstract class Pile
 	public boolean insertCard(ListOfCards inputList) { return false; }
 
 	/**
+	 * Vola sa pri undo, maze karty z pile-u
+	 * Velmi nebezpecna funkcia !!!!!
+	 * Nekontroluje sa ci sa maze spravna karta !!!!!
+	 * Maze podla poctu alebo len vrachnu kartu a pod..
+	 */
+	public void removeCard(ListOfCards inputList) {}
+
+	/**
 	 * Do balicku kariet v danej Pile-e ulozi vstupny zoznam kariet
 	 */
-	public void returnListOfCardsToPile(ListOfCards inputList) {}
+	public void returnListOfCardsToPile(ListOfCards inputList, boolean action) {}
 
 	/**
 	 * Vola sa len pri linkedPile
 	 */
-	public void actionEnded() {}
+	public boolean actionEnded() { return false; }
 }

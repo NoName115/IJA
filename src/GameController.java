@@ -16,7 +16,11 @@ import java.util.ArrayList;
 import java.lang.InterruptedException;
 
 
-public class GameController extends Canvas implements Runnable, MouseListener, MouseMotionListener
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+
+public class GameController extends Canvas implements Runnable, MouseListener, MouseMotionListener, KeyListener
 {
 	// Celkova sirka/vyska okna a max. pocet hier
 	private static final int WIDTH = 1220;
@@ -35,6 +39,9 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		this.setSize(new Dimension(WIDTH, HEIGHT));
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
+
+		// sdf 
+		this.addKeyListener(this);
 
 		this.actualGameIndex = -1;
 		this.listOfGames = new ArrayList<PlayGround>();
@@ -271,7 +278,7 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 			PlayGround tempPg;
 			if ((tempPg = listOfGames.get(i)) != null)
 			{
-				if (tempPg.checkSection(e.getX(), e.getY()))
+				if (!tempPg.getGameEnded() && tempPg.checkSection(e.getX(), e.getY()))
 				{
 					this.actualGameIndex = i;
 					tempPg.mousePressed(e.getX(), e.getY());
@@ -308,4 +315,15 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 	public void mouseExited(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseMoved(MouseEvent e) {}
+
+
+	// sdf sdf sdfds f
+	public void keyPressed(KeyEvent e)
+	{
+		System.out.println("key pressed");
+		listOfGames.get(0).undoTest();
+	}
+
+	public void keyReleased(KeyEvent e) {}
+	public void keyTyped(KeyEvent e) {}
 }

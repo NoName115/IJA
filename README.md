@@ -4,8 +4,11 @@
 	- koniec hry(vyhra)
 
 ### Hra
-	- pravidla ukladania kariet na seba
-	- undo (aspon 5 tahov)
+	- undo (aspon 5 tahov)     - Akykolvek pocet tahov, DONE
 	- ulozit a nacitat hru
 	- vhodne zobrazit hint
-	- koniec hry
+	- koniec hry               - funkcia pripravena
+
+##### Comment
+	- Implementovat triedu Undo, ktore obsahuje zoznam tried Command
+	- Command obsahuje: 'z coho', 'do coho', 'co presuva'

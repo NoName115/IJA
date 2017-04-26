@@ -94,7 +94,13 @@ public class DiscardPile extends Pile
 	}
 
 	@Override
-	public void returnListOfCardsToPile(ListOfCards inputList)
+	public void removeCard(ListOfCards inputList)
+	{
+		this.cardList.remove(this.cardList.size() - 1);
+	}
+
+	@Override
+	public void returnListOfCardsToPile(ListOfCards inputList, boolean action)
 	{
 		if (inputList != null)
 		{
@@ -107,5 +113,15 @@ public class DiscardPile extends Pile
 				this.cardList.add(c);
 			}
 		}
+	}
+
+	/*
+	 * Kontroluje ci pile obsahuje vsetky potrebne karty
+	 * pre ukoncenie hry
+	 * Staci skontrolovat pocet kariet
+	 */
+	public boolean containAllCards()
+	{
+		return (this.cardList.size() == 13) ? true : false;
 	}
 }
