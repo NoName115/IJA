@@ -54,6 +54,45 @@ public class PlayGround
 	// List undo commandov
 	private ArrayList<Command> undoList;
 
+	private class HintMessage
+	{
+		private Card source;
+		private Card destination;
+		private Card under;
+		private String message;
+
+		public HintMessage(Card sourceCard, Card destinationCard, Card under, String message)
+		{
+			this.source = sourceCard;
+			this.destination = destinationCard;
+			this.under = under;
+			this.message = message;
+		}
+
+		public void printHint(boolean moveCard)
+		{
+			if (moveCard)
+			{
+				if (this.destination != null)
+				{
+					System.out.println(
+						"Move " + this.source.toString() + " at " + this.destination.toString()
+					);
+				}
+				else
+				{
+					System.out.println(
+						"Move " + this.source.toString() + " at " + this.message
+					);
+				}
+			}
+			else
+			{
+				System.out.println("Draw card");
+			}
+		}
+	}
+
 	public PlayGround(int xPos, int yPos, int width, int height, int gameMod)
 	{
 		this.xStartPosition = xPos;
@@ -384,13 +423,149 @@ public class PlayGround
 
 	public boolean getGameEnded() { return this.gameEnded; }
 
+	// DEBUG HINT
+	public void showHint()
+	{
+		System.out.println("-----------------");
+
+		HintMessage hint;
+
+		// Kontrola kazdej faceUp karty z linkedListu
+		// ci sa da dat niekde inde polozit
+		for (LinkedPile lp : this.linkedPiles)
+		{
+			for (Card tempCard : lp.getFaceUpCardList())
+			{
+				if ((hint = hintCanAddCard(tempCard, lp)) != null)
+				{
+					if (hint.source != null)
+					{
+						System.out.println("_Source: " + hint.source.toString());
+					}
+
+					if (hint.destination != null)
+					{
+						System.out.println("_Desti: " + hint.destination.toString());
+					}
+
+					if (hint.under != null)
+					{
+						System.out.println("_Under: " + hint.under.toString());
+					}
+
+
+
+					if (hint.destination == null && hint.under == null && lp.getFaceDownCardListSize() == 0 && hint.message != "discard pile")
+					{
+						hint = null;
+						continue;
+					}
+
+					if (hint.destination != null && hint.under != null && (hint.destination.getValue() == hint.under.getValue()))
+					{
+						hint = null;
+						continue;
+					}
+
+					hint.printHint(true);
+					return;
+				}
+			}
+		}
+
+		// Vrchna karta z drawHelpPile
+		ArrayList<Card> cardList = this.drawHelpPile.getCardList();
+		if (!cardList.isEmpty())
+		{
+			if ((hint = hintCanAddCard(cardList.get(cardList.size() - 1), null)) != null)
+			{
+				hint.printHint(true);
+				return;
+			}
+		}
+
+		// Zvysok draw help pile
+		for (Card tempCard : this.drawHelpPile.getCardList())
+		{
+			if ((hint = hintCanAddCard(tempCard, null)) != null)
+			{
+				hint.printHint(false);
+				return;
+			}
+		}
+
+		// Draw Pile
+		for (Card tempCard : this.drawPile.getCardList())
+		{
+			if ((hint = hintCanAddCard(tempCard, null)) != null)
+			{
+				hint.printHint(false);
+				return;
+			}
+		}
+	}
+
+	/*
+	 * Methoda vrati dvojicu kariet, source & destination card
+	 * Ak neexistuje hint vrati null
+	 */
+	private HintMessage hintCanAddCard(Card inputCard, LinkedPile inputPile)
+	{
+		if (inputCard == null)
+		{
+			return null;
+		}
+
+		// Skontrolujem ci neviem polozit kartu
+		// do odkladacich balickou
+		for (DiscardPile pile : this.discardPiles)
+		{
+			if (pile.canAddCard(inputCard))
+			{
+				if (inputPile != null && inputCard != inputPile.getLastFaceUpCard())
+				{
+					break;
+				}
+
+				return new HintMessage(
+					inputCard,
+					null,
+					null,
+					"discard pile"
+					);
+			}
+		}
+
+		// Skontrolujem ci neviem polozit kartu
+		// do linked pile-u
+		for (LinkedPile pile : this.linkedPiles)
+		{
+			if (pile.canAddCard(inputCard))
+			{
+				return new HintMessage(
+					inputCard,
+					pile.getLastFaceUpCard(),
+					inputPile != null ? inputPile.getUnderCard(inputCard) : null,
+					"linked pile"
+					);
+			}
+		}
+
+		return null;
+	}
+
+	// DEBUG UNDO
 	public void undoTest()
 	{
+		showHint();
+
+		/*
 		if (!this.undoList.isEmpty())
 		{
 			int lastIndex = this.undoList.size() - 1;
 			this.undoList.get(lastIndex).undo();
 			this.undoList.remove(lastIndex);
 		}
+		*/
 	}
 }

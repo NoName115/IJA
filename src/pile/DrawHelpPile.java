@@ -77,4 +77,9 @@ public class DrawHelpPile extends Pile
 
 		return tempCard;
 	}
+
+	public ArrayList<Card> getCardList()
+	{
+		return this.cardList;
+	}
 }

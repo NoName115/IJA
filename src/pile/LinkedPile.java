@@ -28,6 +28,7 @@ public class LinkedPile extends Pile
 		this.Y_CARD_SHIFT = this.pg.getCardShift();
 	}
 
+	@Override
 	public void update() {}
 
 	/**
@@ -144,35 +145,9 @@ public class LinkedPile extends Pile
 			return false;
 		}
 
-		// Kontrola spravneho typu kariet
-		if (!this.isEmpty())
+		if (!checkCorrectCard(inputList))
 		{
-			if (!this.faceUpCardList.isEmpty())
-			{
-				Card tempCard = inputList.getFirstCard();
-				Card topCard = this.faceUpCardList.get(this.faceUpCardList.size() - 1);
-
-				// Kontrola farby
-				if (topCard.colorEqual(tempCard))
-				{
-					return false;
-				}
-
-				// Kontrola hodnoty, rozdiel musi byt 1
-				if (topCard.getValue() - tempCard.getValue() != 1)
-				{
-					return false;
-				}
-			}
-			
-		}
-		// Prva karta musi byt King
-		else
-		{
-			if (inputList.getFirstCard().getValue() != 13)
-			{
-				return false;
-			}
+			return false;
 		}
 
 		int counter = 0;
@@ -237,6 +212,7 @@ public class LinkedPile extends Pile
 	 * Otoci vrchnu kartu z faceDownCardList
 	 * a prida ju do faceUpCardList
 	 */
+	@Override
 	public boolean actionEnded()
 	{
 		if (faceDownCardList.isEmpty() || faceUpCardList.size() >= 1)
@@ -256,6 +232,43 @@ public class LinkedPile extends Pile
 		return true;
 	}
 
+	private boolean checkCorrectCard(ListOfCards inputList)
+	{
+		// Kontrola spravneho typu kariet
+		if (!this.isEmpty())
+		{
+			if (!this.faceUpCardList.isEmpty())
+			{
+				Card tempCard = inputList.getFirstCard();
+				Card topCard = this.faceUpCardList.get(this.faceUpCardList.size() - 1);
+
+				// Kontrola farby
+				if (topCard.colorEqual(tempCard))
+				{
+					return false;
+				}
+
+				// Kontrola hodnoty, rozdiel musi byt 1
+				if (topCard.getValue() - tempCard.getValue() != 1)
+				{
+					return false;
+				}
+			}
+			
+		}
+		// Prva karta musi byt King
+		else
+		{
+			if (inputList.getFirstCard().getValue() != 13)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	@Override
 	public void addCard(Card inputCard)
 	{
 		inputCard.setDefaultPosition(
@@ -276,11 +289,66 @@ public class LinkedPile extends Pile
 		this.height = sizeOfLists > 1 ? (sizeOfLists - 1) * Y_CARD_SHIFT + this.defaultHeight : this.defaultHeight;
 	}
 
-	/*
+	/**
 	 * Vrati true ak obydva zoznamy su prazdne
 	 */
 	private boolean isEmpty()
 	{
 		return this.faceDownCardList.isEmpty() && this.faceUpCardList.isEmpty();
+	}
+
+	/**
+	 * Metoda vrati null ak sa karta neda pridat do balicku,
+	 * alebo kartu z vrchu balicka ak sa da
+	 */
+	public boolean canAddCard(Card inputCard)
+	{
+		return checkCorrectCard(new ListOfCards(null, inputCard, 0));
+	}
+
+	/**
+	 * Funkcia vrati poslednu(vrchnu) kartu z faceUpCardList
+	 * Karta sa zo zoznamu nemaze
+	 */
+	public Card getLastFaceUpCard()
+	{
+		if (!this.faceUpCardList.isEmpty())
+		{
+			return this.faceUpCardList.get(this.faceUpCardList.size() - 1);
+		}
+
+		return null;
+	}
+
+	public int getFaceDownCardListSize()
+	{
+		return this.faceDownCardList.size();
+	}
+
+	/**
+	 * Vrati kartu ktora je pod kartou v argumente funkcie
+	 */
+	public Card getUnderCard(Card inputCard)
+	{
+		int underCardIndex = -1;
+		for (Card forCard : this.faceUpCardList)
+		{
+			if (forCard == inputCard)
+			{
+				//underCardIndex--;
+				break;
+			}
+
+			underCardIndex++;
+		}
+
+		System.out.println("__UNDER: " + underCardIndex);
+
+		return underCardIndex < 0 ? null : this.faceUpCardList.get(underCardIndex);
+	}
+
+	public ArrayList<Card> getFaceUpCardList()
+	{
+		return this.faceUpCardList;
 	}
 }

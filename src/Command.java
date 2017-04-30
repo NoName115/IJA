@@ -19,12 +19,6 @@ public class Command
         this.destination = destination;
         this.cardList = cardList;
         this.action = action;
-
-        System.out.println(
-            this.source.getClass().getSimpleName() + " - " +
-            this.destination.getClass().getSimpleName()
-            );
-        this.cardList.printDebug();
     }
 
     public void run()
@@ -35,12 +29,6 @@ public class Command
 
     public void undo()
     {
-        System.out.println(
-            "\nUndo_run: \n" +
-            this.source.getClass().getSimpleName() + " - " +
-            this.destination.getClass().getSimpleName()
-            );
-
         this.destination.removeCard(this.cardList);
         this.source.returnListOfCardsToPile(this.cardList, action);
     }

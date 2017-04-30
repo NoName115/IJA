@@ -99,7 +99,7 @@ public class Card
 				break;
 		}
 
-		return cardInString + "  -  " + this.type.toString();
+		return cardInString + " - " + this.type.toString();
 	}
 
 	public DeckPile.Type getType()

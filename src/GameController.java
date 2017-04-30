@@ -40,7 +40,7 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 
-		// sdf 
+		// DEBUG pre undo
 		this.addKeyListener(this);
 
 		this.actualGameIndex = -1;
@@ -317,13 +317,13 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 	public void mouseMoved(MouseEvent e) {}
 
 
-	// sdf sdf sdfds f
+	// DEBUG pre undo
+	// vsetky 3 funkcie
 	public void keyPressed(KeyEvent e)
 	{
 		System.out.println("key pressed");
 		listOfGames.get(0).undoTest();
 	}
-
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
 }

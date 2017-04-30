@@ -82,4 +82,9 @@ public class DrawPile extends Pile
 		tempCard.faceUp();
 		return null;
 	}
+
+	public ArrayList<Card> getCardList()
+	{
+		return this.cardList;
+	}
 }

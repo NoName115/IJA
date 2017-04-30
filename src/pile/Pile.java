@@ -99,9 +99,9 @@ public abstract class Pile
 
 	/**
 	 * Vola sa pri undo, maze karty z pile-u
-	 * Velmi nebezpecna funkcia !!!!!
+	 * VELMI, VELMI NEBEZPECNA funkcia !!!!!
 	 * Nekontroluje sa ci sa maze spravna karta !!!!!
-	 * Maze podla poctu alebo len vrachnu kartu a pod..
+	 * Maze podla poctu alebo len vrchnu kartu a pod..
 	 */
 	public void removeCard(ListOfCards inputList) {}
 

@@ -55,30 +55,9 @@ public class DiscardPile extends Pile
 			return false;
 		}
 
-		// Kontrola spravneho typu kariet
-		if (!this.cardList.isEmpty())
+		if (!checkCorrectCard(inputList))
 		{
-			Card tempCard = inputList.getFirstCard();
-
-			// Rovnaka farba karty
-			if (!this.cardList.get(0).typeEqual(tempCard))
-			{
-				return false;
-			}
-
-			// Hodnota karty o 1 vyssia
-			if (tempCard.getValue() - this.cardList.get(this.cardList.size() - 1).getValue() != 1)
-			{
-				return false;
-			}
-		}
-		// Prva karta musi byt Eso(A)
-		else
-		{
-			if (inputList.getFirstCard().getValue() != 1)
-			{
-				return false;
-			}
+			return false;
 		}
 
 		for (Card c : inputList.getList())
@@ -113,6 +92,53 @@ public class DiscardPile extends Pile
 				this.cardList.add(c);
 			}
 		}
+	}
+
+	private boolean checkCorrectCard(ListOfCards inputList)
+	{
+		// Kontrola spravneho typu kariet
+		if (!this.cardList.isEmpty())
+		{
+			Card tempCard = inputList.getFirstCard();
+
+			// Rovnaka farba karty
+			if (!this.cardList.get(0).typeEqual(tempCard))
+			{
+				return false;
+			}
+
+			// Hodnota karty o 1 vyssia
+			if (tempCard.getValue() - this.cardList.get(this.cardList.size() - 1).getValue() != 1)
+			{
+				return false;
+			}
+		}
+		// Prva karta musi byt Eso(A)
+		else
+		{
+			if (inputList.getFirstCard().getValue() != 1)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Metoda vrati null ak sa karta neda pridat do balicku,
+	 * alebo kartu z vrchu balicka ak sa da
+	 */
+	public boolean canAddCard(Card inputCard)
+	{
+		ListOfCards inputList = new ListOfCards(null, inputCard, 0);
+
+		if (checkCorrectCard(inputList))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	/*
