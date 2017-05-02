@@ -10,7 +10,7 @@ import java.lang.NullPointerException;
 
 import src.pile.*;
 import src.card.*;
-
+import src.gui.ControlPanel;
 
 /**
  * Object reprezentujuci jednu hraciu plochu
@@ -26,6 +26,7 @@ public class PlayGround
 	private static final int[] Y_CARD_SHIFT = new int[] { 20, 20 };
 	private static final int[] CARD_WIDTH = new int[] { 140, 70 };
 	private static final int[] CARD_HEIGHT = new int[] { 200, 100 };
+	private static final int[] PANEL_SIZE = new int[] { 80, 40 };
 
 	private int gameMod;
 
@@ -53,6 +54,8 @@ public class PlayGround
 	private Pile[] allPiles;
 	// List undo commandov
 	private ArrayList<Command> undoList;
+	// Bottom control panel
+	private ControlPanel controlPanel;
 
 	private class HintMessage
 	{
@@ -69,26 +72,22 @@ public class PlayGround
 			this.message = message;
 		}
 
-		public void printHint(boolean moveCard)
+		public String getHintString(boolean moveCard)
 		{
 			if (moveCard)
 			{
 				if (this.destination != null)
 				{
-					System.out.println(
-						"Move " + this.source.toString() + " at " + this.destination.toString()
-					);
+					return "Move " + this.source.toString() + " at " + this.destination.toString();
 				}
 				else
 				{
-					System.out.println(
-						"Move " + this.source.toString() + " at " + this.message
-					);
+					return "Move " + this.source.toString() + " at " + this.message;
 				}
 			}
 			else
 			{
-				System.out.println("Draw card");
+				return "Draw card";
 			}
 		}
 	}
@@ -105,6 +104,11 @@ public class PlayGround
 		this.actualPile = null;
 
 		this.undoList = new ArrayList<Command>();
+		this.controlPanel = new ControlPanel(
+			this,
+			xStartPosition, yStartPosition + height - PANEL_SIZE[this.gameMod],
+			width, PANEL_SIZE[this.gameMod]
+			);
 
 		// Decks
 		this.allPiles = new Pile[NUMBER_OF_PILES];	// 1 + 1 + NUMBER_OF_LINKED_PILES + 4
@@ -170,6 +174,11 @@ public class PlayGround
 		this.height = height;
 
 		this.gameMod = gameMod;
+
+		this.controlPanel.setNewResolution(
+			xStartPosition, yStartPosition + height - PANEL_SIZE[this.gameMod],
+			width, PANEL_SIZE[this.gameMod]
+			);
 
 		// Set new resolution to all piles
 		this.allPiles[0].setNewResolution(
@@ -291,6 +300,8 @@ public class PlayGround
 			System.out.println("Ocakavana chyba: " + e);
 		}
 
+		controlPanel.render(g);
+
 		if (gameEnded)
 		{
 			g.drawString(
@@ -323,6 +334,13 @@ public class PlayGround
 	 */
 	public void mousePressed(int ix, int iy)
 	{
+		// Check controlPanel
+		if (this.controlPanel.isIn(ix, iy))
+		{
+			return;
+		}
+
+		// Check piles
 		for (int i = 0; i < NUMBER_OF_PILES; ++i)
 		{
 			if (this.allPiles[i].isInPile(ix, iy))
@@ -423,11 +441,25 @@ public class PlayGround
 
 	public boolean getGameEnded() { return this.gameEnded; }
 
-	// DEBUG HINT
-	public void showHint()
+	/**
+	 * Funkcia urobi undo
+	 */
+	public void undo()
 	{
-		System.out.println("-----------------");
+		if (!undoList.isEmpty())
+		{
+			int lastIndex = undoList.size() - 1;
+			Command tempCommand = undoList.get(lastIndex);
+			undoList.remove(lastIndex);
+			tempCommand.undo();
+		}
+	}
 
+	/**
+	 * Funkcie vrati hint(string)
+	 */
+	public String showHint()
+	{
 		HintMessage hint;
 
 		// Kontrola kazdej faceUp karty z linkedListu
@@ -438,23 +470,6 @@ public class PlayGround
 			{
 				if ((hint = hintCanAddCard(tempCard, lp)) != null)
 				{
-					if (hint.source != null)
-					{
-						System.out.println("_Source: " + hint.source.toString());
-					}
-
-					if (hint.destination != null)
-					{
-						System.out.println("_Desti: " + hint.destination.toString());
-					}
-
-					if (hint.under != null)
-					{
-						System.out.println("_Under: " + hint.under.toString());
-					}
-
-
-
 					if (hint.destination == null && hint.under == null && lp.getFaceDownCardListSize() == 0 && hint.message != "discard pile")
 					{
 						hint = null;
@@ -467,8 +482,7 @@ public class PlayGround
 						continue;
 					}
 
-					hint.printHint(true);
-					return;
+					return hint.getHintString(true);
 				}
 			}
 		}
@@ -479,8 +493,7 @@ public class PlayGround
 		{
 			if ((hint = hintCanAddCard(cardList.get(cardList.size() - 1), null)) != null)
 			{
-				hint.printHint(true);
-				return;
+				return hint.getHintString(true);
 			}
 		}
 
@@ -489,8 +502,7 @@ public class PlayGround
 		{
 			if ((hint = hintCanAddCard(tempCard, null)) != null)
 			{
-				hint.printHint(false);
-				return;
+				return hint.getHintString(false);
 			}
 		}
 
@@ -499,10 +511,11 @@ public class PlayGround
 		{
 			if ((hint = hintCanAddCard(tempCard, null)) != null)
 			{
-				hint.printHint(false);
-				return;
+				return hint.getHintString(false);
 			}
 		}
+
+		return null;
 	}
 
 	/*
@@ -554,18 +567,5 @@ public class PlayGround
 		return null;
 	}
 
-	// DEBUG UNDO
-	public void undoTest()
-	{
-		showHint();
-
-		/*
-		if (!this.undoList.isEmpty())
-		{
-			int lastIndex = this.undoList.size() - 1;
-			this.undoList.get(lastIndex).undo();
-			this.undoList.remove(lastIndex);
-		}
-		*/
-	}
+	public int getPanelSize() { return this.PANEL_SIZE[this.gameMod]; }
 }

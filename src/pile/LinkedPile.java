@@ -335,14 +335,11 @@ public class LinkedPile extends Pile
 		{
 			if (forCard == inputCard)
 			{
-				//underCardIndex--;
 				break;
 			}
 
 			underCardIndex++;
 		}
-
-		System.out.println("__UNDER: " + underCardIndex);
 
 		return underCardIndex < 0 ? null : this.faceUpCardList.get(underCardIndex);
 	}
