@@ -1,4 +1,4 @@
-package src;
+package solitaire;
 
 import java.awt.Graphics;
 
@@ -8,9 +8,9 @@ import java.util.ConcurrentModificationException;
 import java.lang.IndexOutOfBoundsException;
 import java.lang.NullPointerException;
 
-import src.pile.*;
-import src.card.*;
-import src.gui.ControlPanel;
+import solitaire.pile.*;
+import solitaire.card.*;
+import solitaire.gui.ControlPanel;
 
 /**
  * Object reprezentujuci jednu hraciu plochu
@@ -40,7 +40,7 @@ public class PlayGround
 
 	// Aktualne vybrana karta alebo list kariet
 	private ListOfCards actualList;
-	// Aktualny pile z ktoreho bola karta zobrata
+	// Aktualny solitaire.pile z ktoreho bola karta zobrata
 	private Pile actualPile;
 
 	// Vsetky decky potrebne pre hranie
@@ -87,7 +87,7 @@ public class PlayGround
 			}
 			else
 			{
-				return "Draw card";
+				return "Draw solitaire.card";
 			}
 		}
 	}
@@ -247,7 +247,7 @@ public class PlayGround
 			}
 		}
 
-		// Kazdy discard pile obsahuje vsetky karty
+		// Kazdy discard solitaire.pile obsahuje vsetky karty
 		this.gameEnded = true;
 	}
 
@@ -330,7 +330,7 @@ public class PlayGround
 	}
 
 	/**
-	 * Zachytenie karty a pile-u
+	 * Zachytenie karty a solitaire.pile-u
 	 */
 	public void mousePressed(int ix, int iy)
 	{
@@ -359,7 +359,7 @@ public class PlayGround
 	}
 
 	/**
-	 * Vypustenie aktualnej karty a pile-u
+	 * Vypustenie aktualnej karty a solitaire.pile-u
 	 */
 	public void mouseReleased(int ix, int iy)
 	{
@@ -470,7 +470,7 @@ public class PlayGround
 			{
 				if ((hint = hintCanAddCard(tempCard, lp)) != null)
 				{
-					if (hint.destination == null && hint.under == null && lp.getFaceDownCardListSize() == 0 && hint.message != "discard pile")
+					if (hint.destination == null && hint.under == null && lp.getFaceDownCardListSize() == 0 && hint.message != "discard solitaire.pile")
 					{
 						hint = null;
 						continue;
@@ -497,7 +497,7 @@ public class PlayGround
 			}
 		}
 
-		// Zvysok draw help pile
+		// Zvysok draw help solitaire.pile
 		for (Card tempCard : this.drawHelpPile.getCardList())
 		{
 			if ((hint = hintCanAddCard(tempCard, null)) != null)
@@ -519,7 +519,7 @@ public class PlayGround
 	}
 
 	/*
-	 * Methoda vrati dvojicu kariet, source & destination card
+	 * Methoda vrati dvojicu kariet, source & destination solitaire.card
 	 * Ak neexistuje hint vrati null
 	 */
 	private HintMessage hintCanAddCard(Card inputCard, LinkedPile inputPile)
@@ -544,13 +544,13 @@ public class PlayGround
 					inputCard,
 					null,
 					null,
-					"discard pile"
+					"discard solitaire.pile"
 					);
 			}
 		}
 
 		// Skontrolujem ci neviem polozit kartu
-		// do linked pile-u
+		// do linked solitaire.pile-u
 		for (LinkedPile pile : this.linkedPiles)
 		{
 			if (pile.canAddCard(inputCard))
@@ -559,7 +559,7 @@ public class PlayGround
 					inputCard,
 					pile.getLastFaceUpCard(),
 					inputPile != null ? inputPile.getUnderCard(inputCard) : null,
-					"linked pile"
+					"linked solitaire.pile"
 					);
 			}
 		}

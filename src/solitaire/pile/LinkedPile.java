@@ -1,12 +1,12 @@
-package src.pile;
+package solitaire.pile;
 
 import java.awt.Graphics;
 import java.awt.Color;
 
 import java.util.ArrayList;
 
-import src.card.*;
-import src.PlayGround;
+import solitaire.card.*;
+import solitaire.PlayGround;
 
 
 public class LinkedPile extends Pile
@@ -220,7 +220,7 @@ public class LinkedPile extends Pile
 			return false;
 		}
 
-		// Reavel top card
+		// Reavel top solitaire.card
 		int lastCardIndex = this.faceDownCardList.size() - 1;
 		Card tempCard = this.faceDownCardList.get(lastCardIndex);
 

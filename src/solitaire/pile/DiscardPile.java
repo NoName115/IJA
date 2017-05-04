@@ -1,11 +1,10 @@
-package src.pile;
+package solitaire.pile;
 
 import java.awt.Graphics;
 import java.awt.Color;
-import java.util.ArrayList;
 
-import src.card.*;
-import src.PlayGround;
+import solitaire.card.*;
+import solitaire.PlayGround;
 
 
 public class DiscardPile extends Pile
@@ -142,7 +141,7 @@ public class DiscardPile extends Pile
 	}
 
 	/*
-	 * Kontroluje ci pile obsahuje vsetky potrebne karty
+	 * Kontroluje ci solitaire.pile obsahuje vsetky potrebne karty
 	 * pre ukoncenie hry
 	 * Staci skontrolovat pocet kariet
 	 */

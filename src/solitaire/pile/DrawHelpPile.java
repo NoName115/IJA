@@ -1,11 +1,11 @@
-package src.pile;
+package solitaire.pile;
 
 import java.awt.Graphics;
 
 import java.util.ArrayList;
 
-import src.card.*;
-import src.PlayGround;
+import solitaire.card.*;
+import solitaire.PlayGround;
 
 
 public class DrawHelpPile extends Pile

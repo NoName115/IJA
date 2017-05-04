@@ -1,12 +1,11 @@
-package src.card;
+package solitaire.card;
 
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Point;
 
-import src.pile.DeckPile;
-import src.GameController;
-import src.PlayGround;
+import solitaire.pile.DeckPile;
+import solitaire.PlayGround;
 
 
 public class Card

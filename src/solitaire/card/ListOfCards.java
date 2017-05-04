@@ -1,4 +1,4 @@
-package src.card;
+package solitaire.card;
 
 import java.awt.Graphics;
 import java.awt.Point;

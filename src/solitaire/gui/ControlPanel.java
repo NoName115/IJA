@@ -1,9 +1,9 @@
-package src.gui;
+package solitaire.gui;
 
 import java.awt.Graphics;
 import java.awt.Color;
 
-import src.PlayGround;
+import solitaire.PlayGround;
 
 
 public class ControlPanel

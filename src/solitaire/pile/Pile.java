@@ -1,11 +1,11 @@
-package src.pile;
+package solitaire.pile;
 
 import java.awt.Graphics;
 
 import java.util.ArrayList;
 
-import src.card.*;
-import src.PlayGround;
+import solitaire.card.*;
+import solitaire.PlayGround;
 
 
 /**
@@ -98,7 +98,7 @@ public abstract class Pile
 	public boolean insertCard(ListOfCards inputList) { return false; }
 
 	/**
-	 * Vola sa pri undo, maze karty z pile-u
+	 * Vola sa pri undo, maze karty z solitaire.pile-u
 	 * VELMI, VELMI NEBEZPECNA funkcia !!!!!
 	 * Nekontroluje sa ci sa maze spravna karta !!!!!
 	 * Maze podla poctu alebo len vrchnu kartu a pod..

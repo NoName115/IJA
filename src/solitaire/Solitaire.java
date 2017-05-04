@@ -1,4 +1,4 @@
-package src;
+package solitaire;
 
 import javax.swing.JFrame;
 

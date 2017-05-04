@@ -1,4 +1,4 @@
-package src.gui;
+package solitaire.gui;
 
 
 public class ButtonUndo extends Button

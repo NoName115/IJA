@@ -1,10 +1,10 @@
 if [ "$#" -eq 0 ]; then
-    rm -f src/*.class src/pile/*.class src/card/*.class src/gui/*.class
-    javac src/Solitaire.java src/GameController.java src/Command.java src/PlayGround.java src/pile/Pile.java src/pile/DiscardPile.java src/pile/DrawPile.java src/pile/DrawHelpPile.java src/pile/DeckPile.java src/card/ListOfCards.java src/card/Card.java src/gui/ControlPanel.java src/gui/Button.java src/gui/ButtonHint.java
+    rm -f src/*.class src/solitaire.pile/*.class src/solitaire.card/*.class src/solitaire.gui/*.class
+    javac src/Solitaire.java src/GameController.java src/Command.java src/PlayGround.java src/solitaire.pile/Pile.java src/solitaire.pile/DiscardPile.java src/solitaire.pile/DrawPile.java src/solitaire.pile/DrawHelpPile.java src/solitaire.pile/DeckPile.java src/solitaire.card/ListOfCards.java src/solitaire.card/Card.java src/solitaire.gui/ControlPanel.java src/solitaire.gui/Button.java src/solitaire.gui/ButtonHint.java
     java src.Solitaire
 else
     if [ "$#" -eq 1 ] && [ "$1" == "clean" ]; then
-        rm -f src/*.class src/pile/*.class src/card/*.class src/gui/*.class
+        rm -f src/*.class src/solitaire.pile/*.class src/solitaire.card/*.class src/solitaire.gui/*.class
     else
         echo "./runSolitaire.sh [clean]"
     fi

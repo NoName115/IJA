@@ -1,9 +1,9 @@
-package src;
+package solitaire;
 
 import java.util.ArrayList;
 
-import src.card.*;
-import src.pile.Pile;
+import solitaire.card.*;
+import solitaire.pile.Pile;
 
 
 public class Command
