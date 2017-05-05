@@ -15,60 +15,86 @@ public class Network {
         kryo.register(GameStateResponse.class);
         kryo.register(GameMoveResponse.class);
         kryo.register(GameMove.class);
-        kryo.register(AddGame.class);
+        kryo.register(AddPlayground.class);
         kryo.register(UpdatePlayground.class);
-        kryo.register(CloseGame.class);
-        kryo.register(Undo.class);
-        kryo.register(Save.class);
+        kryo.register(ClosePlayground.class);
+        kryo.register(UndoRequest.class);
+        kryo.register(SaveRequest.class);
+        kryo.register(LoadRequest.class);
+        kryo.register(HintRequest.class);
+        kryo.register(HintResponse.class);
 
     }
 
+    // Creating new game
     static public class RegisterGameRequest {
     }
 
+    // Response for creating new game
     static public class RegisterGameResponse {
         public String uuid;
     }
 
+    // Request for joining game
     static public class JoinGameRequest {
-        public int uuid;
+        public String uuid;
     }
 
+    // Response after joining game along with multiple UpdatePlayground
     static public class GameStateResponse {
         public boolean spectator;
-        // state of whole game - list of 4 boards
     }
 
-    static public class GameBoard {
+    // Status of whole playground
+    static public class UpdatePlayground {
         // one board - eg. for adding game
     }
 
+    // Request for moving cards between piles
     static public class GameMove {
         public int index;
-        // move to do
+        public int from;
+        public int to;
+        public int numberOfCards;
     }
 
+    // Response after moving cards - valid move or not
     static public class GameMoveResponse {
         public boolean valid;
     }
 
-    static public class AddGame {
+    // Request/Response for adding playground
+    static public class AddPlayground {
         public int index;
     }
 
-    static public class UpdatePlayground {
+    // Request/Response for closing playground
+    static public class ClosePlayground {
         public int index;
     }
 
-    static public class CloseGame {
+    // Request for undo operation
+    static public class UndoRequest {
         public int index;
     }
 
-    static public class Undo {
+    // Request for saving game
+    static public class SaveRequest {
         public int index;
     }
 
-    static public class Save {
+    // Request for loading game
+    static public class LoadRequest {
         public int index;
+    }
+
+    // Request for getting hint
+    static public class HintRequest {
+        public int index;
+    }
+
+    // Response for getting hint
+    static public class HintResponse {
+
     }
 }

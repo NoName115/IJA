@@ -50,9 +50,11 @@ public class SolitaireServer {
                 }
 
                 if (object instanceof JoinGameRequest) {
-                    if (connection.uuid == null) return;
 
-                    GameInstance game = games.get(connection.uuid);
+                    JoinGameRequest joinGameRequest = (JoinGameRequest) object;
+                    GameInstance game = games.get(joinGameRequest.uuid);
+
+                    connection.uuid = joinGameRequest.uuid;
 
                     GameStateResponse response = new GameStateResponse();
                     if (game.getPlayerID() == connection.getID()) {
@@ -90,33 +92,33 @@ public class SolitaireServer {
                     return;
                 }
 
-                if (object instanceof AddGame) {
+                if (object instanceof AddPlayground) {
                     if (connection.uuid == null) return;
 
                     GameInstance game = games.get(connection.uuid);
                     if (game.getPlayerID() != game.getPlayerID()) return;
 
-                    AddGame addGame = (AddGame) object;
+                    AddPlayground addPlayground = (AddPlayground) object;
 
                     if (true/*number of games == 4*/) {
                         return;
                     }
 
                     // TODO: vytvorit hru, pridat do response
-                    GameBoard response = new GameBoard();
+                    Network.UpdatePlayground response = new Network.UpdatePlayground();
 
                     sendToAllPlayers(game, response);
 
                     return;
                 }
 
-                if (object instanceof CloseGame) {
+                if (object instanceof ClosePlayground) {
                     if (connection.uuid == null) return;
 
                     GameInstance game = games.get(connection.uuid);
                     if (game.getPlayerID() != game.getPlayerID()) return;
 
-                    CloseGame closeGame = (CloseGame) object;
+                    ClosePlayground closePlayground = (ClosePlayground) object;
 
                     if (true/*game not exist*/) {
                         return;
@@ -124,33 +126,33 @@ public class SolitaireServer {
 
                     // TODO: vytvorit hru, pridat do response
 
-                    sendToAllSpectators(game, closeGame);
+                    sendToAllSpectators(game, closePlayground);
 
                     return;
                 }
 
-                if (object instanceof Undo) {
+                if (object instanceof UndoRequest) {
                     if (connection.uuid == null) return;
 
                     GameInstance game = games.get(connection.uuid);
                     if (game.getPlayerID() != game.getPlayerID()) return;
 
-                    Undo undo = (Undo) object;
+                    UndoRequest undoRequest = (UndoRequest) object;
 
-                    // TODO: existuje hra? Sprav undo
+                    // TODO: existuje hra? Sprav undoRequest
 
-                    sendToAllSpectators(game, undo);
+                    sendToAllSpectators(game, undoRequest);
 
                     return;
                 }
 
-                if (object instanceof Save) {
+                if (object instanceof SaveRequest) {
                     if (connection.uuid == null) return;
 
                     GameInstance game = games.get(connection.uuid);
                     if (game.getPlayerID() != game.getPlayerID()) return;
 
-                    Save save = (Save) object;
+                    SaveRequest saveRequest = (SaveRequest) object;
 
                     // TODO: existuje hra? Uloz
 

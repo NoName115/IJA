@@ -3,16 +3,9 @@ package solitaire.networking;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.minlog.Log;
 
 import solitaire.networking.Network.*;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 public class SolitaireClient {
@@ -47,11 +40,7 @@ public class SolitaireClient {
             }
 
             public void disconnected (Connection connection) {
-                EventQueue.invokeLater(new Runnable() {
-                    public void run () {
-                        // Closing the frame calls the close listener which will stop the client's update thread.
-                    }
-                });
+
             }
         });
 
@@ -80,4 +69,68 @@ public class SolitaireClient {
             }
         }.start();
     }
+
+    public void registerGame() {
+        RegisterGameRequest req = new RegisterGameRequest();
+        client.sendTCP(req);
+    }
+
+    public void joinGame(String UUID) {
+        JoinGameRequest req = new JoinGameRequest();
+        req.uuid = UUID;
+    }
+
+    public void makeMove(int playground, int from, int to, int numberOfCards) {
+        GameMove req = new GameMove();
+        req.index = playground;
+        req.from = from;
+        req.to = to;
+        req.numberOfCards = numberOfCards;
+
+        client.sendTCP(req);
+    }
+
+    public void addGame(int index) {
+        AddPlayground req = new AddPlayground();
+        req.index = index;
+
+        client.sendTCP(index);
+    }
+
+    public void closeGame(int index) {
+        ClosePlayground req = new ClosePlayground();
+        req.index = index;
+
+        client.sendTCP(req);
+    }
+
+    public void undo(int index) {
+        UndoRequest req = new UndoRequest();
+        req.index = index;
+
+        client.sendTCP(req);
+    }
+
+    public void save(int index) {
+        SaveRequest req = new SaveRequest();
+        req.index = index;
+
+        client.sendTCP(req);
+    }
+
+    public void load(int index) {
+        LoadRequest req = new LoadRequest();
+        req.index = index;
+
+        client.sendTCP(req);
+    }
+
+    public void getHint(int index) {
+        HintRequest req = new HintRequest();
+        req.index = index;
+
+        client.sendTCP(req);
+    }
+
+
 }

@@ -28,7 +28,7 @@ public class ControlPanel
         this.height = height;
 
         this.buttonHint = new ButtonHint(this, "Show Hint", 0.15, 0.8, 0.01);
-        this.buttonUndo = new ButtonUndo(this, "Undo", 0.15, 0.56, 0.25);
+        this.buttonUndo = new ButtonUndo(this, "UndoRequest", 0.15, 0.56, 0.25);
     }
 
     public void render(Graphics g)
