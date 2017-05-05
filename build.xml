@@ -58,49 +58,59 @@
   <property name="java_school.jar.client" value="dest-client"/>
   <property name="java_school.jar.server" value="dest-server"/>
 
-  <path id="java_school.module.bootclasspath">
-    <!-- Paths to be included in compilation bootclasspath -->
+  <path id="java_school.classpath">
+    <fileset dir="lib">
+      <include name="*.jar"/>
+    </fileset>
   </path>
-  
-  <path id="java_school.module.production.classpath"/>
-  
-  <path id="java_school.runtime.production.module.classpath"/>
-  
-  <path id="java_school.module.classpath"/>
-  
-  <path id="java_school.runtime.module.classpath"/>
-  
-  
-  <patternset id="excluded.from.module.java_school">
-    <patternset refid="ignored.files"/>
-  </patternset>
-  
-  <patternset id="excluded.from.compilation.java_school">
-    <patternset refid="excluded.from.module.java_school"/>
-  </patternset>
-  
-  
-  <target name="compile" depends="compile.module.client,compile.module.server" description="Compile module Java_School"/>
-  <target name="compile.module.client" description="Compile module client">
+
+  <target name="compile" description="Compile module Java_School">
     <mkdir dir="${java_school.output.dir}"/>
     <mkdir dir="${java_school.jar.client}"/>
     <mkdir dir="${java_school.jar.server}"/>
-    <javac srcdir="src" destdir="${java_school.output.dir}"/>
+    <javac srcdir="src" destdir="${java_school.output.dir}">
+      <classpath>
+        <fileset dir="lib">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+    </javac>
+
     <jar destfile="${java_school.jar.client}/ija-client.jar" basedir="${java_school.output.dir}">
       <manifest>
-        <attribute name="Main-Class" value="solitaire.Solitaire"/>
+        <attribute name="Main-Class" value="solitaire.networking.SolitaireClient"/>
       </manifest>
+      <zipgroupfileset dir="lib" includes="**/*.jar"/>
     </jar>
-  </target>
-  <target name="compile.module.server" description="Compile module server"/>
 
+    <jar destfile="${java_school.jar.server}/ija-server.jar" basedir="${java_school.output.dir}">
+      <manifest>
+        <attribute name="Main-Class" value="solitaire.networking.SolitaireServer"/>
+      </manifest>
+      <zipgroupfileset dir="lib" includes="**/*.jar"/>
+    </jar>
+
+  </target>
 
   <target name="clean.module.java_school" description="cleanup module">
     <delete dir="${java_school.output.dir}"/>
   </target>
 
   <target name="run" description="Run server and 2 clients">
+    <java jar="${java_school.jar.server}/ija-server.jar" fork="true"/>
     <java jar="${java_school.jar.client}/ija-client.jar" fork="true"/>
+  </target>
+
+  <target name="run.client" description="Run server and 2 clients">
+    <java jar="${java_school.jar.client}/ija-client.jar" fork="true"/>
+  </target>
+
+  <target name="run.server" description="Run server and 2 clients">
+    <java jar="${java_school.jar.server}/ija-server.jar" fork="true"/>
+  </target>
+
+  <target name="run.single" description="Run server and 2 clients">
+    <java jar="${java_school.output.dir}/ija.jar" fork="true"/>
   </target>
 
   <target name="init" description="Build initialization">
