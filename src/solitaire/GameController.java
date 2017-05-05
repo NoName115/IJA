@@ -317,7 +317,7 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 	public void mouseMoved(MouseEvent e) {}
 
 	@Override
-	public void moveCard(int from, int to, int numberOfCards) {
+	public void moveCard(int playground, int from, int to, int numberOfCards) {
 
 	}
 
@@ -333,6 +333,11 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 
 	@Override
 	public void closePlayground(int index) {
+
+	}
+
+	@Override
+	public void showHint(String hint) {
 
 	}
 }

@@ -64,7 +64,17 @@
     </fileset>
   </path>
 
-  <target name="compile" description="Compile module Java_School">
+  <target name="libs.check">
+    <available file="lib/kryonet-all-2.21.jar" property="libs.down" value="true"/>
+  </target>
+
+  <target name="libs.download" depends="libs.check" unless="libs.down">
+    <exec executable="/bin/bash">
+      <arg value="lib/get-libs.sh"/>
+    </exec>
+  </target>
+
+  <target name="compile" depends="libs.download" description="Compile module Java_School">
     <mkdir dir="${java_school.output.dir}"/>
     <mkdir dir="${java_school.jar.client}"/>
     <mkdir dir="${java_school.jar.server}"/>
