@@ -16,6 +16,7 @@ public class Network {
         kryo.register(GameMoveResponse.class);
         kryo.register(GameMove.class);
         kryo.register(AddGame.class);
+        kryo.register(UpdatePlayground.class);
         kryo.register(CloseGame.class);
         kryo.register(Undo.class);
         kryo.register(Save.class);
@@ -52,7 +53,11 @@ public class Network {
     }
 
     static public class AddGame {
+        public int index;
+    }
 
+    static public class UpdatePlayground {
+        public int index;
     }
 
     static public class CloseGame {

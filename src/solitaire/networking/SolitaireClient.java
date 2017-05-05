@@ -18,8 +18,12 @@ import java.io.IOException;
 public class SolitaireClient {
 
     Client client;
+    IClientController controller;
 
-    public SolitaireClient () {
+    public SolitaireClient (IClientController controller) {
+
+        this.controller = controller;
+
         client = new Client();
         client.start();
 
@@ -75,11 +79,5 @@ public class SolitaireClient {
                 }
             }
         }.start();
-    }
-
-    public static void main (String[] args) {
-        Log.set(Log.LEVEL_DEBUG);
-        System.out.println("Running");
-        new SolitaireClient();
     }
 }

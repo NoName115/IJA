@@ -78,7 +78,7 @@
 
     <jar destfile="${java_school.jar.client}/ija-client.jar" basedir="${java_school.output.dir}">
       <manifest>
-        <attribute name="Main-Class" value="solitaire.networking.SolitaireClient"/>
+        <attribute name="Main-Class" value="solitaire.Solitaire"/>
       </manifest>
       <zipgroupfileset dir="lib" includes="**/*.jar"/>
     </jar>
@@ -107,10 +107,6 @@
 
   <target name="run.server" description="Run server and 2 clients">
     <java jar="${java_school.jar.server}/ija-server.jar" fork="true"/>
-  </target>
-
-  <target name="run.single" description="Run server and 2 clients">
-    <java jar="${java_school.output.dir}/ija.jar" fork="true"/>
   </target>
 
   <target name="init" description="Build initialization">

@@ -1,5 +1,8 @@
 package solitaire;
 
+import solitaire.networking.IClientController;
+import solitaire.networking.SolitaireClient;
+
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -16,7 +19,7 @@ import java.util.ArrayList;
 import java.lang.InterruptedException;
 
 
-public class GameController extends Canvas implements Runnable, MouseListener, MouseMotionListener
+public class GameController extends Canvas implements Runnable, MouseListener, MouseMotionListener, IClientController
 {
 	// Celkova sirka/vyska okna a max. pocet hier
 	private static final int WIDTH = 1220;
@@ -28,6 +31,8 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 	private int actualGameIndex;
 	private ArrayList<PlayGround> listOfGames;
 
+	private SolitaireClient connection;
+
 	public GameController()
 	{
 		super();
@@ -35,6 +40,8 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 		this.setSize(new Dimension(WIDTH, HEIGHT));
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
+
+		this.connection = new SolitaireClient(this);
 
 		this.actualGameIndex = -1;
 		this.listOfGames = new ArrayList<PlayGround>();
@@ -308,4 +315,24 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 	public void mouseExited(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseMoved(MouseEvent e) {}
+
+	@Override
+	public void moveCard(int from, int to, int numberOfCards) {
+
+	}
+
+	@Override
+	public void lastOperationStatus(boolean valid) {
+
+	}
+
+	@Override
+	public void playgroundUpdate(int index) {
+
+	}
+
+	@Override
+	public void closePlayground(int index) {
+
+	}
 }
