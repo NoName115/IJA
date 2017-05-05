@@ -10,16 +10,12 @@ import java.lang.NullPointerException;
 
 import solitaire.pile.*;
 import solitaire.card.*;
-import solitaire.gui.ControlPanel;
 
 /**
  * Object reprezentujuci jednu hraciu plochu
 */
-public class PlayGround
+public class PlayGround extends PlayGroundBase
 {
-	private static final int NUMBER_OF_PILES = 13;
-	private static final int NUMBER_OF_LINKED_PILES = 7;
-
 	// index 0 - rozmery pre 1 hru
 	// index 1 - rozmery pre 2-4 hry
 	private static final int[] PANDING = new int[] { 30, 15 };
@@ -37,25 +33,6 @@ public class PlayGround
 
 	private boolean firstUpdate = false;
 	private boolean gameEnded = false;
-
-	// Aktualne vybrana karta alebo list kariet
-	private ListOfCards actualList;
-	// Aktualny solitaire.pile z ktoreho bola karta zobrata
-	private Pile actualPile;
-
-	// Vsetky decky potrebne pre hranie
-	private DeckPile deckPile;
-	private DrawPile drawPile;
-	private DrawHelpPile drawHelpPile;
-	private ArrayList<DiscardPile> discardPiles;	// 4 decks
-	private ArrayList<LinkedPile> linkedPiles;		// 8 decks
-
-	// Pole vsetkych Pile-ov
-	private Pile[] allPiles;
-	// List undo commandov
-	private ArrayList<Command> undoList;
-	// Bottom control panel
-	private ControlPanel controlPanel;
 
 	private class HintMessage
 	{
@@ -94,6 +71,8 @@ public class PlayGround
 
 	public PlayGround(int xPos, int yPos, int width, int height, int gameMod)
 	{
+		super();
+
 		this.xStartPosition = xPos;
 		this.yStartPosition = yPos;
 		this.width = width;
@@ -104,11 +83,6 @@ public class PlayGround
 		this.actualPile = null;
 
 		this.undoList = new ArrayList<Command>();
-		this.controlPanel = new ControlPanel(
-			this,
-			xStartPosition, yStartPosition + height - PANEL_SIZE[this.gameMod],
-			width, PANEL_SIZE[this.gameMod]
-			);
 
 		// Decks
 		this.allPiles = new Pile[NUMBER_OF_PILES];	// 1 + 1 + NUMBER_OF_LINKED_PILES + 4
@@ -174,11 +148,6 @@ public class PlayGround
 		this.height = height;
 
 		this.gameMod = gameMod;
-
-		this.controlPanel.setNewResolution(
-			xStartPosition, yStartPosition + height - PANEL_SIZE[this.gameMod],
-			width, PANEL_SIZE[this.gameMod]
-			);
 
 		// Set new resolution to all piles
 		this.allPiles[0].setNewResolution(
@@ -300,8 +269,6 @@ public class PlayGround
 			System.out.println("Ocakavana chyba: " + e);
 		}
 
-		controlPanel.render(g);
-
 		if (gameEnded)
 		{
 			g.drawString(
@@ -334,17 +301,17 @@ public class PlayGround
 	 */
 	public void mousePressed(int ix, int iy)
 	{
-		// Check controlPanel
-		if (this.controlPanel.isIn(ix, iy))
-		{
-			return;
-		}
-
 		// Check piles
 		for (int i = 0; i < NUMBER_OF_PILES; ++i)
 		{
 			if (this.allPiles[i].isInPile(ix, iy))
 			{
+
+				// TODO
+                // V this.allPiles[i] je pile z ktoreho beriem karty
+                // Z this.allPiles[i].selectPile(ix, iy) vrati ListOfCards list kariet ktore sa vybrali z balicka
+
+
 				this.actualPile = this.allPiles[i];
 				this.actualList = this.allPiles[i].selectPile(ix, iy);
 
@@ -369,6 +336,13 @@ public class PlayGround
 			{
 				if (this.allPiles[i].isInPile(ix, iy))
 				{
+
+					// TODO
+                    // Metoda this.allPiles[i].insertCard(ListOfCards) da karty do pilu a vrati True/False ci karty boli vlozene
+                    // Volanie this.actualPile.actionEnded() obrati kartu na vrchu balicka
+                    // Tu sa generuje UNDO este
+
+
 					boolean wasInserted = this.allPiles[i].insertCard(this.actualList);
 					if (!wasInserted)
 					{
@@ -393,6 +367,9 @@ public class PlayGround
 					return;
 				}
 			}
+
+			// TODO
+            // Vratenie kariet do povodneho balicka ak neboli insertnute
 
 			this.actualPile.returnListOfCardsToPile(this.actualList, false);
 			this.actualList.setIsDragged(false);
