@@ -9,9 +9,7 @@ import java.awt.MenuBar;
 import java.awt.MenuItem;
 import java.awt.MenuShortcut;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 
 public class Solitaire extends JFrame implements ActionListener
@@ -73,6 +71,14 @@ public class Solitaire extends JFrame implements ActionListener
 	{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
+
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent windowEvent) {
+				super.windowClosed(windowEvent);
+				gameController.getConnection().disconnect();
+			}
+		});
 
 		this.add(gameController);
 		this.setMenuBar(menuBar);

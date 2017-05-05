@@ -29,7 +29,6 @@ public class SolitaireServer {
 
         server.addListener(new Listener() {
             public void received(Connection c, Object object) {
-                // We know all connections for this server are actually ChatConnections.
                 SolitaireConnection connection = (SolitaireConnection) c;
 
                 System.out.println("Client connected");

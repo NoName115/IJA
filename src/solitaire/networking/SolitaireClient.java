@@ -53,18 +53,10 @@ public class SolitaireClient {
                     client.connect(5000, "localhost", Network.port);
                     System.out.println("Connected!");
 
-
-                    RegisterGameRequest regReq = new RegisterGameRequest();
-                    client.sendTCP(regReq);
-
-                    Thread.sleep(2000);
-                    client.stop();
                     // Server communication after connection can go here, or in Listener#connected().
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     System.exit(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
         }.start();
@@ -130,6 +122,10 @@ public class SolitaireClient {
         req.index = index;
 
         client.sendTCP(req);
+    }
+
+    public void disconnect() {
+        client.stop();
     }
 
 

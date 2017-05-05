@@ -316,6 +316,11 @@ public class GameController extends Canvas implements Runnable, MouseListener, M
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseMoved(MouseEvent e) {}
 
+
+	public SolitaireClient getConnection() {
+		return connection;
+	}
+
 	@Override
 	public void moveCard(int playground, int from, int to, int numberOfCards) {
 
