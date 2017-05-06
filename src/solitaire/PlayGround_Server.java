@@ -1,10 +1,9 @@
-package src;
+package solitaire;
+
+import solitaire.card.Card;
+import solitaire.pile.server.*;
 
 import java.util.ArrayList;
-
-import src.pile.server.*;
-import src.card.*;
-
 
 public class PlayGround_Server
 {

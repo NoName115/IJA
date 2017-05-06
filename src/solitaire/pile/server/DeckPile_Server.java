@@ -1,5 +1,6 @@
-package solitaire.pile;
+package solitaire.pile.server;
 
+import java.awt.*;
 import java.util.Random;
 
 import solitaire.card.*;
@@ -80,7 +81,7 @@ public class DeckPile_Server extends Pile_Server
 		{
 			for (int j = 0; j < NUMBER_OF_CARDS; ++j)
 			{
-				this.cardList.add(new Card(j + 1, t, this.pg));
+				this.cardList.add(new Card_Server(j + 1, t));
 			}
 		}
 	}
@@ -91,7 +92,7 @@ public class DeckPile_Server extends Pile_Server
 	 * Vrati nahodnu kartu z balicka
 	 * Vrati null ak je balicek prazny
 	 */
-	public Card popCard()
+	public Card_Server popCard()
 	{
 		if (this.cardList.isEmpty())
 		{
@@ -100,7 +101,7 @@ public class DeckPile_Server extends Pile_Server
 
 		Random ran = new Random();
 		int randomIndex = ran.nextInt(this.cardList.size());
-		Card returnCard = this.cardList.get(randomIndex);
+		Card_Server returnCard = this.cardList.get(randomIndex);
 		this.cardList.remove(randomIndex);
 
 		return returnCard;

@@ -1,4 +1,4 @@
-package solitaire.pile;
+package solitaire.pile.server;
 
 import java.util.ArrayList;
 
@@ -10,21 +10,20 @@ import solitaire.card.*;
  */
 public abstract class Pile_Server
 {
-    protected ArrayList<Card> cardList;
+    protected ArrayList<Card_Server> cardList;
 
     public Pile_Server()
     {
-        this.cardList = new ArrayList<Card>();
+        this.cardList = new ArrayList<Card_Server>();
     }
 
     /**
      * Prida kartu na koniec balicku
      * a vola setDefaultPosition pre danu kartu
      */
-    public void addCard(Card inputCard)
+    public void addCard(Card_Server inputCard)
     {
         this.cardList.add(inputCard);
-        inputCard.setDefaultPosition(this.xPosition, this.yPosition);
     }
 
     /**
@@ -32,10 +31,10 @@ public abstract class Pile_Server
      * Vlozi kartu do Pile-u
      * Vrati true ak karta bola vlozena, inac false
      */
-    public boolean insertCard(ListOfCards inputList) { return false; }
+    public boolean insertCard(ArrayList<Card_Server> inputList) { return false; }
 
     /**
      * Do balicku kariet v danej Pile-e ulozi vstupny zoznam kariet
      */
-    public void returnListOfCardsToPile(ListOfCards inputList, boolean action) {}
+    public void returnListOfCardsToPile(ArrayList<Card_Server> inputList, boolean action) {}
 }

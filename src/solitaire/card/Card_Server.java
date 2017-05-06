@@ -12,7 +12,7 @@ public class Card_Server
     public Card_Server(int cardValue, DeckPile_Server.Type cardType)
     {
         this.value = cardValue;
-        this.cardType = cardType;
+        this.type = cardType;
     }
 
     @Override
@@ -43,4 +43,14 @@ public class Card_Server
 
     public DeckPile_Server.Type getType() { return this.type; }
     public int getValue() { return this.value; }
+
+    public boolean typeEqual(Card_Server inputCard)
+    {
+        return this.type == inputCard.getType();
+    }
+
+    public boolean colorEqual(Card_Server inputCard)
+    {
+        return this.type.equalColor(inputCard.getType());
+    }
 }

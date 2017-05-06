@@ -1,4 +1,4 @@
-package solitaire.pile;
+package solitaire.pile.server;
 
 import java.util.ArrayList;
 import solitaire.card.*;

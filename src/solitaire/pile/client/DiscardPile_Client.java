@@ -1,4 +1,4 @@
-package solitaire.pile;
+package solitaire.pile.client;
 
 import java.awt.Graphics;
 import java.awt.Color;

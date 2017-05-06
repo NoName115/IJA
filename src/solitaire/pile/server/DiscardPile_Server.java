@@ -1,7 +1,9 @@
-package solitaire.pile;
+package solitaire.pile.server;
 
-import solitaire.card.*;
+import solitaire.card.Card_Server;
+import solitaire.card.ListOfCards;
 
+import java.util.ArrayList;
 
 public class DiscardPile_Server extends Pile_Server
 {
@@ -11,7 +13,7 @@ public class DiscardPile_Server extends Pile_Server
     }
 
     @Override
-    public boolean insertCard(ListOfCards inputList)
+    public boolean insertCard(ArrayList<Card_Server> inputList)
     {
         if (inputList == null || inputList.isEmpty() || inputList.size() > 1)
         {
@@ -23,12 +25,8 @@ public class DiscardPile_Server extends Pile_Server
             return false;
         }
 
-        for (Card c : inputList.getList())
+        for (Card_Server c : inputList)
         {
-            c.setDefaultPosition(
-                this.xPosition,
-                this.yPosition
-                );
             this.cardList.add(c);
         }
 
@@ -36,27 +34,23 @@ public class DiscardPile_Server extends Pile_Server
     }
 
     @Override
-    public void returnListOfCardsToPile(ListOfCards inputList, boolean action)
+    public void returnListOfCardsToPile(ArrayList<Card_Server> inputList, boolean action)
     {
         if (inputList != null)
         {
-            for (Card c : inputList.getList())
+            for (Card_Server c : inputList)
             {
-                c.setDefaultPosition(
-                    this.xPosition,
-                    this.yPosition
-                    );
                 this.cardList.add(c);
             }
         }
     }
 
-    private boolean checkCorrectCard(ListOfCards inputList)
+    private boolean checkCorrectCard(ArrayList<Card_Server> inputList)
     {
         // Kontrola spravneho typu kariet
         if (!this.cardList.isEmpty())
         {
-            Card tempCard = inputList.getFirstCard();
+            Card_Server tempCard = inputList.get(inputList.size() - 1);
 
             // Rovnaka farba karty
             if (!this.cardList.get(0).typeEqual(tempCard))
@@ -73,7 +67,7 @@ public class DiscardPile_Server extends Pile_Server
         // Prva karta musi byt Eso(A)
         else
         {
-            if (inputList.getFirstCard().getValue() != 1)
+            if (inputList.get(inputList.size() - 1).getValue() != 1)
             {
                 return false;
             }
@@ -86,7 +80,7 @@ public class DiscardPile_Server extends Pile_Server
      * Metoda vrati null ak sa karta neda pridat do balicku,
      * alebo kartu z vrchu balicka ak sa da
      */
-    public boolean canAddCard(Card inputCard)
+    public boolean canAddCard(Card_Server inputCard)
     {
         ListOfCards inputList = new ListOfCards(null, inputCard, 0);
 

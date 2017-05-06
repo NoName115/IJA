@@ -1,4 +1,4 @@
-package src;
+package solitaire;
 
 import java.awt.Graphics;
 

@@ -1,4 +1,4 @@
-package solitaire.pile;
+package solitaire.pile.server;
 
 import java.util.ArrayList;
 
@@ -8,8 +8,8 @@ import solitaire.card.*;
 public class LinkedPile_Server extends Pile_Server
 {
     private int Y_CARD_SHIFT;
-    private ArrayList<Card> faceDownCardList;
-    private ArrayList<Card> faceUpCardList;
+    private ArrayList<Card_Server> faceDownCardList;
+    private ArrayList<Card_Server> faceUpCardList;
 
     // Obsahuje zakladnu vysku Pile-u
     private static int defaultHeight;
@@ -20,13 +20,13 @@ public class LinkedPile_Server extends Pile_Server
     }
 
     @Override
-    public void addCard(Card inputCard)
+    public void addCard(Card_Server inputCard)
     {
         this.faceDownCardList.add(inputCard);
     }
 
     @Override
-    public boolean insertCard(ListOfCards inputList)
+    public boolean insertCard(ArrayList<Card_Server> inputList)
     {
         if (inputList == null || inputList.isEmpty())
         {
@@ -38,7 +38,7 @@ public class LinkedPile_Server extends Pile_Server
             return false;
         }
 
-        for (Card c : inputList.getList())
+        for (Card_Server c : inputList.getList())
         {
             this.faceUpCardList.add(c);
         }
@@ -47,7 +47,7 @@ public class LinkedPile_Server extends Pile_Server
     }
 
     @Override
-    public void returnListOfCardsToPile(ListOfCards inputList, boolean action)
+    public void returnListOfCardsToPile(ArrayList<Card_Server> inputList, boolean action)
     {
         if (inputList == null)
         {
@@ -94,7 +94,7 @@ public class LinkedPile_Server extends Pile_Server
         return true;
     }
 
-    private boolean checkCorrectCard(ListOfCards inputList)
+    private boolean checkCorrectCard(ArrayList<Card_Server> inputList)
     {
         // Kontrola spravneho typu kariet
         if (!(this.faceDownCardList.isEmpty() && this.faceUpCardList.isEmpty()))
@@ -143,7 +143,7 @@ public class LinkedPile_Server extends Pile_Server
      * Funkcia vrati poslednu(vrchnu) kartu z faceUpCardList
      * Karta sa zo zoznamu nemaze
      */
-    public Card getLastFaceUpCard()
+    public Card_Server getLastFaceUpCard()
     {
         if (!this.faceUpCardList.isEmpty())
         {
@@ -161,10 +161,10 @@ public class LinkedPile_Server extends Pile_Server
     /**
      * Vrati kartu ktora je pod kartou v argumente funkcie
      */
-    public Card getUnderCard(Card inputCard)
+    public Card_Server getUnderCard(Card_Server inputCard)
     {
         int underCardIndex = -1;
-        for (Card forCard : this.faceUpCardList)
+        for (Card_Server forCard : this.faceUpCardList)
         {
             if (forCard == inputCard)
             {
@@ -177,7 +177,7 @@ public class LinkedPile_Server extends Pile_Server
         return underCardIndex < 0 ? null : this.faceUpCardList.get(underCardIndex);
     }
 
-    public ArrayList<Card> getFaceUpCardList()
+    public ArrayList<Card_Server> getFaceUpCardList()
     {
         return this.faceUpCardList;
     }

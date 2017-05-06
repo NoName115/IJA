@@ -1,9 +1,7 @@
-package solitaire.pile;
+package solitaire.pile.client;
 
 import java.awt.Graphics;
 import java.awt.Color;
-
-import java.util.ArrayList;
 
 import solitaire.card.*;
 import solitaire.PlayGround;
@@ -12,9 +10,9 @@ import solitaire.PlayGround;
 public class DrawPile_Client extends Pile_Client
 {
 	// Pile kde sa nachadza list odhalenych kariet
-	private DrawHelpPile helpPile;
+	private DrawHelpPile_Client helpPile;
 
-	public DrawPile_Client(int xPos, int yPos, int width, int height, PlayGround pg, DrawHelpPile helpPile)
+	public DrawPile_Client(int xPos, int yPos, int width, int height, PlayGround pg, DrawHelpPile_Client helpPile)
 	{
 		super(xPos, yPos, width, height, pg);
 
