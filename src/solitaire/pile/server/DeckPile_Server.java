@@ -1,17 +1,14 @@
 package solitaire.pile;
 
-import java.awt.Graphics;
-import java.awt.Color;
 import java.util.Random;
 
 import solitaire.card.*;
-import solitaire.PlayGround;
 
 
 /**
  * Trieda pre vygenerovanie celeho balicka kariet
  */
-public class DeckPile extends Pile
+public class DeckPile_Server extends Pile_Server
 {
 	private static final int NUMBER_OF_CARDS = 13;
 
@@ -51,7 +48,7 @@ public class DeckPile extends Pile
 			}
 		}
 
-		public boolean equalColor(DeckPile.Type iColor)
+		public boolean equalColor(DeckPile_Server.Type iColor)
 		{
 			if (this == iColor)
 			{
@@ -75,11 +72,11 @@ public class DeckPile extends Pile
 	/**
 	 * Generuje balicek 52 kariet
 	 */
-	public DeckPile(int xPos, int yPos, int width, int height, PlayGround pg)
+	public DeckPile_Server()
 	{
-		super(xPos, yPos, width, height, pg);
+		super();
 
-		for (DeckPile.Type t : DeckPile.Type.values())
+		for (DeckPile_Server.Type t : DeckPile_Server.Type.values())
 		{
 			for (int j = 0; j < NUMBER_OF_CARDS; ++j)
 			{
@@ -88,10 +85,7 @@ public class DeckPile extends Pile
 		}
 	}
 
-	public void update() {}
-	public void render(Graphics g) {}
 	public void addCard(Card inputCard) {}
-	public void setNewDefaultPosition() {}
 
 	/**
 	 * Vrati nahodnu kartu z balicka

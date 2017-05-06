@@ -9,20 +9,17 @@ import solitaire.card.*;
 import solitaire.PlayGround;
 
 
-public class DrawPile extends Pile
+public class DrawPile_Client extends Pile_Client
 {
 	// Pile kde sa nachadza list odhalenych kariet
 	private DrawHelpPile helpPile;
 
-	public DrawPile(int xPos, int yPos, int width, int height, PlayGround pg, DrawHelpPile helpPile)
+	public DrawPile_Client(int xPos, int yPos, int width, int height, PlayGround pg, DrawHelpPile helpPile)
 	{
 		super(xPos, yPos, width, height, pg);
 
 		this.helpPile = helpPile;
 	}
-
-	@Override
-	public void update() {}
 
 	/**
 	 * Render balicku kariet a helpPile objektu
@@ -80,10 +77,5 @@ public class DrawPile extends Pile
 
 		tempCard.faceUp();
 		return null;
-	}
-
-	public ArrayList<Card> getCardList()
-	{
-		return this.cardList;
 	}
 }

@@ -1,23 +1,20 @@
-package solitaire;
+package src;
 
 import java.awt.Graphics;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
-import java.lang.IndexOutOfBoundsException;
-import java.lang.NullPointerException;
-
-import solitaire.pile.*;
-import solitaire.card.*;
+import src.pile.client.*;
+import src.card.*;
 
 /**
  * Object reprezentujuci jednu hraciu plochu
 */
-public class PlayGround extends PlayGroundBase
+public class PlayGround
 {
 	private static final int NUMBER_OF_PILES = 13;
-    private static final int NUMBER_OF_LINKED_PILES = 7;
+	private static final int NUMBER_OF_LINKED_PILES = 7;
 
 	// index 0 - rozmery pre 1 hru
 	// index 1 - rozmery pre 2-4 hry
@@ -25,40 +22,44 @@ public class PlayGround extends PlayGroundBase
 	private static final int[] Y_CARD_SHIFT = new int[] { 20, 20 };
 	private static final int[] CARD_WIDTH = new int[] { 140, 70 };
 	private static final int[] CARD_HEIGHT = new int[] { 200, 100 };
-	private static final int[] PANEL_SIZE = new int[] { 80, 40 };
-
-	// Aktualne vybrana karta alebo list kariet
-    private ListOfCards actualList;
-    // Aktualny solitaire.pile z ktoreho bola karta zobrata
-    private Pile actualPile;
 
 	private int gameMod;
+	private boolean gameEnded;
 
 	private int width;
 	private int height;
 	private int xStartPosition;
 	private int yStartPosition;
 
-	private boolean firstUpdate = false;
+	// Aktualne vybrana karta alebo list kariet
+	private ListOfCards actualList;
+	// Aktualny pile z ktoreho bola karta zobrata
+	private Pile actualPile;
+
+	// Vsetky decky potrebne pre hranie
+	private DrawPile_Client drawPile;
+	private DrawHelpPile_Client drawHelpPile;
+	private ArrayList<DiscardPile_Client> discardPiles;	// 4 decks
+	private ArrayList<LinkedPile_Client> linkedPiles;		// 8 decks
+
+	// Pole vsetkych Pile-ov
+	private Pile_Client[] allPiles;
 
 	public PlayGround(int xPos, int yPos, int width, int height, int gameMod)
 	{
-		super();
-
 		this.xStartPosition = xPos;
 		this.yStartPosition = yPos;
 		this.width = width;
 		this.height = height;
 
+		this.gameEnded = false;
 		this.gameMod = gameMod;
 		this.actualList = null;
 		this.actualPile = null;
 
-		this.undoList = new ArrayList<Command>();
-
 		// Decks
 		this.allPiles = new Pile[NUMBER_OF_PILES];	// 1 + 1 + NUMBER_OF_LINKED_PILES + 4
-		this.deckPile = new DeckPile(0, 0, 0, 0, this);
+
 		this.drawHelpPile = new DrawHelpPile(
 			this.xStartPosition + PANDING[this.gameMod] + (CARD_WIDTH[this.gameMod] + PANDING[this.gameMod]) * 5,
 			this.yStartPosition + PANDING[this.gameMod],
@@ -103,9 +104,6 @@ public class PlayGround extends PlayGroundBase
 				this.allPiles[NUMBER_OF_LINKED_PILES + 1 + (i - i / 2)] = this.discardPiles.get(i - i / 2);
 			}
 		}
-
-		this.fillDecks();
-		this.firstUpdate = true;
 	}
 
 	/**
@@ -152,50 +150,6 @@ public class PlayGround extends PlayGroundBase
 					);
 			}
 		}
-	}
-
-	/**
-	 * Naplni kazdy deck potrebnym poctom kariet
-	 * Funkcia popCard vracia nahodnu kartu z balicka
-	 */
-	// TODO
-	// Nebude tu tato funkcia, bude pridanie karty zo servera
-	private void fillDecks()
-	{
-		for (int i = 0; i < 7; ++i)
-		{
-			for (int j = 0; j < i + 1; ++j)
-			{
-				this.linkedPiles.get(i).addCard(this.deckPile.popCard());
-			}
-		}
-
-		Card deckPileCard = null;
-		while ((deckPileCard = this.deckPile.popCard()) != null)
-		{
-			this.drawPile.addCard(deckPileCard);
-		}
-	}
-
-	/**
-	 * Update pre logiku hry
-	 */
-	// TODO
-	// Bezi na servery??
-	// Pridat funkciu do Interface pre clienta ze actionEnded() - otocit kartu
-	public void update()
-	{
-		if (this.firstUpdate)
-		{
-			// Reavel first cards
-			for (LinkedPile lp : this.linkedPiles)
-			{
-				lp.actionEnded();
-			}
-			this.firstUpdate = false;
-		}
-
-		checkGameEnded();
 	}
 
 	/**
@@ -257,7 +211,7 @@ public class PlayGround extends PlayGroundBase
 	}
 
 	/**
-	 * Zachytenie karty a solitaire.pile-u
+	 * Zachytenie karty a pile-u
 	 */
 	public void mousePressed(int ix, int iy)
 	{
@@ -266,12 +220,6 @@ public class PlayGround extends PlayGroundBase
 		{
 			if (this.allPiles[i].isInPile(ix, iy))
 			{
-
-				// TODO
-                // V this.allPiles[i] je pile z ktoreho beriem karty
-                // Z this.allPiles[i].selectPile(ix, iy) vrati ListOfCards list kariet ktore sa vybrali z balicka
-
-
 				this.actualPile = this.allPiles[i];
 				this.actualList = this.allPiles[i].selectPile(ix, iy);
 
@@ -286,7 +234,7 @@ public class PlayGround extends PlayGroundBase
 	}
 
 	/**
-	 * Vypustenie aktualnej karty a solitaire.pile-u
+	 * Vypustenie aktualnej karty a pile-u
 	 */
 	public void mouseReleased(int ix, int iy)
 	{
@@ -296,13 +244,6 @@ public class PlayGround extends PlayGroundBase
 			{
 				if (this.allPiles[i].isInPile(ix, iy))
 				{
-
-					// TODO
-                    // Metoda this.allPiles[i].insertCard(ListOfCards) da karty do pilu a vrati True/False ci karty boli vlozene
-                    // Volanie this.actualPile.actionEnded() obrati kartu na vrchu balicka
-                    // Tu sa generuje UNDO este
-
-
 					boolean wasInserted = this.allPiles[i].insertCard(this.actualList);
 					if (!wasInserted)
 					{
@@ -327,9 +268,6 @@ public class PlayGround extends PlayGroundBase
 					return;
 				}
 			}
-
-			// TODO
-            // Vratenie kariet do povodneho balicka ak neboli insertnute
 
 			this.actualPile.returnListOfCardsToPile(this.actualList, false);
 			this.actualList.setIsDragged(false);
@@ -360,5 +298,7 @@ public class PlayGround extends PlayGroundBase
 	public int getCardHeight() { return CARD_HEIGHT[this.gameMod]; }
 	public int getCardShift() { return Y_CARD_SHIFT[this.gameMod]; }
 
+	// TODO
+	// Mozno vymazat asi... neviem ci sa to vola niekde
 	public boolean getGameEnded() { return this.gameEnded; }
 }

@@ -1,38 +1,27 @@
-package solitaire;
-
-import java.awt.Graphics;
+package src;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 
-import java.lang.IndexOutOfBoundsException;
-import java.lang.NullPointerException;
+import src.pile.server.*;
+import src.card.*;
 
-import solitaire.pile.*;
-import solitaire.card.*;
 
-/**
- * Object reprezentujuci jednu hraciu plochu, bez renderu
-*/
-public class PlayGroundBase
+public class PlayGround_Server
 {
+    private static final int NUMBER_OF_PILES = 13;
+    private static final int NUMBER_OF_LINKED_PILES = 7;
+
     // Vsetky decky potrebne pre hranie
-    protected DeckPile deckPile;
-    protected DrawPile drawPile;
-    protected DrawHelpPile drawHelpPile;
-    protected ArrayList<DiscardPile> discardPiles;    // 4 decks
-    protected ArrayList<LinkedPile> linkedPiles;      // 8 decks
+    private DeckPile_Server deckPile;
+    private DrawPile_Server drawPile;
+    private DrawHelpPile_Server drawHelpPile;
+    private ArrayList<DiscardPile_Server> discardPiles;    // 4 decks
+    private ArrayList<LinkedPile_Server> linkedPiles;      // 8 decks
 
     // Pole vsetkych Pile-ov
-    // 0 - Draw_Pile
-    // 1-7 - Linked_Pile
-    // 8-11 - Discard_Pile
-    // 12 - Draw_Help_Pile
-    protected Pile[] allPiles;
+    private Pile_Server[] allPiles;
     // List undo commandov
-    protected ArrayList<Command> undoList;
-
-    protected boolean gameEnded = false;
+    private ArrayList<Command> undoList;
 
     private class HintMessage
     {
@@ -64,11 +53,76 @@ public class PlayGroundBase
             }
             else
             {
-                return "Draw solitaire.card";
+                return "Draw card";
             }
         }
     }
 
+    public PlayGround_Server()
+    {
+        // Definovanie zakladnych listov
+        this.undoList = new ArrayList<Command>();
+        this.allPiles = new Pile[NUMBER_OF_PILES];
+
+        // Vygeneruje balicek 52 kariet
+        this.deckPile = new DeckPile();
+
+        this.fillDecks();
+        this.reavelTopCards();
+    }
+
+    // TODO
+    // Tu by sa malo poslat klientovy naplnenie balickov
+    // Poslat spravu addCard(hodnotaKarty, typKarty, indexPile-u)
+    private void fillDecks()
+    {
+        for (int i = 0; i < NUMBER_OF_LINKED_PILES; ++i)
+        {
+            for (int j = 0; j < i + 1; ++j)
+            {
+                this.linkedPiles.get(i).addCard(this.deckPile.popCard());
+            }
+        }
+
+        Card deckPileCard = null;
+        while ((deckPileCard = this.deckPile.popCard()) != null)
+        {
+            this.drawPile.addCard(deckPileCard);
+        }
+    }
+
+    // TODO
+    // Poslat klientovy spravu na odhalenie vrchnych kariet
+    private void reavelTopCards()
+    {
+        for (int i = 0; i < NUMBER_OF_LINKED_PILES; ++i)
+        {
+            this.linkedPiles.get(i).reavelTopCard();
+        }
+    }
+
+    // TODO
+    // Poslat klientovy ze hra skoncila
+    /**
+     * Funkcie kontroluje ci je hra dohrata
+     */
+    private void checkGameEnded()
+    {
+        for (DiscardPile lp : this.discardPiles)
+        {
+            if (!lp.containAllCards())
+            {
+                return;
+            }
+        }
+
+        // Kazdy discard pile obsahuje vsetky karty
+        // TODO
+        // Poslat spravu
+    }
+
+    // TODO
+    // Poslat MOVE hracovy
     /**
      * Funkcia urobi undo
      */
@@ -83,6 +137,8 @@ public class PlayGroundBase
         }
     }
 
+    // TODO
+    // Vratit hint ako string klientovy
     /**
      * Funkcie vrati hint(string)
      */
@@ -98,7 +154,7 @@ public class PlayGroundBase
             {
                 if ((hint = hintCanAddCard(tempCard, lp)) != null)
                 {
-                    if (hint.destination == null && hint.under == null && lp.getFaceDownCardListSize() == 0 && hint.message != "discard solitaire.pile")
+                    if (hint.destination == null && hint.under == null && lp.getFaceDownCardListSize() == 0 && hint.message != "discard pile")
                     {
                         hint = null;
                         continue;
@@ -125,7 +181,7 @@ public class PlayGroundBase
             }
         }
 
-        // Zvysok draw help solitaire.pile
+        // Zvysok draw help pile
         for (Card tempCard : this.drawHelpPile.getCardList())
         {
             if ((hint = hintCanAddCard(tempCard, null)) != null)
@@ -147,7 +203,7 @@ public class PlayGroundBase
     }
 
     /*
-     * Methoda vrati dvojicu kariet, source & destination solitaire.card
+     * Methoda vrati dvojicu kariet, source & destination card
      * Ak neexistuje hint vrati null
      */
     private HintMessage hintCanAddCard(Card inputCard, LinkedPile inputPile)
@@ -172,13 +228,13 @@ public class PlayGroundBase
                     inputCard,
                     null,
                     null,
-                    "discard solitaire.pile"
+                    "discard pile"
                     );
             }
         }
 
         // Skontrolujem ci neviem polozit kartu
-        // do linked solitaire.pile-u
+        // do linked pile-u
         for (LinkedPile pile : this.linkedPiles)
         {
             if (pile.canAddCard(inputCard))
@@ -187,7 +243,7 @@ public class PlayGroundBase
                     inputCard,
                     pile.getLastFaceUpCard(),
                     inputPile != null ? inputPile.getUnderCard(inputCard) : null,
-                    "linked solitaire.pile"
+                    "linked pile"
                     );
             }
         }
@@ -195,20 +251,4 @@ public class PlayGroundBase
         return null;
     }
 
-    /**
-     * Funkcie kontroluje ci je hra dohrata
-     */
-    private void checkGameEnded()
-    {
-        for (DiscardPile lp : this.discardPiles)
-        {
-            if (!lp.containAllCards())
-            {
-                return;
-            }
-        }
-
-        // Kazdy discard solitaire.pile obsahuje vsetky karty
-        this.gameEnded = true;
-    }
-}
+} 
