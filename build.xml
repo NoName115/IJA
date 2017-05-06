@@ -74,7 +74,12 @@
     </exec>
   </target>
 
-  <target name="compile" depends="libs.download" description="Compile module Java_School">
+  <target name="doc" description="generate documentation">
+    <mkdir dir="doc"/>
+    <javadoc sourcepath="src" destdir="doc"/>
+  </target>
+
+  <target name="compile" depends="libs.download,doc" description="Compile module Java_School">
     <mkdir dir="${java_school.output.dir}"/>
     <mkdir dir="${java_school.jar.client}"/>
     <mkdir dir="${java_school.jar.server}"/>

@@ -1,7 +1,5 @@
 package solitaire.networking;
 
-import solitaire.PlayGround;
-
 public interface IClientController {
     /**
      * Method which controlls moving cards between piles
