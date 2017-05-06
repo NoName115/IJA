@@ -16,6 +16,9 @@ import solitaire.card.*;
 */
 public class PlayGround extends PlayGroundBase
 {
+	private static final int NUMBER_OF_PILES = 13;
+    private static final int NUMBER_OF_LINKED_PILES = 7;
+
 	// index 0 - rozmery pre 1 hru
 	// index 1 - rozmery pre 2-4 hry
 	private static final int[] PANDING = new int[] { 30, 15 };
@@ -23,6 +26,11 @@ public class PlayGround extends PlayGroundBase
 	private static final int[] CARD_WIDTH = new int[] { 140, 70 };
 	private static final int[] CARD_HEIGHT = new int[] { 200, 100 };
 	private static final int[] PANEL_SIZE = new int[] { 80, 40 };
+
+	// Aktualne vybrana karta alebo list kariet
+    private ListOfCards actualList;
+    // Aktualny solitaire.pile z ktoreho bola karta zobrata
+    private Pile actualPile;
 
 	private int gameMod;
 
@@ -32,42 +40,6 @@ public class PlayGround extends PlayGroundBase
 	private int yStartPosition;
 
 	private boolean firstUpdate = false;
-	private boolean gameEnded = false;
-
-	private class HintMessage
-	{
-		private Card source;
-		private Card destination;
-		private Card under;
-		private String message;
-
-		public HintMessage(Card sourceCard, Card destinationCard, Card under, String message)
-		{
-			this.source = sourceCard;
-			this.destination = destinationCard;
-			this.under = under;
-			this.message = message;
-		}
-
-		public String getHintString(boolean moveCard)
-		{
-			if (moveCard)
-			{
-				if (this.destination != null)
-				{
-					return "Move " + this.source.toString() + " at " + this.destination.toString();
-				}
-				else
-				{
-					return "Move " + this.source.toString() + " at " + this.message;
-				}
-			}
-			else
-			{
-				return "Draw solitaire.card";
-			}
-		}
-	}
 
 	public PlayGround(int xPos, int yPos, int width, int height, int gameMod)
 	{
@@ -186,6 +158,8 @@ public class PlayGround extends PlayGroundBase
 	 * Naplni kazdy deck potrebnym poctom kariet
 	 * Funkcia popCard vracia nahodnu kartu z balicka
 	 */
+	// TODO
+	// Nebude tu tato funkcia, bude pridanie karty zo servera
 	private void fillDecks()
 	{
 		for (int i = 0; i < 7; ++i)
@@ -204,25 +178,11 @@ public class PlayGround extends PlayGroundBase
 	}
 
 	/**
-	 * Funkcie kontroluje ci je hra dohrata
-	 */
-	private void checkGameEnded()
-	{
-		for (DiscardPile lp : this.discardPiles)
-		{
-			if (!lp.containAllCards())
-			{
-				return;
-			}
-		}
-
-		// Kazdy discard solitaire.pile obsahuje vsetky karty
-		this.gameEnded = true;
-	}
-
-	/**
 	 * Update pre logiku hry
 	 */
+	// TODO
+	// Bezi na servery??
+	// Pridat funkciu do Interface pre clienta ze actionEnded() - otocit kartu
 	public void update()
 	{
 		if (this.firstUpdate)
@@ -269,7 +229,7 @@ public class PlayGround extends PlayGroundBase
 			System.out.println("Ocakavana chyba: " + e);
 		}
 
-		if (gameEnded)
+		if (this.gameEnded)
 		{
 			g.drawString(
 				"Vyhral si !!!",
@@ -391,158 +351,14 @@ public class PlayGround extends PlayGroundBase
 		}
 	}
 
-	public int getXStartPosition()
-	{
-		return xStartPosition;
-	}
-
-	public int getYStartPosition()
-	{
-		return yStartPosition;
-	}
-
-	public int getWidth()
-	{
-		return width;
-	}
-
-	public int getHeight()
-	{
-		return height;
-	}
+	public int getXStartPosition() { return xStartPosition; }
+	public int getYStartPosition() { return yStartPosition; }
+	public int getWidth() { return width; }
+	public int getHeight() { return height; }
 
 	public int getCardWidth() { return CARD_WIDTH[this.gameMod]; }
 	public int getCardHeight() { return CARD_HEIGHT[this.gameMod]; }
-
 	public int getCardShift() { return Y_CARD_SHIFT[this.gameMod]; }
 
 	public boolean getGameEnded() { return this.gameEnded; }
-
-	/**
-	 * Funkcia urobi undo
-	 */
-	public void undo()
-	{
-		if (!undoList.isEmpty())
-		{
-			int lastIndex = undoList.size() - 1;
-			Command tempCommand = undoList.get(lastIndex);
-			undoList.remove(lastIndex);
-			tempCommand.undo();
-		}
-	}
-
-	/**
-	 * Funkcie vrati hint(string)
-	 */
-	public String showHint()
-	{
-		HintMessage hint;
-
-		// Kontrola kazdej faceUp karty z linkedListu
-		// ci sa da dat niekde inde polozit
-		for (LinkedPile lp : this.linkedPiles)
-		{
-			for (Card tempCard : lp.getFaceUpCardList())
-			{
-				if ((hint = hintCanAddCard(tempCard, lp)) != null)
-				{
-					if (hint.destination == null && hint.under == null && lp.getFaceDownCardListSize() == 0 && hint.message != "discard solitaire.pile")
-					{
-						hint = null;
-						continue;
-					}
-
-					if (hint.destination != null && hint.under != null && (hint.destination.getValue() == hint.under.getValue()))
-					{
-						hint = null;
-						continue;
-					}
-
-					return hint.getHintString(true);
-				}
-			}
-		}
-
-		// Vrchna karta z drawHelpPile
-		ArrayList<Card> cardList = this.drawHelpPile.getCardList();
-		if (!cardList.isEmpty())
-		{
-			if ((hint = hintCanAddCard(cardList.get(cardList.size() - 1), null)) != null)
-			{
-				return hint.getHintString(true);
-			}
-		}
-
-		// Zvysok draw help solitaire.pile
-		for (Card tempCard : this.drawHelpPile.getCardList())
-		{
-			if ((hint = hintCanAddCard(tempCard, null)) != null)
-			{
-				return hint.getHintString(false);
-			}
-		}
-
-		// Draw Pile
-		for (Card tempCard : this.drawPile.getCardList())
-		{
-			if ((hint = hintCanAddCard(tempCard, null)) != null)
-			{
-				return hint.getHintString(false);
-			}
-		}
-
-		return null;
-	}
-
-	/*
-	 * Methoda vrati dvojicu kariet, source & destination solitaire.card
-	 * Ak neexistuje hint vrati null
-	 */
-	private HintMessage hintCanAddCard(Card inputCard, LinkedPile inputPile)
-	{
-		if (inputCard == null)
-		{
-			return null;
-		}
-
-		// Skontrolujem ci neviem polozit kartu
-		// do odkladacich balickou
-		for (DiscardPile pile : this.discardPiles)
-		{
-			if (pile.canAddCard(inputCard))
-			{
-				if (inputPile != null && inputCard != inputPile.getLastFaceUpCard())
-				{
-					break;
-				}
-
-				return new HintMessage(
-					inputCard,
-					null,
-					null,
-					"discard solitaire.pile"
-					);
-			}
-		}
-
-		// Skontrolujem ci neviem polozit kartu
-		// do linked solitaire.pile-u
-		for (LinkedPile pile : this.linkedPiles)
-		{
-			if (pile.canAddCard(inputCard))
-			{
-				return new HintMessage(
-					inputCard,
-					pile.getLastFaceUpCard(),
-					inputPile != null ? inputPile.getUnderCard(inputCard) : null,
-					"linked solitaire.pile"
-					);
-			}
-		}
-
-		return null;
-	}
-
-	public int getPanelSize() { return this.PANEL_SIZE[this.gameMod]; }
 }
