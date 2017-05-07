@@ -1,255 +1,160 @@
 package solitaire;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import solitaire.piles.FoundationPile;
+import solitaire.piles.TableauPile;
+import solitaire.piles.StockPile;
+import solitaire.piles.WastePile;
 
-import java.awt.BorderLayout;
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
-import java.awt.MenuShortcut;
+import java.util.*;
 
-import java.awt.event.*;
+public class Solitaire {
+    public static void main(String[] args) {
+        new Solitaire();
+    }
 
+    private StockPile stockPile;
+    private WastePile wastePile;
+    private TableauPile[] tableauPiles;
+    private FoundationPile[] foundationPiles;
 
-public class Solitaire extends JFrame implements ActionListener
-{
-	private static final String GAME_TITLE = "Solitaire";
+    private SolitaireDisplay display;
 
-	GameController gameController = new GameController();
+    public Solitaire() {
+        tableauPiles = new TableauPile[4];
+        for (int i = 0; i < tableauPiles.length; i++) {
+            tableauPiles[i] = new TableauPile();
+        }
+        foundationPiles = new FoundationPile[7];
+        for (int i = 0; i < foundationPiles.length; i++) {
+            foundationPiles[i] = new FoundationPile();
+        }
+        stockPile = new StockPile();
+        wastePile = new WastePile();
 
-	// Main GUI
-	MenuBar menuBar = new MenuBar();
+        display = new SolitaireDisplay(this);
+        deal();
+    }
 
-	Menu mainMenu = new Menu("Game Menu");
-	MenuItem createGame = new MenuItem("Create new game");
-	MenuItem connectGame = new MenuItem("Connect to game");
+    public Card getStockCard() {
+        return stockPile.getCard();
+    }
 
-	Menu game_1 = new Menu("Game - 1");
-	MenuItem createPlayGround_1 = new MenuItem("Create game");
-	MenuItem loadPlayGround_1 = new MenuItem("Load game");
-	MenuItem savePlayGround_1 = new MenuItem("Save game");
-	MenuItem undoPlayGround_1 = new MenuItem("Undo");
-	MenuItem hintPlayGround_1 = new MenuItem("Show hint");
+    public Card getWasteCard() {
+        return wastePile.getCard();
+    }
 
-	Menu game_2 = new Menu("Game - 2");
-	MenuItem createPlayGround_2 = new MenuItem("Create game");
-	MenuItem loadPlayGround_2 = new MenuItem("Load game");
-	MenuItem savePlayGround_2 = new MenuItem("Save game");
-	MenuItem undoPlayGround_2 = new MenuItem("Undo");
-	MenuItem hintPlayGround_2 = new MenuItem("Show hint");
+    public Card getFoundationCard(int index) {
+        if (tableauPiles[index].isEmpty()) return null;
+        return tableauPiles[index].getCard();
+    }
 
-	Menu game_3 = new Menu("Game - 3");
-	MenuItem createPlayGround_3 = new MenuItem("Create game");
-	MenuItem loadPlayGround_3 = new MenuItem("Load game");
-	MenuItem savePlayGround_3 = new MenuItem("Save game");
-	MenuItem undoPlayGround_3 = new MenuItem("Undo");
-	MenuItem hintPlayGround_3 = new MenuItem("Show hint");
+    // TODO: remove getPile method
+    public Stack<Card> getPile(int index) {
+        return foundationPiles[index].getPile();
+    }
 
-	Menu game_4 = new Menu("Game - 4");
-	MenuItem createPlayGround_4 = new MenuItem("Create game");
-	MenuItem loadPlayGround_4 = new MenuItem("Load game");
-	MenuItem savePlayGround_4 = new MenuItem("Save game");
-	MenuItem undoPlayGround_4 = new MenuItem("Undo");
-	MenuItem hintPlayGround_4 = new MenuItem("Show hint");
+    // TODO: randomize
+    public void deal() {
+        for (int i = 0; i < foundationPiles.length; i++) {
+            int counter = 0;
+            while (counter != i + 1) {
+                Card temp = stockPile.popCard();
+                foundationPiles[i].pushCard(temp);
+                counter++;
+            }
+            foundationPiles[i].getCard().turnUp();
+        }
+    }
 
-	/**
-	 * Hlavna funkcia main, vytvara object hry Solitaire
-	 */
-	public static void main(String[] args)
-	{
-		Solitaire game = new Solitaire();
-		game.init();
-	}
+    public void dealCardFromStock() {
 
-	/**
-	 * Inicializacia zakladneho grafickeho rozhranie
-	 * pre pridanie/odobranie hry
-	 * A spustenie hry
-	 */
-	private void init()
-	{
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout(new BorderLayout());
+        if (!stockPile.isEmpty()) {
+            wastePile.pushCard(stockPile.popCard());
+        }
 
-		this.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosed(WindowEvent windowEvent) {
-				super.windowClosed(windowEvent);
-				gameController.getConnection().disconnect();
-			}
-		});
+    }
 
-		this.add(gameController);
-		this.setMenuBar(menuBar);
+    public void resetStock() {
+        while (!wastePile.isEmpty()) {
+            stockPile.pushCard(wastePile.popCard());
+        }
+    }
 
-		menuBar.add(mainMenu);
-		mainMenu.add(createGame);
-		mainMenu.add(connectGame);
-		createGame.addActionListener(this);
-		connectGame.addActionListener(this);
+    public void stockClicked() {
+        System.out.println("stock clicked");
+        display.unselect();
+        if (!display.isWasteSelected() && !display.isPileSelected()) {
+            if (stockPile.isEmpty()) resetStock();
+            else dealCardFromStock();
+        }
 
-		menuBar.add(game_1);
-		game_1.add(createPlayGround_1);
-		game_1.add(loadPlayGround_1);
-		game_1.add(savePlayGround_1);
-		game_1.add(undoPlayGround_1);
-		game_1.add(hintPlayGround_1);
-		createPlayGround_1.addActionListener(this);
-		loadPlayGround_1.addActionListener(this);
-		savePlayGround_1.addActionListener(this);
-		undoPlayGround_1.addActionListener(this);
-		hintPlayGround_1.addActionListener(this);
+    }
 
-		menuBar.add(game_2);
-		game_2.add(createPlayGround_2);
-		game_2.add(loadPlayGround_2);
-		game_2.add(savePlayGround_2);
-		game_2.add(undoPlayGround_2);
-		game_2.add(hintPlayGround_2);
-		createPlayGround_2.addActionListener(this);
-		loadPlayGround_2.addActionListener(this);
-		savePlayGround_2.addActionListener(this);
-		undoPlayGround_2.addActionListener(this);
-		hintPlayGround_2.addActionListener(this);
+    public void wasteClicked() {
+        System.out.println("waste clicked");
+        if (!wastePile.isEmpty()) {
+            if (!display.isWasteSelected()) display.selectWaste();
+            else display.unselect();
+        }
+    }
 
-		menuBar.add(game_3);
-		game_3.add(createPlayGround_3);
-		game_3.add(loadPlayGround_3);
-		game_3.add(savePlayGround_3);
-		game_3.add(undoPlayGround_3);
-		game_3.add(hintPlayGround_3);
-		createPlayGround_3.addActionListener(this);
-		loadPlayGround_3.addActionListener(this);
-		savePlayGround_3.addActionListener(this);
-		undoPlayGround_3.addActionListener(this);
-		hintPlayGround_3.addActionListener(this);
+    public void foundationClicked(int index) {
+        System.out.println("foundation #" + index + " clicked");
+        if (display.isWasteSelected()) {
+            if (tableauPiles[index].canAdd(wastePile.getCard())) {
+                tableauPiles[index].pushCard(wastePile.popCard());
+                display.unselect();
+            }
+        }
+        if (display.isPileSelected()) {
+            FoundationPile selectedPile = foundationPiles[display.selectedPile()];
+            if (tableauPiles[index].canAdd(selectedPile.getCard())) {
+                Card temp = selectedPile.popCard();
+                tableauPiles[index].pushCard(temp);
+                if (!selectedPile.isEmpty()) selectedPile.getCard().turnUp();
+                display.unselect();
+            }
 
-		menuBar.add(game_4);
-		game_4.add(createPlayGround_4);
-		game_4.add(loadPlayGround_4);
-		game_4.add(savePlayGround_4);
-		game_4.add(undoPlayGround_4);
-		game_4.add(hintPlayGround_4);
-		createPlayGround_4.addActionListener(this);
-		loadPlayGround_4.addActionListener(this);
-		savePlayGround_4.addActionListener(this);
-		undoPlayGround_4.addActionListener(this);
-		hintPlayGround_4.addActionListener(this);
+        }
+    }
 
-		this.pack();
-		this.setTitle(GAME_TITLE);
-		this.setResizable(false);
-		this.setVisible(true);
+    public void pileClicked(int index) {
+        System.out.println("pile #" + index + " clicked");
+        if (display.isWasteSelected()) {
+            Card temp = wastePile.getCard();
+            if (foundationPiles[index].canAdd(temp)) {
+                foundationPiles[index].pushCard(wastePile.popCard());
+                foundationPiles[index].getCard().turnUp();
+            }
+            display.unselect();
+            display.selectPile(index);
+        } else if (display.isPileSelected()) {
+            int oldPile = display.selectedPile();
+            if (index != oldPile) {
+                Stack<Card> temp = removeFaceUpCards(oldPile);
+                if (foundationPiles[index].canAdd(temp.peek())) {
+                    foundationPiles[index].addCards(temp);
+                    if (!foundationPiles[oldPile].isEmpty()) foundationPiles[oldPile].getCard().turnUp();
 
-		// Spustenie hry
-		gameController.start();
-	}
+                    display.unselect();
+                } else {
+                    foundationPiles[oldPile].addCards(temp);
+                    display.unselect();
+                    display.selectPile(index);
 
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == createGame)
-		{
-			System.out.println("CREATE GAME");
-		}
-		else if (e.getSource() == connectGame)
-		{
-			String input = (String) JOptionPane.showInputDialog(
-				null,
-				"Name:", "Connect to Solitaire server",
-				JOptionPane.QUESTION_MESSAGE,
-				null,
-				null,
-				"Game_ID"
-				);
-			if (input == null || input.trim().length() == 0)
-			{
-				System.exit(1);
-			}
+                }
+            } else display.unselect();
+        } else {
+            display.selectPile(index);
+            foundationPiles[index].getCard().turnUp();
+        }
+    }
 
-			String gameID = input.trim();
-
-			System.out.println("CONNECT TO GAME _: " + gameID);
-		}
-		else if (e.getSource() == createPlayGround_1)
-		{
-			System.out.println("CREATE PLAYGOURND 1");
-		}
-		else if (e.getSource() == loadPlayGround_1)
-		{
-			System.out.println("LOADGAME 1");
-		}
-		else if (e.getSource() == savePlayGround_1)
-		{
-			System.out.println("SAVE GAME 1");
-		}
-		else if (e.getSource() == undoPlayGround_1)
-		{
-			System.out.println("UNDO GAME 1");
-		}
-		else if (e.getSource() == hintPlayGround_1)
-		{
-			System.out.println("HINT GAME 1");
-		}
-		else if (e.getSource() == createPlayGround_2)
-		{
-			System.out.println("CREATE PLAYGOURND 2");
-		}
-		else if (e.getSource() == loadPlayGround_2)
-		{
-			System.out.println("LOADGAME 2");
-		}
-		else if (e.getSource() == savePlayGround_2)
-		{
-			System.out.println("SAVE GAME 2");
-		}
-		else if (e.getSource() == undoPlayGround_2)
-		{
-			System.out.println("UNDO GAME 2");
-		}
-		else if (e.getSource() == hintPlayGround_2)
-		{
-			System.out.println("HINT GAME 2");
-		}
-		else if (e.getSource() == createPlayGround_3)
-		{
-			System.out.println("CREATE PLAYGOURND 3");
-		}
-		else if (e.getSource() == loadPlayGround_3)
-		{
-			System.out.println("LOADGAME 3");
-		}
-		else if (e.getSource() == savePlayGround_3)
-		{
-			System.out.println("SAVE GAME 3");
-		}
-		else if (e.getSource() == undoPlayGround_3)
-		{
-			System.out.println("UNDO GAME 3");
-		}
-		else if (e.getSource() == hintPlayGround_3)
-		{
-			System.out.println("HINT GAME 3");
-		}
-		else if (e.getSource() == createPlayGround_4)
-		{
-			System.out.println("CREATE PLAYGOURND 4");
-		}
-		else if (e.getSource() == loadPlayGround_4)
-		{
-			System.out.println("LOADGAME 4");
-		}
-		else if (e.getSource() == savePlayGround_4)
-		{
-			System.out.println("SAVE GAME 4");
-		}
-		else if (e.getSource() == undoPlayGround_4)
-		{
-			System.out.println("UNDO GAME 4");
-		}
-		else if (e.getSource() == hintPlayGround_4)
-		{
-			System.out.println("HINT GAME 4");
-		}
-	}
+    private Stack<Card> removeFaceUpCards(int index) {
+        Stack<Card> cards = new Stack<>();
+        while (!foundationPiles[index].isEmpty() && foundationPiles[index].getCard().isFaceUp()) {
+            cards.push(foundationPiles[index].popCard());
+        }
+        return cards;
+    }
 }

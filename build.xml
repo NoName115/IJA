@@ -96,6 +96,7 @@
         <attribute name="Main-Class" value="solitaire.Solitaire"/>
       </manifest>
       <zipgroupfileset dir="lib" includes="**/*.jar"/>
+      <fileset dir="src/cards"/>
     </jar>
 
     <jar destfile="${java_school.jar.server}/ija-server.jar" basedir="${java_school.output.dir}">

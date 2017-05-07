@@ -2,12 +2,12 @@ package solitaire.networking;
 
 public interface IClientController {
     /**
-     * Method which controlls moving cards between piles
+     * Method which controlls moving solitaire.cards between solitaire.piles
      *
      * @param playground number of playground
      * @param from source pile index
      * @param to destination pile index
-     * @param numberOfCards number of cards
+     * @param numberOfCards number of solitaire.cards
      */
     void moveCard(int playground, int from, int to, int numberOfCards);
 

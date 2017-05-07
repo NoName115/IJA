@@ -67,7 +67,7 @@ public class Network {
         // one board - eg. for adding game
     }
     /**
-     * Request for moving cards between piles
+     * Request for moving solitaire.cards between solitaire.piles
      */
     static public class GameMove {
         public int index;
@@ -77,7 +77,7 @@ public class Network {
     }
 
     /**
-     * Response after moving cards - valid move or not
+     * Response after moving solitaire.cards - valid move or not
      */
     static public class GameMoveResponse {
         public boolean valid;
