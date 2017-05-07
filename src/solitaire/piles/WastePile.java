@@ -7,6 +7,10 @@ public class WastePile extends BasePile {
         super();
     }
 
+    public WastePile(String[] cards) {
+        super(cards);
+    }
+
     @Override
     public void pushCard(Card card) {
         super.pushCard(card);

@@ -6,6 +6,9 @@ public class TableauPile extends BasePile {
     public TableauPile() {
         super();
     }
+    public TableauPile(String[] cards) {
+        super(cards);
+    }
 
     /**
      * Function returns true if card can be added on foundation pile

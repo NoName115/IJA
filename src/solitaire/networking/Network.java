@@ -67,7 +67,20 @@ public class Network {
      * Status of whole playground
      */
     static public class UpdatePlayground {
-        // one board - eg. for adding game
+        public int playground;
+        public String[] stock;
+        public String[] waste;
+        public String[] tableau0;
+        public String[] tableau1;
+        public String[] tableau2;
+        public String[] tableau3;
+        public String[] foundation0;
+        public String[] foundation1;
+        public String[] foundation2;
+        public String[] foundation3;
+        public String[] foundation4;
+        public String[] foundation5;
+        public String[] foundation6;
     }
     /**
      * Request for moving solitaire.add between solitaire.piles

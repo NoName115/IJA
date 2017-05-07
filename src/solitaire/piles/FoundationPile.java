@@ -8,6 +8,9 @@ public class FoundationPile extends BasePile {
     public FoundationPile() {
         super();
     }
+    public FoundationPile(String[] cards) {
+        super(cards);
+    }
 
     /**
      * Function returns true if card can be added on foundation pile

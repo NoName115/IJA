@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
 import solitaire.GameInstance;
+import solitaire.SolitaireServer;
 import solitaire.networking.Network.*;
 
 import javax.swing.*;
@@ -14,11 +15,12 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class SolitaireServer {
+public class NetworkServer {
     private Server server;
     private HashMap<String, GameInstance> games;
+    private SolitaireServer sserver;
 
-    public SolitaireServer() throws IOException {
+    public NetworkServer() throws IOException {
         server = new Server() {
             protected Connection newConnection() {
                 return new SolitaireConnection();
@@ -26,6 +28,8 @@ public class SolitaireServer {
         };
 
         Network.register(server);
+
+        sserver = new SolitaireServer(this);
 
         server.addListener(new Listener() {
             public void received(Connection c, Object object) {
@@ -83,7 +87,9 @@ public class SolitaireServer {
                     response.add[0] = "adu";
                     response.to = 1;
 
-                    server.sendToTCP(connection.getID(), response);
+                    UpdatePlayground up = sserver.serialize();
+
+                    server.sendToTCP(connection.getID(), up);
 
                     return;
                 }
@@ -174,7 +180,7 @@ public class SolitaireServer {
         server.start();
 
         // Open a window to provide an easy way to stop the server.
-        JFrame frame = new JFrame("Chat SolitaireServer");
+        JFrame frame = new JFrame("Chat NetworkServer");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent evt) {
@@ -205,7 +211,7 @@ public class SolitaireServer {
 
     public static void main (String[] args) throws IOException {
         Log.set(Log.LEVEL_DEBUG);
-        new SolitaireServer();
+        new NetworkServer();
     }
 
 

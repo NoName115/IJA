@@ -18,13 +18,13 @@ public class SolitaireDisplay extends JComponent implements MouseListener
 	private JFrame frame;
 	private int selectedRow = -1;
 	private int selectedCol = -1;
-	private Solitaire game;
+	private SolitaireClient game;
 
-	public SolitaireDisplay(Solitaire game)
+	public SolitaireDisplay(SolitaireClient game)
 	{
 		this.game = game;
 
-		frame = new JFrame("solitaire.Solitaire");
+		frame = new JFrame("solitaire.SolitaireClient");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(this);
 

@@ -1,7 +1,9 @@
 package solitaire;
 
 import solitaire.networking.IClientController;
-import solitaire.networking.SolitaireClient;
+import solitaire.networking.Network;
+import solitaire.networking.Network.*;
+import solitaire.networking.NetworkClient;
 import solitaire.piles.FoundationPile;
 import solitaire.piles.TableauPile;
 import solitaire.piles.StockPile;
@@ -9,9 +11,9 @@ import solitaire.piles.WastePile;
 
 import java.util.*;
 
-public class Solitaire implements IClientController {
+public class SolitaireClient implements IClientController {
     public static void main(String[] args) {
-        new Solitaire();
+        new SolitaireClient();
     }
 
     private StockPile stockPile; // 0
@@ -20,9 +22,9 @@ public class Solitaire implements IClientController {
     private FoundationPile[] foundationPiles; // 6, 7, 8, 9, 10, 11, 12
 
     private SolitaireDisplay display;
-    private SolitaireClient client;
+    private NetworkClient client;
 
-    public Solitaire() {
+    public SolitaireClient() {
         tableauPiles = new TableauPile[4];
         for (int i = 0; i < tableauPiles.length; i++) {
             tableauPiles[i] = new TableauPile();
@@ -35,7 +37,7 @@ public class Solitaire implements IClientController {
         wastePile = new WastePile();
 
         display = new SolitaireDisplay(this);
-        client = new SolitaireClient(this);
+        client = new NetworkClient(this);
     }
 
     // Klient - kreslenie
@@ -60,8 +62,6 @@ public class Solitaire implements IClientController {
         return foundationPiles[index].getPile();
     }
 
-
-
     // Client - send message that stock is clicked
     public void stockClicked() {
         System.out.println("stock clicked");
@@ -73,7 +73,6 @@ public class Solitaire implements IClientController {
 
     }
 
-    //
     public void wasteClicked() {
         System.out.println("waste clicked");
         if (!wastePile.isEmpty()) {
@@ -85,6 +84,8 @@ public class Solitaire implements IClientController {
     public void foundationClicked(int index) {
         System.out.println("foundation #" + index + " clicked");
         if (display.isWasteSelected()) {
+            client.makeMove(0, 1, index + 6, 1);
+            // To server
             if (tableauPiles[index].canAdd(wastePile.getCard())) {
                 tableauPiles[index].pushCard(wastePile.popCard());
                 display.unselect();
@@ -142,6 +143,22 @@ public class Solitaire implements IClientController {
         return cards;
     }
 
+    private void deserialize(UpdatePlayground up) {
+        this.stockPile = new StockPile(up.stock);
+        this.wastePile = new WastePile(up.stock);
+        this.foundationPiles[0] = new FoundationPile(up.foundation0);
+        this.foundationPiles[1] = new FoundationPile(up.foundation1);
+        this.foundationPiles[2] = new FoundationPile(up.foundation2);
+        this.foundationPiles[3] = new FoundationPile(up.foundation3);
+        this.foundationPiles[4] = new FoundationPile(up.foundation4);
+        this.foundationPiles[5] = new FoundationPile(up.foundation5);
+        this.foundationPiles[6] = new FoundationPile(up.foundation6);
+        this.tableauPiles[0] = new TableauPile(up.tableau0);
+        this.tableauPiles[1] = new TableauPile(up.tableau1);
+        this.tableauPiles[2] = new TableauPile(up.tableau2);
+        this.tableauPiles[3] = new TableauPile(up.tableau3);
+    }
+
     @Override
     public void moveCard(int playground, int from, int to, int numberOfCards) {
 
@@ -151,7 +168,7 @@ public class Solitaire implements IClientController {
     public void addCards(int playground, int to, String[] cards) {
         System.out.println("adding cards");
         if (to == 1) {
-            for (int i = 0; i < cards.length; i++) {
+            for (int i = cards.length - 1; i >= 0; i--) {
                 wastePile.pushCard(new Card(cards[i]));
             }
         }
@@ -163,8 +180,8 @@ public class Solitaire implements IClientController {
     }
 
     @Override
-    public void playgroundUpdate(int index) {
-
+    public void playgroundUpdate(int index, UpdatePlayground up) {
+        deserialize(up);
     }
 
     @Override

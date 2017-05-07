@@ -12,6 +12,10 @@ public class StockPile extends BasePile {
         createStock();
     }
 
+    public StockPile(String[] cards) {
+        super(cards);
+    }
+
     private void createStock() {
         ArrayList<Card> cards = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {

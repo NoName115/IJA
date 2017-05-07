@@ -1,4 +1,5 @@
 package solitaire.networking;
+import solitaire.networking.Network.*;
 
 public interface IClientController {
     /**
@@ -24,7 +25,7 @@ public interface IClientController {
      *
      * @param index index of playground
      */
-    void playgroundUpdate(int index);
+    void playgroundUpdate(int index, UpdatePlayground up);
 
     /**
      * Method to close playground
