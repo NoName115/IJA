@@ -36,7 +36,6 @@ public class SolitaireClient implements IClientController {
         display = new SolitaireDisplay(this);
         client = new NetworkClient(this);
 
-        //client.registerGame();
     }
 
     // Klient - kreslenie

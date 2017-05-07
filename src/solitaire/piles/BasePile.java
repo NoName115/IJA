@@ -14,7 +14,7 @@ public abstract class BasePile {
 
     public BasePile(String[] cards) {
         this.pile = new Stack<>();
-        for (int i = cards.length - 1; i >= 0; i--) {
+        for (int i = 0; i < cards.length; i++) {
             pile.push(new Card(cards[i]));
         }
     }
@@ -44,8 +44,9 @@ public abstract class BasePile {
     public String[] toArray() {
         String[] arr = new String[pile.size()];
         int pos = 0;
-        while (!pile.isEmpty()) {
-            arr[pos++] = pile.pop().toStringFace();
+        while (pos < pile.size()) {
+            arr[pos] = pile.elementAt(pos).toStringFace();
+            pos++;
         }
 
         return arr;

@@ -19,6 +19,7 @@ public class NetworkServer {
     private Server server;
     private HashMap<String, GameInstance> games;
     private SolitaireServer sserver;
+    private SolitaireServer sserver2;
 
     public NetworkServer() throws IOException {
         server = new Server() {
@@ -30,15 +31,15 @@ public class NetworkServer {
         Network.register(server);
 
         sserver = new SolitaireServer(this);
+        sserver2 = new SolitaireServer(this);
 
         server.addListener(new Listener() {
             public void received(Connection c, Object object) {
                 SolitaireConnection connection = (SolitaireConnection) c;
 
-                System.out.println(sserver.status());
-
                 if (object instanceof RegisterGameRequest) {
                     if (connection.uuid != null) return;
+                    System.out.println("RegisterGameRequest");
 
                     GameInstance game = new GameInstance(connection.getID());
 
