@@ -82,6 +82,8 @@ public class SolitaireServer {
     }
 
     public GameMoveResponse makeMove(GameMove move) {
+
+        System.out.println("From: " + move.from +  ", To: " + move.to);
         PileType from = getPileTypeByIndex(move.from);
         PileType to = getPileTypeByIndex(move.to);
         GameMoveResponse resp = null;

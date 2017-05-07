@@ -67,6 +67,7 @@ public class SolitaireClient implements IClientController {
         if (!display.isWasteSelected() && !display.isPileSelected()) {
 
             client.makeMove(0, 0, 1);
+            display.unselect();
         }
 
     }
@@ -83,6 +84,7 @@ public class SolitaireClient implements IClientController {
         System.out.println("tableau #" + index + " clicked");
         if (display.isWasteSelected()) {
             client.makeMove(0, 1, index + 2);
+            display.unselect();
             // To server
 //            if (tableauPiles[index].canAdd(wastePile.getCard())) {
 //                tableauPiles[index].pushCard(wastePile.popCard());
@@ -91,6 +93,7 @@ public class SolitaireClient implements IClientController {
         }
         if (display.isPileSelected()) {
             client.makeMove(0, 6 + display.selectedPile(), index + 2);
+            display.unselect();
 //            FoundationPile selectedPile = foundationPiles[display.selectedPile()];
 //            if (tableauPiles[index].canAdd(selectedPile.getCard())) {
 //                Card temp = selectedPile.popCard();
@@ -106,15 +109,15 @@ public class SolitaireClient implements IClientController {
         System.out.println("foundation #" + index + " clicked");
         if (display.isWasteSelected()) {
             client.makeMove(0, 1, 6 + index);
+            display.unselect();
 //            Card temp = wastePile.getCard();
 //            if (foundationPiles[index].canAdd(temp)) {
 //                foundationPiles[index].pushCard(wastePile.popCard());
 //                foundationPiles[index].getCard().turnUp();
 //            }
-//            display.unselect();
-//            display.selectPile(index);
         } else if (display.isPileSelected()) {
             client.makeMove(0, 6 + display.selectedPile(), 6 + index);
+            display.unselect();
 //            int oldPile = display.selectedPile();
 //            if (index != oldPile) {
 //                Stack<Card> temp = removeFaceUpCards(oldPile);

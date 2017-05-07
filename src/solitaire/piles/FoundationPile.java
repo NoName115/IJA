@@ -31,18 +31,34 @@ public class FoundationPile extends BasePile {
         }
     }
 
+    @Override
+    public Card popCard() {
+        Card card = super.popCard();
+        if (!this.isEmpty()) {
+            this.getCard().turnUp();
+        }
+        return card;
+    }
+
     public Stack<Card> getPile() { return this.pile; }
 
     public int howManyCardsToTake(Card card) {
         int index = 0;
+
         for (int i = pile.size() - 1; i >= 0; i--) {
             Card pcard = pile.elementAt(i);
             if (!pcard.isFaceUp()) break;
-
-            if (pcard.getRank() == card.getRank() - 1
-                    && pcard.isRed() == !card.isRed()) {
-                index = pile.size() - i;
-                break;
+            if (card == null) {
+                if (pcard.getRank() == 13) {
+                    index = pile.size() - i;
+                    break;
+                }
+            } else {
+                if (pcard.getRank() == card.getRank() - 1
+                        && pcard.isRed() == !card.isRed()) {
+                    index = pile.size() - i;
+                    break;
+                }
             }
         }
 

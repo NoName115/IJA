@@ -13,10 +13,13 @@ public class PileMover {
 
             GameMoveResponse resp = new GameMoveResponse();
             resp.add = new String[w.size()];
+            resp.from = 1;
+            resp.to = 0;
             int index = 0;
 
             while (!w.isEmpty()) {
                 Card card = w.popCard();
+                card.turnDown();
                 s.pushCard(card);
                 resp.add[index++] = card.toStringFace();
             }
@@ -26,7 +29,7 @@ public class PileMover {
             Card card = s.popCard();
             w.pushCard(card);
             GameMoveResponse resp = new GameMoveResponse();
-            resp.add = new String[w.size()];
+            resp.add = new String[1];
             resp.add[0] = card.toStringFace();
 
             return resp;

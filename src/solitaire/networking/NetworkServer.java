@@ -85,6 +85,9 @@ public class NetworkServer {
                     if (resp == null) return;
 
                     System.out.println("Sending GameMoveResponse");
+                    for (String r : resp.add) {
+                        System.out.println(r);
+                    }
                     server.sendToTCP(connection.getID(), resp);
 
                     return;
