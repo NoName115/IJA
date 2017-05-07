@@ -32,4 +32,20 @@ public class FoundationPile extends BasePile {
     }
 
     public Stack<Card> getPile() { return this.pile; }
+
+    public int howManyCardsToTake(Card card) {
+        int index = 0;
+        for (int i = pile.size() - 1; i >= 0; i--) {
+            Card pcard = pile.elementAt(i);
+            if (!pcard.isFaceUp()) break;
+
+            if (pcard.getRank() == card.getRank() - 1
+                    && pcard.isRed() == !card.isRed()) {
+                index = pile.size() - i;
+                break;
+            }
+        }
+
+        return index;
+    }
 }

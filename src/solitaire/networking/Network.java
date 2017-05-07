@@ -86,10 +86,9 @@ public class Network {
      * Request for moving solitaire.add between solitaire.piles
      */
     static public class GameMove {
-        public int index;
         public int from;
         public int to;
-        public int numberOfCards;
+        public int playground;
     }
 
     /**
@@ -97,7 +96,6 @@ public class Network {
      */
     static public class GameMoveResponse {
         public int playground;
-        public String[] remove;
         public String[] add;
         public int from;
         public int to;

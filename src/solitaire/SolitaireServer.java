@@ -3,17 +3,16 @@ package solitaire;
 import solitaire.networking.Network;
 import solitaire.networking.Network.*;
 import solitaire.networking.NetworkServer;
-import solitaire.piles.FoundationPile;
-import solitaire.piles.StockPile;
-import solitaire.piles.TableauPile;
-import solitaire.piles.WastePile;
+import solitaire.piles.*;
 
 public class SolitaireServer {
 
-    private StockPile stockPile;
-    private WastePile wastePile;
-    private TableauPile[] tableauPiles;
-    private FoundationPile[] foundationPiles;
+    private StockPile stockPile; // 0
+    private WastePile wastePile; // 1
+    private TableauPile[] tableauPiles; // 2, 3, 4, 5
+    private FoundationPile[] foundationPiles; // 6, 7, 8, 9, 10, 11, 12
+
+    public enum PileType { S, W, T, F }
 
     NetworkServer networkServer;
 
@@ -37,7 +36,7 @@ public class SolitaireServer {
 
     // Server - generacia balickov
     // TODO: randomize
-    public void deal() {
+    private void deal() {
         for (int i = 0; i < foundationPiles.length; i++) {
             int counter = 0;
             while (counter != i + 1) {
@@ -49,26 +48,19 @@ public class SolitaireServer {
         }
     }
 
-    // Server
-    public void dealCardFromStock() {
-
-        if (!stockPile.isEmpty()) {
-            wastePile.pushCard(stockPile.popCard());
-        }
+    public String status() {
+        return "Waste: " + wastePile.size() + "\n" +
+                "Stock: " + stockPile.size() + "\n" +
+                "F1: " + foundationPiles[0].size() + "\n" +
+                "F1: " + foundationPiles[1].size() + "\n" +
+                "F1: " + foundationPiles[2].size() + "\n" +
+                "F1: " + foundationPiles[3].size() + "\n" +
+                "F1: " + foundationPiles[4].size() + "\n" +
+                "F1: " + foundationPiles[5].size() + "\n" +
+                "F1: " + foundationPiles[6].size();
 
     }
 
-    // Server
-    public void resetStock() {
-        while (!wastePile.isEmpty()) {
-            stockPile.pushCard(wastePile.popCard());
-        }
-    }
-
-    public void stockClicked() {
-        if (stockPile.isEmpty()) resetStock();
-        else dealCardFromStock();
-    }
 
     public UpdatePlayground serialize() {
         UpdatePlayground up = new UpdatePlayground();
@@ -87,6 +79,48 @@ public class SolitaireServer {
         up.foundation6 = foundationPiles[6].toArray();
 
         return up;
+    }
+
+    public GameMoveResponse makeMove(GameMove move) {
+        PileType from = getPileTypeByIndex(move.from);
+        PileType to = getPileTypeByIndex(move.to);
+        GameMoveResponse resp = null;
+
+        if (from == PileType.S && to == PileType.W) {
+            resp = PileMover.stockToWaste(stockPile, wastePile);
+        } else if (from == PileType.W && to == PileType.F) {
+            resp = PileMover.wasteToFoundation(wastePile, foundationPiles[move.to - 6]);
+        } else if (from == PileType.W && to == PileType.T) {
+            resp = PileMover.wasteToTableau(wastePile, tableauPiles[move.to - 2]);
+        } else if (from == PileType.F && to == PileType.F) {
+            resp = PileMover.foundationToFoundation(foundationPiles[move.from - 6], foundationPiles[move.to - 6]);
+        } else if (from == PileType.F && to == PileType.T) {
+            resp = PileMover.foundationToTableau(foundationPiles[move.from - 6], tableauPiles[move.to - 2]);
+        } else if (from == PileType.T && to == PileType.F) {
+            resp = PileMover.tableauToFoundation(tableauPiles[move.from - 2], foundationPiles[move.to - 6]);
+        }
+
+        if (resp == null) {
+            System.out.println("response null");
+            return null;
+        }
+
+        resp.to = move.to;
+        resp.from = move.from;
+
+        return resp;
+    }
+
+    public PileType getPileTypeByIndex(int index) {
+        if (index == 0) {
+            return PileType.S;
+        } else if (index == 1) {
+            return PileType.W;
+        } else if (index > 1 && index < 6) {
+            return PileType.T;
+        } else {
+            return PileType.F;
+        }
     }
 
 }

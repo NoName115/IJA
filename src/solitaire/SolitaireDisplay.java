@@ -127,9 +127,9 @@ public class SolitaireDisplay extends JComponent implements MouseListener
 		else if (row == 0 && col == 1)
 			game.wasteClicked();
 		else if (row == 0 && col >= 3)
-			game.foundationClicked(col - 3);
+			game.tableauClicked(col - 3);
 		else if (row == 1)
-			game.pileClicked(col);
+			game.foundationClicked(col);
 		repaint();
 	}
 

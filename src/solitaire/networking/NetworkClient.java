@@ -48,6 +48,7 @@ public class NetworkClient {
                 if (object instanceof GameMoveResponse) {
                     GameMoveResponse resp = (GameMoveResponse) object;
                     controller.addCards(0, resp.to, resp.add);
+                    controller.removeCards(0, resp.from, resp.add.length);
                 }
 
                 if (object instanceof UpdatePlayground) {
@@ -87,12 +88,11 @@ public class NetworkClient {
         req.uuid = UUID;
     }
 
-    public void makeMove(int playground, int from, int to, int numberOfCards) {
+    public void makeMove(int playground, int from, int to) {
         GameMove req = new GameMove();
-        req.index = playground;
+        req.playground = playground;
         req.from = from;
         req.to = to;
-        req.numberOfCards = numberOfCards;
 
         client.sendTCP(req);
     }

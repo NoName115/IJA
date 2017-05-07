@@ -4,10 +4,7 @@ import solitaire.networking.IClientController;
 import solitaire.networking.Network;
 import solitaire.networking.Network.*;
 import solitaire.networking.NetworkClient;
-import solitaire.piles.FoundationPile;
-import solitaire.piles.TableauPile;
-import solitaire.piles.StockPile;
-import solitaire.piles.WastePile;
+import solitaire.piles.*;
 
 import java.util.*;
 
@@ -38,6 +35,8 @@ public class SolitaireClient implements IClientController {
 
         display = new SolitaireDisplay(this);
         client = new NetworkClient(this);
+
+        //client.registerGame();
     }
 
     // Klient - kreslenie
@@ -68,7 +67,7 @@ public class SolitaireClient implements IClientController {
         display.unselect();
         if (!display.isWasteSelected() && !display.isPileSelected()) {
 
-            client.makeMove(0, 0, -1, -1);
+            client.makeMove(0, 0, 1);
         }
 
     }
@@ -81,54 +80,57 @@ public class SolitaireClient implements IClientController {
         }
     }
 
-    public void foundationClicked(int index) {
-        System.out.println("foundation #" + index + " clicked");
+    public void tableauClicked(int index) {
+        System.out.println("tableau #" + index + " clicked");
         if (display.isWasteSelected()) {
-            client.makeMove(0, 1, index + 6, 1);
+            client.makeMove(0, 1, index + 2);
             // To server
-            if (tableauPiles[index].canAdd(wastePile.getCard())) {
-                tableauPiles[index].pushCard(wastePile.popCard());
-                display.unselect();
-            }
+//            if (tableauPiles[index].canAdd(wastePile.getCard())) {
+//                tableauPiles[index].pushCard(wastePile.popCard());
+//                display.unselect();
+//            }
         }
         if (display.isPileSelected()) {
-            FoundationPile selectedPile = foundationPiles[display.selectedPile()];
-            if (tableauPiles[index].canAdd(selectedPile.getCard())) {
-                Card temp = selectedPile.popCard();
-                tableauPiles[index].pushCard(temp);
-                if (!selectedPile.isEmpty()) selectedPile.getCard().turnUp();
-                display.unselect();
-            }
+            client.makeMove(0, 6 + display.selectedPile(), index + 2);
+//            FoundationPile selectedPile = foundationPiles[display.selectedPile()];
+//            if (tableauPiles[index].canAdd(selectedPile.getCard())) {
+//                Card temp = selectedPile.popCard();
+//                tableauPiles[index].pushCard(temp);
+//                if (!selectedPile.isEmpty()) selectedPile.getCard().turnUp();
+//                display.unselect();
+//            }
 
         }
     }
 
-    public void pileClicked(int index) {
-        System.out.println("pile #" + index + " clicked");
+    public void foundationClicked(int index) {
+        System.out.println("foundation #" + index + " clicked");
         if (display.isWasteSelected()) {
-            Card temp = wastePile.getCard();
-            if (foundationPiles[index].canAdd(temp)) {
-                foundationPiles[index].pushCard(wastePile.popCard());
-                foundationPiles[index].getCard().turnUp();
-            }
-            display.unselect();
-            display.selectPile(index);
+            client.makeMove(0, 1, 6 + index);
+//            Card temp = wastePile.getCard();
+//            if (foundationPiles[index].canAdd(temp)) {
+//                foundationPiles[index].pushCard(wastePile.popCard());
+//                foundationPiles[index].getCard().turnUp();
+//            }
+//            display.unselect();
+//            display.selectPile(index);
         } else if (display.isPileSelected()) {
-            int oldPile = display.selectedPile();
-            if (index != oldPile) {
-                Stack<Card> temp = removeFaceUpCards(oldPile);
-                if (foundationPiles[index].canAdd(temp.peek())) {
-                    foundationPiles[index].addCards(temp);
-                    if (!foundationPiles[oldPile].isEmpty()) foundationPiles[oldPile].getCard().turnUp();
-
-                    display.unselect();
-                } else {
-                    foundationPiles[oldPile].addCards(temp);
-                    display.unselect();
-                    display.selectPile(index);
-
-                }
-            } else display.unselect();
+            client.makeMove(0, 6 + display.selectedPile(), 6 + index);
+//            int oldPile = display.selectedPile();
+//            if (index != oldPile) {
+//                Stack<Card> temp = removeFaceUpCards(oldPile);
+//                if (foundationPiles[index].canAdd(temp.peek())) {
+//                    foundationPiles[index].addCards(temp);
+//                    if (!foundationPiles[oldPile].isEmpty()) foundationPiles[oldPile].getCard().turnUp();
+//
+//                    display.unselect();
+//                } else {
+//                    foundationPiles[oldPile].addCards(temp);
+//                    display.unselect();
+//                    display.selectPile(index);
+//
+//                }
+//            } else display.unselect();
         } else {
             display.selectPile(index);
             foundationPiles[index].getCard().turnUp();
@@ -159,6 +161,30 @@ public class SolitaireClient implements IClientController {
         this.tableauPiles[3] = new TableauPile(up.tableau3);
     }
 
+    private BasePile getBasePileByIndex(int index) {
+        if (index == 0) {
+            return stockPile;
+        } else if (index == 1) {
+            return wastePile;
+        } else if (index > 1 && index < 6) {
+            return tableauPiles[index - 2];
+        } else {
+            return foundationPiles[index - 6];
+        }
+    }
+
+    private void removeCardsFromPile(BasePile pile, int numberOfCards) {
+        for (int i = 0; i < numberOfCards; i++) {
+            pile.popCard();
+        }
+    }
+
+    private void addCardsToPile(BasePile pile, String[] cards) {
+        for (int i = cards.length - 1; i >= 0; i--) {
+            pile.pushCard(new Card(cards[i]));
+        }
+    }
+
     @Override
     public void moveCard(int playground, int from, int to, int numberOfCards) {
 
@@ -167,21 +193,19 @@ public class SolitaireClient implements IClientController {
     @Override
     public void addCards(int playground, int to, String[] cards) {
         System.out.println("adding cards");
-        if (to == 1) {
-            for (int i = cards.length - 1; i >= 0; i--) {
-                wastePile.pushCard(new Card(cards[i]));
-            }
-        }
+        addCardsToPile(getBasePileByIndex(to), cards);
     }
 
     @Override
-    public void lastOperationStatus(boolean valid) {
-
+    public void removeCards(int playground, int from, int numberOfCards) {
+        System.out.println("removing cards");
+        removeCardsFromPile(getBasePileByIndex(from), numberOfCards);
     }
 
     @Override
     public void playgroundUpdate(int index, UpdatePlayground up) {
         deserialize(up);
+        display.repaint();
     }
 
     @Override

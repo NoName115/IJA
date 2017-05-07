@@ -35,7 +35,7 @@ public class NetworkServer {
             public void received(Connection c, Object object) {
                 SolitaireConnection connection = (SolitaireConnection) c;
 
-                System.out.println("Client connected");
+                System.out.println(sserver.status());
 
                 if (object instanceof RegisterGameRequest) {
                     if (connection.uuid != null) return;
@@ -47,7 +47,7 @@ public class NetworkServer {
                     RegisterGameResponse reg = new RegisterGameResponse();
                     reg.uuid = game.getUUID();
 
-                    server.sendToTCP(connection.getID(), reg);
+                    server.sendToTCP(connection.getID(), sserver.serialize());
 
                     return;
                 }
@@ -79,17 +79,12 @@ public class NetworkServer {
 //                    GameInstance game = games.get(connection.uuid);
 //                    if (game.getPlayerID() != game.getPlayerID()) return;
 
-                    GameMove gameMove = (GameMove) object;
+                    GameMoveResponse resp = sserver.makeMove((GameMove) object);
 
-                    GameMoveResponse response = new GameMoveResponse();
+                    if (resp == null) return;
 
-                    response.add = new String[1];
-                    response.add[0] = "adu";
-                    response.to = 1;
-
-                    UpdatePlayground up = sserver.serialize();
-
-                    server.sendToTCP(connection.getID(), up);
+                    System.out.println("Sending GameMoveResponse");
+                    server.sendToTCP(connection.getID(), resp);
 
                     return;
                 }

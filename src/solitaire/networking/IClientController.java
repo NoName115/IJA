@@ -13,13 +13,8 @@ public interface IClientController {
     void moveCard(int playground, int from, int to, int numberOfCards);
 
     void addCards(int playground, int to, String[] cards);
-    /**
-     * Status of last created operation
-     *
-     * @param valid true if valid
-     */
-    void lastOperationStatus(boolean valid);
 
+    void removeCards(int playground, int from, int numberOfCards);
     /**
      * Method updates whole playground
      *

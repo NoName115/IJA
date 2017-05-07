@@ -33,6 +33,10 @@ public abstract class BasePile {
         pile.push(card);
     }
 
+    public int size() {
+        return pile.size();
+    }
+
     public boolean isEmpty() {
         return pile.isEmpty();
     }
