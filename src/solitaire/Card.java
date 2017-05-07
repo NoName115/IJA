@@ -80,7 +80,7 @@ public class Card {
         if (rank == 10) return "./src/cards/t" + suit + ".gif";
         if (rank == 11) return "./src/cards/j" + suit + ".gif";
         if (rank == 12) return "./src/cards/q" + suit + ".gif";
-        if (rank == 13) return "./src/cards/k" + suit + ".png";
+        if (rank == 13) return "./src/cards/k" + suit + ".gif";
         if (rank == 1) return "./src/cards/a" + suit + ".gif";
         return "./src/cards/" + rank + suit + ".gif";
     }
