@@ -4,6 +4,8 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import com.esotericsoftware.minlog.Log;
+import solitaire.Card;
 import solitaire.networking.Network.*;
 
 import java.io.IOException;
@@ -12,6 +14,11 @@ public class SolitaireClient {
 
     Client client;
     IClientController controller;
+
+    public static void main (String[] args) throws IOException {
+        Log.set(Log.LEVEL_DEBUG);
+        new SolitaireClient(null);
+    }
 
     public SolitaireClient (IClientController controller) {
 
@@ -26,6 +33,7 @@ public class SolitaireClient {
 
         client.addListener(new Listener() {
             public void connected (Connection connection) {
+                registerGame();
             }
 
             public void received (Connection connection, Object object) {
@@ -36,6 +44,11 @@ public class SolitaireClient {
 
                     //client.stop();
                     return;
+                }
+
+                if (object instanceof GameMoveResponse) {
+                    GameMoveResponse resp = (GameMoveResponse) object;
+                    controller.addCards(0, resp.to, resp.add);
                 }
             }
 

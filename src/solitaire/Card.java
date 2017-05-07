@@ -1,9 +1,9 @@
 package solitaire;
 
 public class Card {
-    public int rank;
-    public String suit;
-    public boolean isFaceUp;
+    private int rank;
+    private String suit;
+    private boolean isFaceUp;
 
     /**
      * Constructs a solitaire.Card object
@@ -15,6 +15,18 @@ public class Card {
         rank = newRank;
         suit = newSuit;
         isFaceUp = false;
+    }
+
+    public Card(String card) {
+        if (card.charAt(0) == 't') rank = 10;
+        if (card.charAt(0) == 'j') rank = 11;
+        if (card.charAt(0) == 'q') rank = 12;
+        if (card.charAt(0) == 'k') rank = 13;
+        if (card.charAt(0) == 'a') rank = 1;
+        else rank = Integer.parseInt(card.substring(0, 1));
+
+        suit = card.substring(1, 2);
+        isFaceUp = card.charAt(2) == 'u';
     }
 
     /**
@@ -84,4 +96,31 @@ public class Card {
         if (rank == 1) return "./src/cards/a" + suit + ".gif";
         return "./src/cards/" + rank + suit + ".gif";
     }
+//
+//    @Override
+//    public String toString() {
+//        if (rank == 10) return "t" + suit;
+//        if (rank == 11) return "j" + suit;
+//        if (rank == 12) return "q" + suit;
+//        if (rank == 13) return "k" + suit;
+//        if (rank == 1) return "a" + suit;
+//        return Integer.toString(rank) + suit;
+//    }
+//
+//
+//    public String getFileName()
+//    {
+//        if (!isFaceUp) return "./src/cards/back.gif";
+//        return "./src/cards/" + this.toString() + ".gif";
+//    }
+//
+//    @Override
+//    public String toString() {
+//        if (rank == 10) return "t" + suit;
+//        if (rank == 11) return "j" + suit;
+//        if (rank == 12) return "q" + suit;
+//        if (rank == 13) return "k" + suit;
+//        if (rank == 1) return "a" + suit;
+//        return Integer.toString(rank) + suit;
+//    }
 }

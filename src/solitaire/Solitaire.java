@@ -1,5 +1,7 @@
 package solitaire;
 
+import solitaire.networking.IClientController;
+import solitaire.networking.SolitaireClient;
 import solitaire.piles.FoundationPile;
 import solitaire.piles.TableauPile;
 import solitaire.piles.StockPile;
@@ -7,17 +9,18 @@ import solitaire.piles.WastePile;
 
 import java.util.*;
 
-public class Solitaire {
+public class Solitaire implements IClientController {
     public static void main(String[] args) {
         new Solitaire();
     }
 
-    private StockPile stockPile;
-    private WastePile wastePile;
-    private TableauPile[] tableauPiles;
-    private FoundationPile[] foundationPiles;
+    private StockPile stockPile; // 0
+    private WastePile wastePile; // 1
+    private TableauPile[] tableauPiles; // 2, 3, 4, 5
+    private FoundationPile[] foundationPiles; // 6, 7, 8, 9, 10, 11, 12
 
     private SolitaireDisplay display;
+    private SolitaireClient client;
 
     public Solitaire() {
         tableauPiles = new TableauPile[4];
@@ -32,64 +35,45 @@ public class Solitaire {
         wastePile = new WastePile();
 
         display = new SolitaireDisplay(this);
-        deal();
+        client = new SolitaireClient(this);
     }
 
+    // Klient - kreslenie
     public Card getStockCard() {
         return stockPile.getCard();
     }
 
+    // Klient - kreslenie
     public Card getWasteCard() {
         return wastePile.getCard();
     }
 
+    // Klient - kreslenie
     public Card getFoundationCard(int index) {
         if (tableauPiles[index].isEmpty()) return null;
         return tableauPiles[index].getCard();
     }
 
-    // TODO: remove getPile method
+    // Klient - kreslenie
+    // TODO: add getPile method
     public Stack<Card> getPile(int index) {
         return foundationPiles[index].getPile();
     }
 
-    // TODO: randomize
-    public void deal() {
-        for (int i = 0; i < foundationPiles.length; i++) {
-            int counter = 0;
-            while (counter != i + 1) {
-                Card temp = stockPile.popCard();
-                foundationPiles[i].pushCard(temp);
-                counter++;
-            }
-            foundationPiles[i].getCard().turnUp();
-        }
-    }
 
-    public void dealCardFromStock() {
 
-        if (!stockPile.isEmpty()) {
-            wastePile.pushCard(stockPile.popCard());
-        }
-
-    }
-
-    public void resetStock() {
-        while (!wastePile.isEmpty()) {
-            stockPile.pushCard(wastePile.popCard());
-        }
-    }
-
+    // Client - send message that stock is clicked
     public void stockClicked() {
         System.out.println("stock clicked");
         display.unselect();
         if (!display.isWasteSelected() && !display.isPileSelected()) {
-            if (stockPile.isEmpty()) resetStock();
-            else dealCardFromStock();
+
+            client.makeMove(0, 0, -1, -1);
         }
 
     }
 
+    //
     public void wasteClicked() {
         System.out.println("waste clicked");
         if (!wastePile.isEmpty()) {
@@ -156,5 +140,40 @@ public class Solitaire {
             cards.push(foundationPiles[index].popCard());
         }
         return cards;
+    }
+
+    @Override
+    public void moveCard(int playground, int from, int to, int numberOfCards) {
+
+    }
+
+    @Override
+    public void addCards(int playground, int to, String[] cards) {
+        System.out.println("adding cards");
+        if (to == 1) {
+            for (int i = 0; i < cards.length; i++) {
+                wastePile.pushCard(new Card(cards[i]));
+            }
+        }
+    }
+
+    @Override
+    public void lastOperationStatus(boolean valid) {
+
+    }
+
+    @Override
+    public void playgroundUpdate(int index) {
+
+    }
+
+    @Override
+    public void closePlayground(int index) {
+
+    }
+
+    @Override
+    public void showHint(String hint) {
+
     }
 }

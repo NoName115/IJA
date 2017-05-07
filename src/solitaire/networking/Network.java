@@ -2,6 +2,9 @@ package solitaire.networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+import solitaire.Card;
+import solitaire.piles.BasePile;
+import solitaire.piles.StockPile;
 
 /**
  * Class that holds communication messages
@@ -30,7 +33,7 @@ public class Network {
         kryo.register(LoadRequest.class);
         kryo.register(HintRequest.class);
         kryo.register(HintResponse.class);
-
+        kryo.register(String[].class);
     }
 
     /**
@@ -67,7 +70,7 @@ public class Network {
         // one board - eg. for adding game
     }
     /**
-     * Request for moving solitaire.cards between solitaire.piles
+     * Request for moving solitaire.add between solitaire.piles
      */
     static public class GameMove {
         public int index;
@@ -77,10 +80,14 @@ public class Network {
     }
 
     /**
-     * Response after moving solitaire.cards - valid move or not
+     * Response after moving solitaire.add - valid move or not
      */
     static public class GameMoveResponse {
-        public boolean valid;
+        public int playground;
+        public String[] remove;
+        public String[] add;
+        public int from;
+        public int to;
     }
 
     /**

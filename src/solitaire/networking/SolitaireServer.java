@@ -38,7 +38,7 @@ public class SolitaireServer {
 
                     GameInstance game = new GameInstance(connection.getID());
 
-                    games.put(game.getUUID(), game);
+                    //games.put(game.getUUID(), game);
 
                     RegisterGameResponse reg = new RegisterGameResponse();
                     reg.uuid = game.getUUID();
@@ -69,22 +69,19 @@ public class SolitaireServer {
                 }
 
                 if (object instanceof GameMove) {
-                    if (connection.uuid == null) return;
+                    //if (connection.uuid == null) return;
 
-                    GameInstance game = games.get(connection.uuid);
-                    if (game.getPlayerID() != game.getPlayerID()) return;
+                    System.out.println("GameMove");
+//                    GameInstance game = games.get(connection.uuid);
+//                    if (game.getPlayerID() != game.getPlayerID()) return;
 
                     GameMove gameMove = (GameMove) object;
 
                     GameMoveResponse response = new GameMoveResponse();
 
-                    // TODO: check if move is valid
-                    if (true) {
-                        response.valid = true;
-                        server.sendToAllExceptTCP(connection.getID(), gameMove);
-                    } else {
-                        response.valid = false;
-                    }
+                    response.add = new String[1];
+                    response.add[0] = "adu";
+                    response.to = 1;
 
                     server.sendToTCP(connection.getID(), response);
 

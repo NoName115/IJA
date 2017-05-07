@@ -11,9 +11,9 @@ public class SolitaireDisplay extends JComponent implements MouseListener
 {
 	private static final int CARD_WIDTH = 73;
 	private static final int CARD_HEIGHT = 97;
-	private static final int SPACING = 5;  //distance between cards
-	private static final int FACE_UP_OFFSET = 15;  //distance for cascading face-up cards
-	private static final int FACE_DOWN_OFFSET = 5;  //distance for cascading face-down cards
+	private static final int SPACING = 5;  //distance between add
+	private static final int FACE_UP_OFFSET = 15;  //distance for cascading face-up add
+	private static final int FACE_DOWN_OFFSET = 5;  //distance for cascading face-down add
 
 	private JFrame frame;
 	private int selectedRow = -1;
