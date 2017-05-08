@@ -11,6 +11,11 @@ public class WastePile extends BasePile {
         super(cards);
     }
 
+    public Card getFirstCard()
+    {
+        return this.pile.isEmpty() ? null : this.pile.get(this.pile.size() - 1);
+    }
+
     @Override
     public void pushCard(Card card) {
         super.pushCard(card);

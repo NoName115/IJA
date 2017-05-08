@@ -51,7 +51,25 @@ public class FoundationPile extends BasePile {
         return card;
     }
 
-    public Stack<Card> getPile() { return this.pile; }
+    // Pre hint prvu iteraciu foundation s foundation
+    public Card getLastFaceUpCard()
+    {
+        for (Card tempCard : this.pile)
+        {
+            if (tempCard.isFaceUp())
+            {
+                return tempCard;
+            }
+        }
+
+        return null;
+    }
+
+    // Pre hint iteracia foundation s Tableau
+    public Card getFirstFaceUpCard()
+    {
+        return this.pile.isEmpty() ? null : this.pile.get(this.pile.size() - 1);
+    }
 
     public int howManyCardsToTake(Card card) {
         int index = 0;

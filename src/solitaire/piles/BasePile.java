@@ -50,6 +50,8 @@ public abstract class BasePile {
         return pile.isEmpty();
     }
 
+    public Stack<Card> getPile() { return this.pile; }
+
     public String[] toArray() {
         String[] arr = new String[pile.size()];
         int pos = 0;

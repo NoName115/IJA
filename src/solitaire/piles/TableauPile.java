@@ -21,7 +21,7 @@ public class TableauPile extends BasePile {
         {
             return (card.getRank() == 1);
         }
-        
+
         Card top = getCard();
         return (top.getRank() + 1 == card.getRank()) && (top.getSuit().equals(card.getSuit()));
     }

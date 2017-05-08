@@ -146,8 +146,129 @@ public class GameInstance {
 
     public Network.HintResponse getHint() {
         Network.HintResponse resp = new Network.HintResponse();
-        // TODO:
-        return null;
+
+        for (FoundationPile fp : this.foundationPiles)
+        {
+            Card tempCard = fp.getFirstFaceUpCard();
+            if (tempCard == null)
+            {
+                continue;
+            }
+
+            // Foundation pile s Tableau pile
+            for (TableauPile tp : this.tableauPiles)
+            {
+                if (tp.canAdd(tempCard))
+                {
+                    resp.hint = "Move " + tempCard.toString() + " to Tableau pile";
+                    return resp;
+                }
+            }
+
+            tempCard = fp.getLastFaceUpCard();
+            if (tempCard == null)
+            {
+                continue;
+            }
+
+            // Foundation pile s Foundation pile
+            for (FoundationPile fpInter : this.foundationPiles)
+            {
+                if (fpInter.canAdd(tempCard))
+                {
+                    Card topCard = fpInter.getFirstFaceUpCard();
+                    if (topCard != null)
+                    {
+                        resp.hint = "Move " + tempCard.toString() + " at " + topCard.toString();
+                    }
+                    else
+                    {
+                        resp.hint = "Move " + tempCard.toString() + " to Foundation pile";
+                    }
+
+                    return resp;
+                }
+            }
+        }
+
+        // Top Waste pile Card
+        Card tempCard = this.wastePile.getFirstCard();
+        if (tempCard != null)
+        {
+            for (TableauPile tp : this.tableauPiles)
+            {
+                if (tp.canAdd(tempCard))
+                {
+                    resp.hint = "Move " + tempCard.toString() + " to Tableau pile";
+                    return resp;
+                }
+            }
+
+            for (FoundationPile fp : this.foundationPiles)
+            {
+                if (fp.canAdd(tempCard))
+                {
+                    Card topCard = fp.getFirstFaceUpCard();
+                    if (topCard != null)
+                    {
+                        resp.hint = "Move " + tempCard.toString() + " at " + topCard.toString();
+                    }
+                    else
+                    {
+                        resp.hint = "Move " + tempCard.toString() + " to FoundationPile";
+                    }
+
+                    return resp;
+                }
+            }
+        }
+
+        // Waste pile
+        for (Card interCard : this.wastePile.getPile())
+        {
+            for (TableauPile tp : this.tableauPiles)
+            {
+                if (tp.canAdd(interCard))
+                {
+                    resp.hint = "Draw card";
+                    return resp;
+                }
+            }
+
+            for (FoundationPile fp : this.foundationPiles)
+            {
+                if (fp.canAdd(interCard))
+                {
+                    resp.hint = "Draw card";
+                    return resp;
+                }
+            }
+        }
+
+        // Stock pile
+        for (Card interCard : this.stockPile.getPile())
+        {
+            for (TableauPile tp : this.tableauPiles)
+            {
+                if (tp.canAdd(interCard))
+                {
+                    resp.hint = "Draw card";
+                    return resp;
+                }
+            }
+
+            for (FoundationPile fp : this.foundationPiles)
+            {
+                if (fp.canAdd(interCard))
+                {
+                    resp.hint = "Draw card";
+                    return resp;
+                }
+            }
+        }
+
+        resp.hint = "No hint available";
+        return resp;
     }
 
     public void removeCardsFromPile(int from, int numberOfCards) {
