@@ -63,7 +63,6 @@ public class GameInstance {
     }
 
     // Server - generacia balickov
-    // TODO: randomize
     public void deal() {
         for (int i = 0; i < foundationPiles.length; i++) {
             int counter = 0;

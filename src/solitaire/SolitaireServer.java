@@ -43,17 +43,19 @@ public class SolitaireServer {
     }
 
     public UpdatePlayground getGameById(int index) {
-        if (!act[index]) {
-            return null;
-        }
         UpdatePlayground pg = gi[index].serialize();
         pg.playground = index;
         return pg;
     }
 
+    public boolean isActive(int index) {
+        return act[index];
+    }
+
     public void activate(int index) {
         act[index] = true;
         gi[index] = new GameInstance(true);
+        gi[index].deal();
     }
 
     public void deactivate(int index) {

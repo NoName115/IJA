@@ -57,7 +57,7 @@ public class NetworkClient {
                 }
 
                 if (object instanceof ClosePlayground) {
-
+                    controller.removeGame(((ClosePlayground) object).index);
                 }
             }
 
@@ -117,7 +117,7 @@ public class NetworkClient {
         AddPlayground req = new AddPlayground();
         req.index = index;
 
-        client.sendTCP(index);
+        client.sendTCP(req);
     }
 
     /**
@@ -178,14 +178,6 @@ public class NetworkClient {
         req.index = index;
 
         client.sendTCP(req);
-    }
-
-    public void enableGame(int index) {
-
-    }
-
-    public void disableGame(int index) {
-        
     }
 
     /**

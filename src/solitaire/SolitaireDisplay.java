@@ -193,12 +193,10 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 	{
 		if (e.getSource() == createPlayGround_1)
 		{
-			this.setGameRunning(0, true);
 			this.game.activateGame(0);
 		}
 		else if (e.getSource() == closePlayGround_1)
 		{
-			this.setGameRunning(0, false);
 			this.game.disableGame(0);
 		}
 		else if (e.getSource() == loadPlayGround_1)
@@ -219,12 +217,10 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == createPlayGround_2)
 		{
-			this.setGameRunning(1, true);
 			this.game.activateGame(1);
 		}
 		else if (e.getSource() == closePlayGround_2)
 		{
-			this.setGameRunning(1, false);
 			this.game.disableGame(1);
 		}
 		else if (e.getSource() == loadPlayGround_2)
@@ -245,12 +241,10 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == createPlayGround_3)
 		{
-			this.setGameRunning(2, true);
 			this.game.activateGame(2);
 		}
 		else if (e.getSource() == closePlayGround_3)
 		{
-			this.setGameRunning(2, false);
 			this.game.disableGame(2);
 		}
 		else if (e.getSource() == loadPlayGround_3)
@@ -271,12 +265,10 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == createPlayGround_4)
 		{
-			this.setGameRunning(3, true);
 			this.game.activateGame(3);
 		}
 		else if (e.getSource() == closePlayGround_4)
 		{
-			this.setGameRunning(3, false);
 			this.game.disableGame(3);
 		}
 		else if (e.getSource() == loadPlayGround_4)

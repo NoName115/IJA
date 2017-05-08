@@ -141,12 +141,12 @@ public class SolitaireClient implements IClientController {
         client.load(gameIndex);
     }
 
-    public void enableGame(int gameIndex) {
-        client.enableGame(gameIndex);
+    public void activateGame(int gameIndex) {
+        client.addGame(gameIndex);
     }
 
     public void disableGame(int gameIndex) {
-        client.disableGame(gameIndex);
+        client.closeGame(gameIndex);
     }
 
     @Override
@@ -165,12 +165,8 @@ public class SolitaireClient implements IClientController {
     public void playgroundUpdate(int index, UpdatePlayground up) {
         System.out.println(up);
         gi[index].deserialize(up);
+        display.setGameRunning(up.playground, true);
         display.repaint();
-    }
-
-    @Override
-    public void closePlayground(int index) {
-
     }
 
     @Override
@@ -180,6 +176,6 @@ public class SolitaireClient implements IClientController {
 
     @Override
     public void removeGame(int gameIndex) {
-
+        display.setGameRunning(gameIndex, false);
     }
 }

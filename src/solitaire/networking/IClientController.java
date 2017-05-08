@@ -14,13 +14,6 @@ public interface IClientController {
     void playgroundUpdate(int index, UpdatePlayground up);
 
     /**
-     * Method to close playground
-     *
-     * @param index index of playground
-     */
-    void closePlayground(int index);
-
-    /**
      * Method to show hint
      *
      * @param hint Hint

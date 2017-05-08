@@ -50,10 +50,10 @@ public class NetworkServer {
                         spectators.add(connection.getID());
                     }
 
-                    server.sendToTCP(connection.getID(), sserver.getGameById(0));
-                    server.sendToTCP(connection.getID(), sserver.getGameById(1));
-                    server.sendToTCP(connection.getID(), sserver.getGameById(2));
-                    server.sendToTCP(connection.getID(), sserver.getGameById(3));
+                    if (sserver.isActive(0)) server.sendToTCP(connection.getID(), sserver.getGameById(0));
+                    if (sserver.isActive(1)) server.sendToTCP(connection.getID(), sserver.getGameById(1));
+                    if (sserver.isActive(2)) server.sendToTCP(connection.getID(), sserver.getGameById(2));
+                    if (sserver.isActive(3)) server.sendToTCP(connection.getID(), sserver.getGameById(3));
 
                     return;
                 }
@@ -119,6 +119,7 @@ public class NetworkServer {
                     if (playerID != connection.getID()) return;
 
                     AddPlayground req = (AddPlayground) object;
+                    System.out.println("AddPlayground " + req.index);
                     sserver.activate(req.index);
                     sendToAllPlayers(sserver.getGameById(req.index));
                 }
