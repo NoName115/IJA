@@ -115,6 +115,22 @@ public class NetworkServer {
 
                 }
 
+                if (object instanceof AddPlayground) {
+                    if (playerID != connection.getID()) return;
+
+                    AddPlayground req = (AddPlayground) object;
+                    sserver.activate(req.index);
+                    sendToAllPlayers(sserver.getGameById(req.index));
+                }
+
+                if (object instanceof ClosePlayground) {
+                    if (playerID != connection.getID()) return;
+
+                    ClosePlayground req = (ClosePlayground) object;
+                    sserver.deactivate(req.index);
+                    sendToAllSpectators(req);
+                }
+
             }
 
             public void disconnected(Connection c) {

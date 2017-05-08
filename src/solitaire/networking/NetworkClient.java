@@ -55,6 +55,10 @@ public class NetworkClient {
                     HintResponse resp = (HintResponse) object;
                     controller.showHint(resp.hint, resp.index);
                 }
+
+                if (object instanceof ClosePlayground) {
+
+                }
             }
 
             public void disconnected (Connection connection) {
