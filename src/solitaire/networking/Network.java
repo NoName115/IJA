@@ -40,13 +40,14 @@ public class Network {
      * Creating new game
      */
     static public class RegisterGameRequest {
+        String uuid;
     }
 
     /**
      * Response for creating new game
      */
     static public class RegisterGameResponse {
-        public boolean spectator;
+        public String uuid;
     }
 
     /**
