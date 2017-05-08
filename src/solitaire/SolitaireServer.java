@@ -33,4 +33,8 @@ public class SolitaireServer {
         pg.playground = index;
         return pg;
     }
+
+    public GameMoveResponse makeUndo(int index) {
+        return gi[index].undo();
+    }
 }

@@ -125,6 +125,10 @@ public class SolitaireClient implements IClientController {
         }
     }
 
+    public void undo(int gameIndex) {
+        client.undo(gameIndex);
+    }
+
     private BasePile getBasePileByIndex(int gameIndex, int index) {
         if (index == 0) {
             return gi[gameIndex].s();

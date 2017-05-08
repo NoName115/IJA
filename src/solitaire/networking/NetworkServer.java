@@ -41,7 +41,6 @@ public class NetworkServer {
                 SolitaireConnection connection = (SolitaireConnection) c;
 
                 if (object instanceof RegisterGameRequest) {
-                    if (connection.uuid != null) return;
                     System.out.println("RegisterGameRequest");
 
 
@@ -134,20 +133,21 @@ public class NetworkServer {
 //                    return;
 //                }
 //
-//                if (object instanceof UndoRequest) {
-//                    if (connection.uuid == null) return;
-//
-//                    GameInstance game = games.get(connection.uuid);
+                if (object instanceof UndoRequest) {
+
 //                    if (game.getPlayerID() != game.getPlayerID()) return;
-//
-//                    UndoRequest undoRequest = (UndoRequest) object;
-//
-//                    // TODO: existuje hra? Sprav undoRequest
-//
-//                    sendToAllSpectators(game, undoRequest);
-//
-//                    return;
-//                }
+
+                    UndoRequest undoRequest = (UndoRequest) object;
+
+                    GameMoveResponse resp = sserver.makeUndo(undoRequest.index);
+                    if (resp == null) {
+                        return;
+                    }
+
+                    sendToAllPlayers(resp);
+
+                    return;
+                }
 //
 //                if (object instanceof SaveRequest) {
 //                    if (connection.uuid == null) return;
@@ -167,8 +167,6 @@ public class NetworkServer {
             public void disconnected(Connection c) {
                 System.out.println("Client disconnected");
                 SolitaireConnection connection = (SolitaireConnection) c;
-
-                if (connection.uuid == null) return;
 
                 if (RemovePlayer(connection.getID()) == 0) {
                     playerID = -1;
@@ -206,7 +204,6 @@ public class NetworkServer {
 
     // Every connection should've unique ID of the game
     static class SolitaireConnection extends Connection {
-        public String uuid;
     }
 
     public int RemovePlayer(int id) {

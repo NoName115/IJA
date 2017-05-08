@@ -1,6 +1,7 @@
 package solitaire;
 
 import solitaire.networking.Network;
+import solitaire.networking.UndoBuffer;
 import solitaire.piles.*;
 
 public class GameInstance {
@@ -9,6 +10,8 @@ public class GameInstance {
     private WastePile wastePile; // 1
     private TableauPile[] tableauPiles; // 2, 3, 4, 5
     private FoundationPile[] foundationPiles; // 6, 7, 8, 9, 10, 11, 12
+
+    private UndoBuffer undoBuffer;
 
     public GameInstance(boolean server) {
         tableauPiles = new TableauPile[4];
@@ -21,6 +24,7 @@ public class GameInstance {
         }
         stockPile = new StockPile(server);
         wastePile = new WastePile();
+        undoBuffer = new UndoBuffer(5);
     }
 
     public void deserialize(Network.UpdatePlayground up) {
@@ -74,7 +78,6 @@ public class GameInstance {
 
     public Network.GameMoveResponse makeMove(Network.GameMove move) {
 
-        System.out.println("From: " + move.from +  ", To: " + move.to);
         SolitaireServer.PileType from = getPileTypeByIndex(move.from);
         SolitaireServer.PileType to = getPileTypeByIndex(move.to);
         Network.GameMoveResponse resp = null;
@@ -102,6 +105,8 @@ public class GameInstance {
         resp.from = move.from;
         resp.playground = move.playground;
 
+        undoBuffer.addMove(resp);
+
         return resp;
     }
 
@@ -127,6 +132,10 @@ public class GameInstance {
             System.out.print(pile.getCard() + " ");
         }
         System.out.println();
+    }
+
+    public Network.GameMoveResponse undo() {
+        return undoBuffer.getMove();
     }
 
     public StockPile s() {
