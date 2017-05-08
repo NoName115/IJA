@@ -68,7 +68,6 @@ public class NetworkServer {
                     if (resp == null) return;
 
                     sendToAllPlayers(resp);
-//                    server.sendToTCP(connection.getID(), resp);
 
                     return;
                 }
@@ -112,7 +111,6 @@ public class NetworkServer {
                     LoadRequest loadRequest = (LoadRequest) object;
                     if (sserver.load(loadRequest.index)) {
                         sendToAllPlayers(sserver.getGameById(loadRequest.index));
-//                        server.sendToTCP(connection.getID(), sserver.getGameById(loadRequest.index));
                     }
 
                 }
@@ -147,15 +145,27 @@ public class NetworkServer {
         frame.setVisible(true);
     }
 
+    /**
+     * Method to reset game
+     */
     private void resetGame() {
         sserver = new SolitaireServer(this);
     }
 
+    /**
+     * Method to send respnse to all players
+     * @param o response object
+     */
     private void sendToAllPlayers(Object o) {
         server.sendToTCP(playerID, o);
         sendToAllSpectators(o);
     }
 
+    /**
+     * Method to send response to all spectators
+     *
+     * @param o response object
+     */
     private void sendToAllSpectators(Object o) {
         for (int player:spectators) {
             server.sendToTCP(player, o);
@@ -166,6 +176,12 @@ public class NetworkServer {
     static class SolitaireConnection extends Connection {
     }
 
+    /**
+     * Function to remove player from game
+     *
+     * @param id ID of the player
+     * @return number of players left in the game
+     */
     public int RemovePlayer(int id) {
         if (playerID == id) {
             playerID = 0;

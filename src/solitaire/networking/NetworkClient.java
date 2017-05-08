@@ -78,11 +78,21 @@ public class NetworkClient {
         }.start();
     }
 
+    /**
+     * Function to send register game request
+     */
     public void registerGame() {
         RegisterGameRequest req = new RegisterGameRequest();
         client.sendTCP(req);
     }
 
+    /**
+     * Make makeMove request
+     *
+     * @param playground no of playground
+     * @param from source pile
+     * @param to destination pile
+     */
     public void makeMove(int playground, int from, int to) {
 
         System.out.println("playground " + playground + " from " + from + " to " + to);
@@ -94,6 +104,11 @@ public class NetworkClient {
         client.sendTCP(req);
     }
 
+    /**
+     * sending add new game request
+     *
+     * @param index no of playground
+     */
     public void addGame(int index) {
         AddPlayground req = new AddPlayground();
         req.index = index;
@@ -101,6 +116,11 @@ public class NetworkClient {
         client.sendTCP(index);
     }
 
+    /**
+     * Sending close game request
+     *
+     * @param index no of playground
+     */
     public void closeGame(int index) {
         ClosePlayground req = new ClosePlayground();
         req.index = index;
@@ -108,6 +128,11 @@ public class NetworkClient {
         client.sendTCP(req);
     }
 
+    /**
+     * Sending undo request
+     *
+     * @param index no of playground
+     */
     public void undo(int index) {
         UndoRequest req = new UndoRequest();
         req.index = index;
@@ -115,6 +140,11 @@ public class NetworkClient {
         client.sendTCP(req);
     }
 
+    /**
+     * Sending save request
+     *
+     * @param index of playground
+     */
     public void save(int index) {
         SaveRequest req = new SaveRequest();
         req.index = index;
@@ -122,6 +152,11 @@ public class NetworkClient {
         client.sendTCP(req);
     }
 
+    /**
+     * Loading game request
+     *
+     * @param index no of playground
+     */
     public void load(int index) {
         LoadRequest req = new LoadRequest();
         req.index = index;
@@ -129,6 +164,11 @@ public class NetworkClient {
         client.sendTCP(req);
     }
 
+    /**
+     * Sending getHint request
+     *
+     * @param index no of playground
+     */
     public void getHint(int index) {
         HintRequest req = new HintRequest();
         req.index = index;
@@ -136,6 +176,9 @@ public class NetworkClient {
         client.sendTCP(req);
     }
 
+    /**
+     * Method to disconnect
+     */
     public void disconnect() {
         client.stop();
     }
