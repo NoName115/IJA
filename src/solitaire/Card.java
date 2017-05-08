@@ -97,6 +97,25 @@ public class Card {
 //        return "./src/cards/" + rank + suit + ".gif";
 //    }
 //
+    public String toStringRobo()
+    {
+        switch(rank)
+        {
+            case 10:
+                return "10 - " + suit;
+            case 11:
+                return "J - " + suit;
+            case 12:
+                return "Q - " + suit;
+            case 13:
+                return "K - " + suit;
+            case 14:
+                return "A - " + suit;
+            default:
+                return Integer.toString(rank) + " - " + suit;
+        }
+    }
+
     public String toString() {
         if (rank == 10)
         {

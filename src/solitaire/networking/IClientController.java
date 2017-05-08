@@ -25,5 +25,5 @@ public interface IClientController {
      *
      * @param hint Hint
      */
-    void showHint(String hint);
+    void showHint(String hint, int gameIndex);
 }

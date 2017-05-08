@@ -160,7 +160,7 @@ public class GameInstance {
             {
                 if (tp.canAdd(tempCard))
                 {
-                    resp.hint = "Move " + tempCard.toString() + " to Tableau pile";
+                    resp.hint = "Move " + tempCard.toStringRobo() + " to Tableau pile";
                     return resp;
                 }
             }
@@ -179,11 +179,11 @@ public class GameInstance {
                     Card topCard = fpInter.getFirstFaceUpCard();
                     if (topCard != null)
                     {
-                        resp.hint = "Move " + tempCard.toString() + " at " + topCard.toString();
+                        resp.hint = "Move " + tempCard.toStringRobo() + " at " + topCard.toStringRobo();
                     }
                     else
                     {
-                        resp.hint = "Move " + tempCard.toString() + " to Foundation pile";
+                        resp.hint = "Move " + tempCard.toStringRobo() + " to Foundation pile";
                     }
 
                     return resp;
@@ -199,7 +199,7 @@ public class GameInstance {
             {
                 if (tp.canAdd(tempCard))
                 {
-                    resp.hint = "Move " + tempCard.toString() + " to Tableau pile";
+                    resp.hint = "Move " + tempCard.toStringRobo() + " to Tableau pile";
                     return resp;
                 }
             }
@@ -211,11 +211,11 @@ public class GameInstance {
                     Card topCard = fp.getFirstFaceUpCard();
                     if (topCard != null)
                     {
-                        resp.hint = "Move " + tempCard.toString() + " at " + topCard.toString();
+                        resp.hint = "Move " + tempCard.toStringRobo() + " at " + topCard.toStringRobo();
                     }
                     else
                     {
-                        resp.hint = "Move " + tempCard.toString() + " to FoundationPile";
+                        resp.hint = "Move " + tempCard.toStringRobo() + " to FoundationPile";
                     }
 
                     return resp;

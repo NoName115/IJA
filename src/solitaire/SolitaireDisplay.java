@@ -213,7 +213,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == hintPlayGround_1)
 		{
-			System.out.println("HINT GAME 1");
+			this.game.hint(0);
 		}
 		else if (e.getSource() == createPlayGround_2)
 		{
@@ -567,9 +567,11 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		g.drawRect(x + 2, y + 2, CARD_WIDTH[this.gameMod] - 4, CARD_HEIGHT[this.gameMod] - 4);
 	}
 
-	// TODO
-	// Index playground-u
-	// NAMIESTO 0 dat gameIndex
+	public void showHint(String hint)
+	{
+		JOptionPane.showMessageDialog(this.frame, hint);
+	}
+
 	public void unselect(int gameIndex)
 	{
 		selectedRow[gameIndex] = -1;

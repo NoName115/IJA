@@ -131,6 +131,10 @@ public class SolitaireClient implements IClientController {
         client.undo(gameIndex);
     }
 
+    public void hint(int gameIndex) {
+        client.getHint(gameIndex);
+    }
+
     @Override
     public void addCards(int playground, int to, String[] cards) {
         gi[playground].addCardsToPile(to, cards);
@@ -156,7 +160,7 @@ public class SolitaireClient implements IClientController {
     }
 
     @Override
-    public void showHint(String hint) {
-
+    public void showHint(String hint, int gameIndex) {
+        this.display.showHint(hint);
     }
 }

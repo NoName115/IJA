@@ -50,6 +50,11 @@ public class NetworkClient {
                     UpdatePlayground resp = (UpdatePlayground) object;
                     controller.playgroundUpdate(resp.playground, resp);
                 }
+
+                if (object instanceof HintResponse) {
+                    HintResponse resp = (HintResponse) object;
+                    controller.showHint(resp.hint, resp.index);
+                }
             }
 
             public void disconnected (Connection connection) {
