@@ -33,6 +33,11 @@ public class FoundationPile extends BasePile {
         return (card.isRed() != top.isRed()) && (card.getRank() == top.getRank() - 1);
     }
 
+    /**
+     * Method insert input stack to pile
+     *
+     * @param Stack<Card> insert stack to pile
+     */
     public void addCards(Stack<Card> cards) {
         while (!cards.isEmpty()) {
             pushCard(cards.pop());
@@ -51,7 +56,11 @@ public class FoundationPile extends BasePile {
         return card;
     }
 
-    // Pre hint prvu iteraciu foundation s foundation
+    /**
+     * Method return last faceUp card
+     *
+     * @return Card last faceUp card
+     */
     public Card getLastFaceUpCard()
     {
         for (Card tempCard : this.pile)
@@ -65,7 +74,11 @@ public class FoundationPile extends BasePile {
         return null;
     }
 
-    // Pre hint iteracia foundation s Tableau
+    /**
+     * Method return top card from pile
+     *
+     * @return Card top faceUp card
+     */
     public Card getFirstFaceUpCard()
     {
         return this.pile.isEmpty() ? null : this.pile.get(this.pile.size() - 1);

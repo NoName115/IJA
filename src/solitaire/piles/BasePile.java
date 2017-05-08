@@ -20,6 +20,11 @@ public abstract class BasePile {
         }
     }
 
+    /**
+     * Method return top card
+     *
+     * @return Card get top card
+     */
     public Card getCard() {
         if (pile.size() == 0)
         {
@@ -29,6 +34,11 @@ public abstract class BasePile {
         return pile.peek();
     }
 
+    /**
+     * Method return top card and pop it
+     *
+     * @return Card pop top card
+     */
     public Card popCard() {
         if (pile.size() == 0)
         {
@@ -38,18 +48,38 @@ public abstract class BasePile {
         return pile.pop();
     }
 
+    /**
+     * Method insert card to pile
+     *
+     * @param Card input card
+     */
     public void pushCard(Card card) {
         pile.push(card);
     }
 
+    /**
+     * Method return size of card pile
+     *
+     * @return int pile size
+     */
     public int size() {
         return pile.size();
     }
 
+    /**
+     * Method return true/false if pile is empty
+     *
+     * @return boolean if pile is empty
+     */
     public boolean isEmpty() {
         return pile.isEmpty();
     }
 
+    /**
+     * Method return whole pile
+     *
+     * @return Stack<Card> stack of cards
+     */
     public Stack<Card> getPile() { return this.pile; }
 
     public String[] toArray() {
