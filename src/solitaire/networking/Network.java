@@ -6,6 +6,8 @@ import solitaire.Card;
 import solitaire.piles.BasePile;
 import solitaire.piles.StockPile;
 
+import java.util.Arrays;
+
 /**
  * Class that holds communication messages
  */
@@ -81,6 +83,26 @@ public class Network {
         public String[] foundation4;
         public String[] foundation5;
         public String[] foundation6;
+
+        @Override
+        public String toString() {
+            return "UpdatePlayground{" +
+                    "playground=" + playground +
+                    ", stock=" + Arrays.toString(stock) +
+                    ", waste=" + Arrays.toString(waste) +
+                    ", tableau0=" + Arrays.toString(tableau0) +
+                    ", tableau1=" + Arrays.toString(tableau1) +
+                    ", tableau2=" + Arrays.toString(tableau2) +
+                    ", tableau3=" + Arrays.toString(tableau3) +
+                    ", foundation0=" + Arrays.toString(foundation0) +
+                    ", foundation1=" + Arrays.toString(foundation1) +
+                    ", foundation2=" + Arrays.toString(foundation2) +
+                    ", foundation3=" + Arrays.toString(foundation3) +
+                    ", foundation4=" + Arrays.toString(foundation4) +
+                    ", foundation5=" + Arrays.toString(foundation5) +
+                    ", foundation6=" + Arrays.toString(foundation6) +
+                    '}';
+        }
     }
     /**
      * Request for moving solitaire.add between solitaire.piles

@@ -25,8 +25,7 @@ public class SolitaireClient implements IClientController {
 
         gi = new GameInstance[4];
         for (int i = 0; i < gi.length; i++) {
-            gi[i] = new GameInstance();
-            gi[i].deal();
+            gi[i] = new GameInstance(false);
         }
 
         display = new SolitaireDisplay(this);
@@ -171,6 +170,7 @@ public class SolitaireClient implements IClientController {
 
     @Override
     public void playgroundUpdate(int index, UpdatePlayground up) {
+        System.out.println(up);
         gi[index].deserialize(up);
         display.repaint();
     }

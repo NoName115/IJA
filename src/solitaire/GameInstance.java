@@ -10,7 +10,7 @@ public class GameInstance {
     private TableauPile[] tableauPiles; // 2, 3, 4, 5
     private FoundationPile[] foundationPiles; // 6, 7, 8, 9, 10, 11, 12
 
-    public GameInstance() {
+    public GameInstance(boolean server) {
         tableauPiles = new TableauPile[4];
         for (int i = 0; i < tableauPiles.length; i++) {
             tableauPiles[i] = new TableauPile();
@@ -19,7 +19,7 @@ public class GameInstance {
         for (int i = 0; i < foundationPiles.length; i++) {
             foundationPiles[i] = new FoundationPile();
         }
-        stockPile = new StockPile();
+        stockPile = new StockPile(server);
         wastePile = new WastePile();
     }
 
@@ -115,6 +115,18 @@ public class GameInstance {
         } else {
             return SolitaireServer.PileType.F;
         }
+    }
+
+    public void debug() {
+        System.out.println(stockPile.getCard() + " " + wastePile.getCard() + " ");
+        for (TableauPile pile : tableauPiles) {
+            System.out.print(pile.getCard() + " ");
+        }
+        System.out.println();
+        for (FoundationPile pile : foundationPiles) {
+            System.out.print(pile.getCard() + " ");
+        }
+        System.out.println();
     }
 
     public StockPile s() {

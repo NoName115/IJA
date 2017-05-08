@@ -7,9 +7,11 @@ import java.util.Stack;
 
 public class StockPile extends BasePile {
 
-    public StockPile() {
+    public StockPile(boolean server) {
         super();
-        createStock();
+        if (server) {
+            createStock();
+        }
     }
 
     public StockPile(String[] cards) {
