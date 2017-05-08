@@ -13,13 +13,13 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 	private static final String GAME_TITLE = "IJA - Solitaire";
 
 	private static final int SPACING = 10;
-	private static final int FACE_UP_OFFSET = 15;  //distance for cascading face-up add
-	private static final int FACE_DOWN_OFFSET = 5;  //distance for cascading face-down add
+	private static final int[] FACE_UP_OFFSET = new int[] { 30 ,15 };  //distance for cascading face-up add
+	private static final int[] FACE_DOWN_OFFSET = new int[] { 10, 5 };  //distance for cascading face-down add
 	private static final int[] CARD_WIDTH = new int[] { 146, 73 };
 	private static final int[] CARD_HEIGHT = new int[] { 194, 97 };
 
 	private int gameMod = 0;
-	private boolean[] gameRunning = new boolean[] { true, false, false, false };
+	private boolean[] gameRunning = new boolean[] { false, false, false, false };
 
 	private JFrame frame;
 	private int[] selectedRow = new int[] { -1, -1, -1, -1 };
@@ -73,7 +73,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		frame.getContentPane().add(this);
 
 		this.gameSizeX = CARD_WIDTH[1] * 7 + SPACING * 8;
-		this.gameSizeY = CARD_HEIGHT[1] * 2 + SPACING * 3 + FACE_DOWN_OFFSET * 7 + 13 * FACE_UP_OFFSET;
+		this.gameSizeY = CARD_HEIGHT[1] * 2 + SPACING * 3 + FACE_DOWN_OFFSET[1] * 7 + 13 * FACE_UP_OFFSET[1];
 
 		this.setPreferredSize(new Dimension(
 			gameSizeX * 2,
@@ -195,13 +195,13 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		{
 			this.setGameRunning(0, true);
 		}
-		else if (e.getSource() == loadPlayGround_1)
-		{
-			System.out.println("LOADGAME 1");
-		}
 		else if (e.getSource() == closePlayGround_1)
 		{
 			this.setGameRunning(0, false);
+		}
+		else if (e.getSource() == loadPlayGround_1)
+		{
+			System.out.println("LOADGAME 1");
 		}
 		else if (e.getSource() == savePlayGround_1)
 		{
@@ -299,7 +299,15 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 
 		if (this.gameMod == 0)
 		{
-			this.printGame(g, 0, 0, this.getIndexOfRunningGame());
+			int indexOfRunningGame = this.getIndexOfRunningGame();
+			if (indexOfRunningGame != -1)
+			{
+				this.printGame(g, 0, 0, indexOfRunningGame);
+			}
+			else
+			{
+				return;
+			}
 		}
 		else
 		{
@@ -345,6 +353,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		drawCard(g, game.getStockCard(gameIndex), SPACING + xStartPos, SPACING + yStartPos);
 
 		// Pozadie wastePile-u
+		g.setColor(Color.BLACK);
 		g.drawRect(
 			SPACING * 2 + CARD_WIDTH[this.gameMod] + xStartPos,
 			SPACING  + yStartPos,
@@ -406,7 +415,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 						);
 				}
 
-				offset += pile.get(j).isFaceUp() == true ? FACE_UP_OFFSET : FACE_DOWN_OFFSET;
+				offset += pile.get(j).isFaceUp() == true ? FACE_UP_OFFSET[this.gameMod] : FACE_DOWN_OFFSET[this.gameMod];
 			}
 		}
 	}
@@ -531,8 +540,6 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		{
 			col = 6;
 		}
-
-		//System.out.println("_G: " + gameIndex + " C: " + col + " R: " + row);
 
 		if (row == 0 && col == 0)
 		{
