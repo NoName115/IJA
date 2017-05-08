@@ -36,7 +36,7 @@ public class FoundationPile extends BasePile {
     /**
      * Method insert input stack to pile
      *
-     * @param Stack<Card> insert stack to pile
+     * @param cards insert stack to pile
      */
     public void addCards(Stack<Card> cards) {
         while (!cards.isEmpty()) {

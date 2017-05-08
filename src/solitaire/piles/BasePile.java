@@ -51,7 +51,7 @@ public abstract class BasePile {
     /**
      * Method insert card to pile
      *
-     * @param Card input card
+     * @param card input card
      */
     public void pushCard(Card card) {
         pile.push(card);
@@ -78,7 +78,7 @@ public abstract class BasePile {
     /**
      * Method return whole pile
      *
-     * @return Stack<Card> stack of cards
+     * @return pile stack of cards
      */
     public Stack<Card> getPile() { return this.pile; }
 
