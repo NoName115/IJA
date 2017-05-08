@@ -56,7 +56,6 @@ public class SolitaireClient implements IClientController {
     }
 
     // Klient - kreslenie
-    // TODO: add getPile method
     public Stack<Card> getPile(int index, int gameIndex) {
         return gi[gameIndex].f(index).getPile();
     }
@@ -65,7 +64,6 @@ public class SolitaireClient implements IClientController {
     public void stockClicked(int gameIndex) {
         System.out.println("stock clicked");
 
-        // TODO - indexy
         display.unselect(gameIndex);
 
         if (!display.isWasteSelected(gameIndex) && !display.isPileSelected(gameIndex)) {
@@ -79,7 +77,6 @@ public class SolitaireClient implements IClientController {
     public void wasteClicked(int gameIndex) {
         System.out.println("waste clicked");
 
-        // TODO - indexy
         if (!gi[gameIndex].w().isEmpty()) {
             if (!display.isWasteSelected(gameIndex))
             {
@@ -95,8 +92,7 @@ public class SolitaireClient implements IClientController {
     public void tableauClicked(int index, int gameIndex) {
         System.out.println("tableau #" + index + " clicked");
 
-        // TODO - indexy
-        if (display.isWasteSelected(0))
+        if (display.isWasteSelected(gameIndex))
         {
             client.makeMove(gameIndex, 1, index + 2);
             display.unselect(gameIndex);
@@ -108,8 +104,7 @@ public class SolitaireClient implements IClientController {
 //            }
         }
 
-        // TODO - indexy
-        if (display.isPileSelected(0))
+        if (display.isPileSelected(gameIndex))
         {
             client.makeMove(gameIndex, 6 + display.selectedPile(0), index + 2);
             display.unselect(gameIndex);
@@ -128,8 +123,7 @@ public class SolitaireClient implements IClientController {
     public void foundationClicked(int index, int gameIndex) {
         System.out.println("foundation #" + index + " clicked");
 
-        // TODO - indexy
-        if (display.isWasteSelected(0))
+        if (display.isWasteSelected(gameIndex))
         {
             client.makeMove(gameIndex, 1, 6 + index);
             display.unselect(gameIndex);
@@ -140,9 +134,9 @@ public class SolitaireClient implements IClientController {
 //                foundationPiles[index].getCard().turnUp();
 //            }
         }
-        else if (display.isPileSelected(0))
+        else if (display.isPileSelected(gameIndex))
         {
-            client.makeMove(gameIndex, 6 + display.selectedPile(0), 6 + index);
+            client.makeMove(gameIndex, 6 + display.selectedPile(gameIndex), 6 + index);
             display.unselect(gameIndex);
 
 //            int oldPile = display.selectedPile();
