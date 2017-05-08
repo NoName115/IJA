@@ -76,7 +76,7 @@
 
   <target name="doc" description="generate documentation">
     <mkdir dir="doc"/>
-    <javadoc sourcepath="src" destdir="doc"/>
+    <javadoc sourcepath="src" docencoding="utf-8" destdir="doc"/>
   </target>
 
   <target name="compile" depends="libs.download,doc" description="Compile module Java_School">

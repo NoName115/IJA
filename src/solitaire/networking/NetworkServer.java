@@ -5,7 +5,6 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
-import solitaire.GameInstance;
 import solitaire.SolitaireServer;
 import solitaire.networking.Network.*;
 
@@ -14,7 +13,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class NetworkServer {
     private Server server;
@@ -43,8 +41,14 @@ public class NetworkServer {
                 if (object instanceof RegisterGameRequest) {
                     System.out.println("RegisterGameRequest");
 
-
                     RegisterGameResponse reg = new RegisterGameResponse();
+
+                    if (playerID == -1) {
+                        reg.spectator = false;
+                        playerID = connection.getID();
+                    } else {
+                        spectators.add(connection.getID());
+                    }
 
                     server.sendToTCP(connection.getID(), sserver.getGameById(0));
                     server.sendToTCP(connection.getID(), sserver.getGameById(1));
@@ -53,43 +57,18 @@ public class NetworkServer {
 
                     return;
                 }
-//
-//                if (object instanceof JoinGameRequest) {
-//
-//                    JoinGameRequest joinGameRequest = (JoinGameRequest) object;
-//                    GameInstance game = games.get(joinGameRequest.uuid);
-//
-//                    connection.uuid = joinGameRequest.uuid;
-//
-//                    GameStateResponse response = new GameStateResponse();
-//                    if (game.getPlayerID() == connection.getID()) {
-//                        response.spectator = false;
-//                    } else {
-//                        response.spectator = true;
-//                        game.getSpectators().add(connection.getID());
-//                    }
-//
-//                    server.sendToTCP(connection.getID(), response);
-//
-//                    return;
-//                }
 
                 if (object instanceof GameMove) {
-                    //if (connection.uuid == null) return;
 
                     System.out.println("GameMove");
-//                    GameInstance game = games.get(connection.uuid);
-//                    if (game.getPlayerID() != game.getPlayerID()) return;
+                    if (playerID != connection.getID()) return;
 
                     GameMoveResponse resp = sserver.makeMove((GameMove) object);
 
                     if (resp == null) return;
 
-                    System.out.println("Sending GameMoveResponse");
-                    for (String r : resp.add) {
-                        System.out.println(r);
-                    }
-                    server.sendToTCP(connection.getID(), resp);
+                    sendToAllPlayers(resp);
+//                    server.sendToTCP(connection.getID(), resp);
 
                     return;
                 }
@@ -102,50 +81,10 @@ public class NetworkServer {
                     server.sendToTCP(connection.getID(), resp);
                 }
 
-//                if (object instanceof AddPlayground) {
-//                    if (connection.uuid == null) return;
-//
-//                    GameInstance game = games.get(connection.uuid);
-//                    if (game.getPlayerID() != game.getPlayerID()) return;
-//
-//                    AddPlayground addPlayground = (AddPlayground) object;
-//
-//                    if (true/*number of games == 4*/) {
-//                        return;
-//                    }
-//
-//                    // TODO: vytvorit hru, pridat do response
-//                    Network.UpdatePlayground response = new Network.UpdatePlayground();
-//
-//                    sendToAllPlayers(game, response);
-//
-//                    return;
-//                }
-//
-//                if (object instanceof ClosePlayground) {
-//                    if (connection.uuid == null) return;
-//
-//                    GameInstance game = games.get(connection.uuid);
-//                    if (game.getPlayerID() != game.getPlayerID()) return;
-//
-//                    ClosePlayground closePlayground = (ClosePlayground) object;
-//
-//                    if (true/*game not exist*/) {
-//                        return;
-//                    }
-//
-//                    // TODO: vytvorit hru, pridat do response
-//
-//                    sendToAllSpectators(game, closePlayground);
-//
-//                    return;
-//                }
-//
                 if (object instanceof UndoRequest) {
 
                     System.out.println("UndoRequest");
-
-//                    if (game.getPlayerID() != game.getPlayerID()) return;
+                    if (playerID != connection.getID()) return;
 
                     UndoRequest undoRequest = (UndoRequest) object;
 
@@ -156,7 +95,7 @@ public class NetworkServer {
                         return;
                     }
 
-                    server.sendToTCP(connection.getID(), resp);
+                    sendToAllPlayers(resp);
 
                     return;
                 }
@@ -172,7 +111,8 @@ public class NetworkServer {
                 if (object instanceof LoadRequest) {
                     LoadRequest loadRequest = (LoadRequest) object;
                     if (sserver.load(loadRequest.index)) {
-                        server.sendToTCP(connection.getID(), sserver.getGameById(loadRequest.index));
+                        sendToAllPlayers(sserver.getGameById(loadRequest.index));
+//                        server.sendToTCP(connection.getID(), sserver.getGameById(loadRequest.index));
                     }
 
                 }
@@ -184,6 +124,7 @@ public class NetworkServer {
                 SolitaireConnection connection = (SolitaireConnection) c;
 
                 if (RemovePlayer(connection.getID()) == 0) {
+                    resetGame();
                     playerID = -1;
                 }
             }
@@ -204,6 +145,10 @@ public class NetworkServer {
         frame.setSize(320, 200);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    private void resetGame() {
+        sserver = new SolitaireServer(this);
     }
 
     private void sendToAllPlayers(Object o) {
