@@ -30,7 +30,6 @@ public class SolitaireClient implements IClientController {
 
         display = new SolitaireDisplay(this);
         client = new NetworkClient(this);
-        client.registerGame(null);
     }
 
     // Klient - kreslenie
@@ -151,7 +150,8 @@ public class SolitaireClient implements IClientController {
     }
 
     public void startGame(String gameID) {
-        client.startGame(gameID);
+
+//        client.registerGame(gameID);
     }
 
     @Override
