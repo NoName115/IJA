@@ -15,9 +15,8 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 	private static final int SPACING = 10;
 	private static final int FACE_UP_OFFSET = 15;  //distance for cascading face-up add
 	private static final int FACE_DOWN_OFFSET = 5;  //distance for cascading face-down add
-	private static final int[] CARD_WIDTH = new int[] { 110, 73 };
-	private static final int[] CARD_HEIGHT = new int[] { 146, 97 };
-	//private static final int[] SPACING = new int[] { 30, 10 };  //distance between cards
+	private static final int[] CARD_WIDTH = new int[] { 146, 73 };
+	private static final int[] CARD_HEIGHT = new int[] { 194, 97 };
 
 	private int gameMod = 0;
 	private boolean[] gameRunning = new boolean[] { true, false, false, false };
@@ -27,11 +26,15 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 	private int[] selectedCol = new int[] { -1, -1, -1, -1 };
 	private SolitaireClient game;
 
+	private int gameSizeX;
+	private int gameSizeY;
+
 	// GUI
 	MenuBar menuBar = new MenuBar();
 
 	Menu game_1 = new Menu("Game - 1");
 	MenuItem createPlayGround_1 = new MenuItem("Create game");
+	MenuItem closePlayGround_1 = new MenuItem("Close game");
 	MenuItem loadPlayGround_1 = new MenuItem("Load game");
 	MenuItem savePlayGround_1 = new MenuItem("Save game");
 	MenuItem undoPlayGround_1 = new MenuItem("Undo");
@@ -39,6 +42,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 
 	Menu game_2 = new Menu("Game - 2");
 	MenuItem createPlayGround_2 = new MenuItem("Create game");
+	MenuItem closePlayGround_2 = new MenuItem("Close game");
 	MenuItem loadPlayGround_2 = new MenuItem("Load game");
 	MenuItem savePlayGround_2 = new MenuItem("Save game");
 	MenuItem undoPlayGround_2 = new MenuItem("Undo");
@@ -46,6 +50,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 
 	Menu game_3 = new Menu("Game - 3");
 	MenuItem createPlayGround_3 = new MenuItem("Create game");
+	MenuItem closePlayGround_3 = new MenuItem("Close game");
 	MenuItem loadPlayGround_3 = new MenuItem("Load game");
 	MenuItem savePlayGround_3 = new MenuItem("Save game");
 	MenuItem undoPlayGround_3 = new MenuItem("Undo");
@@ -53,6 +58,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 
 	Menu game_4 = new Menu("Game - 4");
 	MenuItem createPlayGround_4 = new MenuItem("Create game");
+	MenuItem closePlayGround_4 = new MenuItem("Close game");
 	MenuItem loadPlayGround_4 = new MenuItem("Load game");
 	MenuItem savePlayGround_4 = new MenuItem("Save game");
 	MenuItem undoPlayGround_4 = new MenuItem("Undo");
@@ -66,9 +72,12 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(this);
 
+		this.gameSizeX = CARD_WIDTH[1] * 7 + SPACING * 8;
+		this.gameSizeY = CARD_HEIGHT[1] * 2 + SPACING * 3 + FACE_DOWN_OFFSET * 7 + 13 * FACE_UP_OFFSET;
+
 		this.setPreferredSize(new Dimension(
-			(CARD_WIDTH[1] * 7 + SPACING * 8) * 2,
-			(CARD_HEIGHT[1] * 2 + SPACING * 3 + FACE_DOWN_OFFSET * 7 + 13 * FACE_UP_OFFSET) * 2
+			gameSizeX * 2,
+			gameSizeY * 2
 			));
 		this.addMouseListener(this);
 
@@ -77,11 +86,13 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 
 		menuBar.add(game_1);
 		game_1.add(createPlayGround_1);
+		game_1.add(closePlayGround_1);
 		game_1.add(loadPlayGround_1);
 		game_1.add(savePlayGround_1);
 		game_1.add(undoPlayGround_1);
 		game_1.add(hintPlayGround_1);
 		createPlayGround_1.addActionListener(this);
+		closePlayGround_1.addActionListener(this);
 		loadPlayGround_1.addActionListener(this);
 		savePlayGround_1.addActionListener(this);
 		undoPlayGround_1.addActionListener(this);
@@ -89,11 +100,13 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 
 		menuBar.add(game_2);
 		game_2.add(createPlayGround_2);
+		game_2.add(closePlayGround_2);
 		game_2.add(loadPlayGround_2);
 		game_2.add(savePlayGround_2);
 		game_2.add(undoPlayGround_2);
 		game_2.add(hintPlayGround_2);
 		createPlayGround_2.addActionListener(this);
+		closePlayGround_2.addActionListener(this);
 		loadPlayGround_2.addActionListener(this);
 		savePlayGround_2.addActionListener(this);
 		undoPlayGround_2.addActionListener(this);
@@ -101,11 +114,13 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 
 		menuBar.add(game_3);
 		game_3.add(createPlayGround_3);
+		game_3.add(closePlayGround_3);
 		game_3.add(loadPlayGround_3);
 		game_3.add(savePlayGround_3);
 		game_3.add(undoPlayGround_3);
 		game_3.add(hintPlayGround_3);
 		createPlayGround_3.addActionListener(this);
+		closePlayGround_3.addActionListener(this);
 		loadPlayGround_3.addActionListener(this);
 		savePlayGround_3.addActionListener(this);
 		undoPlayGround_3.addActionListener(this);
@@ -113,11 +128,13 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 
 		menuBar.add(game_4);
 		game_4.add(createPlayGround_4);
+		game_4.add(closePlayGround_4);
 		game_4.add(loadPlayGround_4);
 		game_4.add(savePlayGround_4);
 		game_4.add(undoPlayGround_4);
 		game_4.add(hintPlayGround_4);
 		createPlayGround_4.addActionListener(this);
+		closePlayGround_4.addActionListener(this);
 		loadPlayGround_4.addActionListener(this);
 		savePlayGround_4.addActionListener(this);
 		undoPlayGround_4.addActionListener(this);
@@ -176,11 +193,15 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 	{
 		if (e.getSource() == createPlayGround_1)
 		{
-			System.out.println("CREATE PLAYGOURND 1");
+			this.setGameRunning(0, true);
 		}
 		else if (e.getSource() == loadPlayGround_1)
 		{
 			System.out.println("LOADGAME 1");
+		}
+		else if (e.getSource() == closePlayGround_1)
+		{
+			this.setGameRunning(0, false);
 		}
 		else if (e.getSource() == savePlayGround_1)
 		{
@@ -196,7 +217,11 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == createPlayGround_2)
 		{
-			System.out.println("CREATE PLAYGOURND 2");
+			this.setGameRunning(1, true);
+		}
+		else if (e.getSource() == closePlayGround_2)
+		{
+			this.setGameRunning(1, false);
 		}
 		else if (e.getSource() == loadPlayGround_2)
 		{
@@ -216,7 +241,11 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == createPlayGround_3)
 		{
-			System.out.println("CREATE PLAYGOURND 3");
+			this.setGameRunning(2, true);
+		}
+		else if (e.getSource() == closePlayGround_3)
+		{
+			this.setGameRunning(2, false);
 		}
 		else if (e.getSource() == loadPlayGround_3)
 		{
@@ -236,7 +265,11 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == createPlayGround_4)
 		{
-			System.out.println("CREATE PLAYGOURND 4");
+			this.setGameRunning(3, true);
+		}
+		else if (e.getSource() == closePlayGround_4)
+		{
+			this.setGameRunning(3, false);
 		}
 		else if (e.getSource() == loadPlayGround_4)
 		{
@@ -254,132 +287,128 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		{
 			System.out.println("HINT GAME 4");
 		}
+
+		repaint();
 	}
 
 	public void paintComponent(Graphics g)
 	{
+		// Background
+		g.setColor(new Color(200, 120, 50));
+		g.fillRect(0, 0, getWidth(), getHeight());
+
 		if (this.gameMod == 0)
 		{
-			int indexOfRunningGame = this.getIndexOfRunningGame();
-
-			// Background
-			g.setColor(new Color(200, 120, 50));
-			g.fillRect(0, 0, getWidth(), getHeight());
-
-			// Vykreslenie stockKarty
-			drawCard(g, game.getStockCard(indexOfRunningGame), SPACING, SPACING);
-
-			// Pozadie wastePile-u
-			g.drawRect(SPACING * 2 + CARD_WIDTH[0], SPACING, CARD_WIDTH[0], CARD_HEIGHT[0]);
-			drawCard(g, game.getWasteCard(indexOfRunningGame), SPACING * 2 + CARD_WIDTH[0], SPACING);
-			// Vykreslenie ohranicenia, ked je karta selectnuta
-			if (selectedRow[indexOfRunningGame] == 0 && selectedCol[indexOfRunningGame] == 1)
-			{
-				drawBorder(g, SPACING * 2 + CARD_WIDTH[0], SPACING);
-			}
-
-			// Aces
-			for (int i = 0; i < 4; ++i)
-			{
-				drawCard(
-					g,
-					game.getFoundationCard(i, indexOfRunningGame),
-					SPACING * (4 + i) + CARD_WIDTH[0] * (3 + i),
-					SPACING
-					);
-			}
-
-			// Linked piles
-			for (int i = 0; i < 7; ++i)
-			{
-				// Vykreslenie pozadia
-				g.setColor(Color.BLACK);
-				g.drawRect(
-					SPACING * (1 + i) + CARD_WIDTH[0] * i,
-					SPACING * 2 + CARD_HEIGHT[0],
-					CARD_WIDTH[0], CARD_HEIGHT[0]
-					);
-
-				Stack<Card> pile = game.getPile(i);
-				int offset = 0;
-
-				for (int j = 0; j < pile.size(); ++j)
-				{
-					drawCard(
-						g,
-						pile.get(j),
-						SPACING + (CARD_WIDTH[0] + SPACING) * i,
-						CARD_HEIGHT[0] + 2 * SPACING + offset
-						);
-
-					if (selectedRow[indexOfRunningGame] == 1 && selectedCol[indexOfRunningGame] == i && j == pile.size() - 1)
-					{
-						drawBorder(
-							g,
-							SPACING + (CARD_WIDTH[0] + SPACING) * i,
-							CARD_HEIGHT[0] + 2 * SPACING + offset
-							);
-					}
-
-					offset += pile.get(j).isFaceUp() == true ? FACE_UP_OFFSET : FACE_DOWN_OFFSET;
-				}
-			}
+			this.printGame(g, 0, 0, this.getIndexOfRunningGame());
 		}
 		else
 		{
-			// TODO
-		}
-
-		/*
-		//background
-		g.setColor(new Color(225, 194, 0));
-		g.fillRect(0, 0, getWidth(), getHeight());
-
-		//face down
-		drawCard(g, game.getStockCard(), SPACING, SPACING);
-		*/
-
-		/*
-		//stock
-		drawCard(g, game.getWasteCard(), SPACING * 2 + CARD_WIDTH, SPACING);
-		if (selectedRow == 0 && selectedCol == 1)
-		{
-			drawBorder(g, SPACING * 2 + CARD_WIDTH, SPACING);
-		}
-		*/
-		/*
-		//aces
-		for (int i = 0; i < 4; i++)
-		{
-			drawCard(g, game.getFoundationCard(i), SPACING * (4 + i) + CARD_WIDTH * (3 + i), SPACING);
-		}
-		*/
-
-		/*
-		//solitaire.piles
-		for (int i = 0; i < 7; i++)
-		{
-			Stack<Card> pile = game.getPile(i);
-			int offset = 0;
-			for (int j = 0; j < pile.size(); j++)
+			for (int i = 0; i < 4; ++i)
 			{
-				drawCard(g, pile.get(j), SPACING + (CARD_WIDTH + SPACING) * i, CARD_HEIGHT + 2 * SPACING + offset);
-				if (selectedRow == 1 && selectedCol == i && j == pile.size() - 1)
+				// Ak bezi hra, vykresli sa obrazovka
+				if (this.gameRunning[i])
 				{
-					drawBorder(g, SPACING + (CARD_WIDTH + SPACING) * i, CARD_HEIGHT + 2 * SPACING + offset);
-				}
+					// Nastavenie startovnych pozicii pre hru
+					int xStartPos = 0;
+					int yStartPos = 0;
+					switch (i)
+					{
+						case 1:
+							xStartPos = this.gameSizeX;
+							yStartPos = 0;
+							break;
 
-				if (pile.get(j).isFaceUp())
-				{
-					offset += FACE_UP_OFFSET;
-				}
-				else
-				{
-					offset += FACE_DOWN_OFFSET;
+						case 2:
+							xStartPos = 0;
+							yStartPos = this.gameSizeY;
+							break;
+
+						case 3:
+							xStartPos = this.gameSizeX;
+							yStartPos = this.gameSizeY;
+							break;
+
+						default:
+							xStartPos = 0;
+							yStartPos = 0;
+					}
+
+					this.printGame(g, xStartPos, yStartPos, i);
 				}
 			}
 		}
-		*/
+	}
+
+	private void printGame(Graphics g, int xStartPos, int yStartPos, int gameIndex)
+	{
+		// Vykreslenie stockKarty
+		drawCard(g, game.getStockCard(gameIndex), SPACING + xStartPos, SPACING + yStartPos);
+
+		// Pozadie wastePile-u
+		g.drawRect(
+			SPACING * 2 + CARD_WIDTH[this.gameMod] + xStartPos,
+			SPACING  + yStartPos,
+			CARD_WIDTH[this.gameMod],
+			CARD_HEIGHT[this.gameMod]
+			);
+		drawCard(
+			g,
+			game.getWasteCard(gameIndex),
+			SPACING * 2 + CARD_WIDTH[this.gameMod] + xStartPos,
+			SPACING + yStartPos
+			);
+		// Vykreslenie ohranicenia, ked je karta selectnuta
+		if (selectedRow[gameIndex] == 0 && selectedCol[gameIndex] == 1)
+		{
+			drawBorder(g, SPACING * 2 + CARD_WIDTH[this.gameMod] + xStartPos, SPACING + yStartPos);
+		}
+
+		// Aces
+		for (int i = 0; i < 4; ++i)
+		{
+			drawCard(
+				g,
+				game.getFoundationCard(i, gameIndex),
+				SPACING * (4 + i) + CARD_WIDTH[this.gameMod] * (3 + i) + xStartPos,
+				SPACING + yStartPos
+				);
+		}
+
+		// Linked piles
+		for (int i = 0; i < 7; ++i)
+		{
+			// Vykreslenie pozadia
+			g.setColor(Color.BLACK);
+			g.drawRect(
+				SPACING * (1 + i) + CARD_WIDTH[this.gameMod] * i + xStartPos,
+				SPACING * 2 + CARD_HEIGHT[this.gameMod] + yStartPos,
+				CARD_WIDTH[this.gameMod], CARD_HEIGHT[this.gameMod]
+				);
+
+			Stack<Card> pile = game.getPile(i);
+			int offset = 0;
+
+			for (int j = 0; j < pile.size(); ++j)
+			{
+				drawCard(
+					g,
+					pile.get(j),
+					SPACING + (CARD_WIDTH[this.gameMod] + SPACING) * i + xStartPos,
+					CARD_HEIGHT[this.gameMod] + 2 * SPACING + offset + yStartPos
+					);
+
+				if (selectedRow[gameIndex] == 1 && selectedCol[gameIndex] == i && j == pile.size() - 1)
+				{
+					drawBorder(
+						g,
+						SPACING + (CARD_WIDTH[this.gameMod] + SPACING) * i + xStartPos,
+						CARD_HEIGHT[this.gameMod] + 2 * SPACING + offset + yStartPos
+						);
+				}
+
+				offset += pile.get(j).isFaceUp() == true ? FACE_UP_OFFSET : FACE_DOWN_OFFSET;
+			}
+		}
 	}
 
 	private void drawCard(Graphics g, Card card, int x, int y)
@@ -424,9 +453,76 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 
 	public void mouseClicked(MouseEvent e)
 	{
+		if (this.gameMod == 0)
+		{
+			this.pileSelection(e.getX(), e.getY(), this.getIndexOfRunningGame());
+		}
+		else
+		{
+			for (int i = 0; i < 4; ++i)
+			{
+				// Ak bezi hra, zisti sa ktory pile bol oznaceny
+				if (this.gameRunning[i])
+				{
+					int xStartPos = 0;
+					int yStartPos = 0;
+					int xMousePos = e.getX();
+					int yMousePos = e.getY();
+
+					if (i == 0)
+					{
+						if (xMousePos > this.gameSizeX || yMousePos > this.gameSizeY)
+						{
+							continue;
+						}
+
+						xStartPos = 0;
+						yStartPos = 0;
+					}
+					else if (i == 1)
+					{
+						if (xMousePos < this.gameSizeX || yMousePos > this.gameSizeY)
+						{
+							continue;
+						}
+
+						xStartPos = this.gameSizeX;
+						yStartPos = 0;
+					}
+					else if (i == 2)
+					{
+						if (xMousePos > this.gameSizeX || yMousePos < this.gameSizeY)
+						{
+							continue;
+						}
+
+						xStartPos = 0;
+						yStartPos = this.gameSizeY;
+					}
+					else if (i == 3)
+					{
+						if (xMousePos < this.gameSizeX || yMousePos < this.gameSizeY)
+						{
+							continue;
+						}
+
+						xStartPos = this.gameSizeX;
+						yStartPos = this.gameSizeY;
+					}
+
+					this.pileSelection(xMousePos - xStartPos, yMousePos - yStartPos, i);
+				}
+			}
+		}
+
+		repaint();
+	}
+
+	private void pileSelection(int xStartPos, int yStartPos, int gameIndex)
+	{
 		//none selected previously
-		int col = e.getX() / (SPACING + CARD_WIDTH[0]);
-		int row = e.getY() / (SPACING + CARD_HEIGHT[0]);
+		int col = xStartPos / (SPACING + CARD_WIDTH[this.gameMod]);
+		int row = yStartPos / (SPACING + CARD_HEIGHT[this.gameMod]);
 		if (row > 1)
 		{
 			row = 1;
@@ -436,24 +532,24 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 			col = 6;
 		}
 
+		System.out.println("_G: " + gameIndex + " C: " + col + " R: " + row);
+
 		if (row == 0 && col == 0)
 		{
-			game.stockClicked();
+			game.stockClicked(gameIndex);
 		}
 		else if (row == 0 && col == 1)
 		{
-			game.wasteClicked();
+			game.wasteClicked(gameIndex);
 		}
 		else if (row == 0 && col >= 3)
 		{
-			game.tableauClicked(col - 3);
+			game.tableauClicked(col - 3, gameIndex);
 		}
 		else if (row == 1)
 		{
-			game.foundationClicked(col);
+			game.foundationClicked(col, gameIndex);
 		}
-
-		repaint();
 	}
 
 	private void drawBorder(Graphics g, int x, int y)
@@ -469,31 +565,31 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 	// NAMIESTO 0 dat gameIndex
 	public void unselect(int gameIndex)
 	{
-		selectedRow[0] = -1;
-		selectedCol[0] = -1;
+		selectedRow[gameIndex] = -1;
+		selectedCol[gameIndex] = -1;
 	}
 
 	public boolean isWasteSelected(int gameIndex)
 	{
-		return selectedRow[0] == 0 && selectedCol[0] == 1;
+		return selectedRow[gameIndex] == 0 && selectedCol[gameIndex] == 1;
 	}
 
 	public void selectWaste(int gameIndex)
 	{
-		selectedRow[0] = 0;
-		selectedCol[0] = 1;
+		selectedRow[gameIndex] = 0;
+		selectedCol[gameIndex] = 1;
 	}
 
 	public boolean isPileSelected(int gameIndex)
 	{
-		return selectedRow[0] == 1;
+		return selectedRow[gameIndex] == 1;
 	}
 
 	public int selectedPile(int gameIndex)
 	{
-		if (selectedRow[0] == 1)
+		if (selectedRow[gameIndex] == 1)
 		{
-			return selectedCol[0];
+			return selectedCol[gameIndex];
 		}
 
 		return -1;
@@ -501,7 +597,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 
 	public void selectPile(int index, int gameIndex)
 	{
-		selectedRow[0] = 1;
-		selectedCol[0] = index;
+		selectedRow[gameIndex] = 1;
+		selectedCol[gameIndex] = index;
 	}
 }

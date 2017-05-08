@@ -69,7 +69,7 @@ public class SolitaireClient implements IClientController {
     }
 
     // Client - send message that stock is clicked
-    public void stockClicked() {
+    public void stockClicked(int gameIndex) {
         System.out.println("stock clicked");
 
         // TODO - indexy
@@ -83,7 +83,7 @@ public class SolitaireClient implements IClientController {
 
     }
 
-    public void wasteClicked() {
+    public void wasteClicked(int gameIndex) {
         System.out.println("waste clicked");
 
         // TODO - indexy
@@ -99,7 +99,7 @@ public class SolitaireClient implements IClientController {
         }
     }
 
-    public void tableauClicked(int index) {
+    public void tableauClicked(int index, int gameIndex) {
         System.out.println("tableau #" + index + " clicked");
 
         // TODO - indexy
@@ -132,7 +132,7 @@ public class SolitaireClient implements IClientController {
         }
     }
 
-    public void foundationClicked(int index) {
+    public void foundationClicked(int index, int gameIndex) {
         System.out.println("foundation #" + index + " clicked");
 
         // TODO - indexy
