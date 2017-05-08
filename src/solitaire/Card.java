@@ -98,11 +98,27 @@ public class Card {
 //    }
 //
     public String toString() {
-        if (rank == 10) return "t" + suit;
-        if (rank == 11) return "j" + suit;
-        if (rank == 12) return "q" + suit;
-        if (rank == 13) return "k" + suit;
-        if (rank == 1) return "a" + suit;
+        if (rank == 10)
+        {
+            return "t" + suit;
+        }
+        if (rank == 11)
+        {
+            return "j" + suit;
+        }
+        if (rank == 12)
+        {
+            return "q" + suit;
+        }
+        if (rank == 13)
+        {
+            return "k" + suit;
+        }
+        if (rank == 1)
+        {
+            return "a" + suit;
+        }
+
         return Integer.toString(rank) + suit;
     }
 
@@ -118,7 +134,11 @@ public class Card {
 
     public String getFileName()
     {
-        if (!isFaceUp) return "./src/cards/back.gif";
+        if (!isFaceUp)
+        {
+            return "./src/cards/back.gif";
+        }
+
         return "./src/cards/" + this.toString() + ".gif";
     }
 //

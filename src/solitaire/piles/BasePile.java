@@ -14,18 +14,27 @@ public abstract class BasePile {
 
     public BasePile(String[] cards) {
         this.pile = new Stack<>();
+
         for (int i = 0; i < cards.length; i++) {
             pile.push(new Card(cards[i]));
         }
     }
 
     public Card getCard() {
-        if (pile.size() == 0) return null;
+        if (pile.size() == 0)
+        {
+            return null;
+        }
+
         return pile.peek();
     }
 
     public Card popCard() {
-        if (pile.size() == 0) return null;
+        if (pile.size() == 0)
+        {
+            return null;
+        }
+
         return pile.pop();
     }
 

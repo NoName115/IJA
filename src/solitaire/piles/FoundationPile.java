@@ -19,9 +19,17 @@ public class FoundationPile extends BasePile {
      * @return true/false
      */
     public boolean canAdd(Card card) {
-        if (pile.isEmpty()) return (card.getRank() == 13);
+        if (pile.isEmpty())
+        {
+            return (card.getRank() == 13);
+        }
+
         Card top = getCard();
-        if (!top.isFaceUp()) return false;
+        if (!top.isFaceUp())
+        {
+            return false;
+        }
+
         return (card.isRed() != top.isRed()) && (card.getRank() == top.getRank() - 1);
     }
 
@@ -34,9 +42,12 @@ public class FoundationPile extends BasePile {
     @Override
     public Card popCard() {
         Card card = super.popCard();
-        if (!this.isEmpty()) {
+
+        if (!this.isEmpty())
+        {
             this.getCard().turnUp();
         }
+
         return card;
     }
 
@@ -47,18 +58,23 @@ public class FoundationPile extends BasePile {
 
         for (int i = pile.size() - 1; i >= 0; i--) {
             Card pcard = pile.elementAt(i);
-            if (!pcard.isFaceUp()) break;
-            if (card == null) {
-                if (pcard.getRank() == 13) {
+            if (!pcard.isFaceUp())
+            {
+                break;
+            }
+
+            if (card == null)
+            {
+                if (pcard.getRank() == 13)
+                {
                     index = pile.size() - i;
                     break;
                 }
-            } else {
-                if (pcard.getRank() == card.getRank() - 1
-                        && pcard.isRed() == !card.isRed()) {
-                    index = pile.size() - i;
-                    break;
-                }
+            }
+            else if (pcard.getRank() == card.getRank() - 1 && pcard.isRed() == !card.isRed())
+            {
+                index = pile.size() - i;
+                break;
             }
         }
 

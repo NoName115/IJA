@@ -8,7 +8,10 @@ import solitaire.piles.*;
 
 import java.util.*;
 
+
 public class SolitaireClient implements IClientController {
+    
+    // Spustenie clienta
     public static void main(String[] args) {
         new SolitaireClient();
     }
@@ -35,22 +38,27 @@ public class SolitaireClient implements IClientController {
 
         display = new SolitaireDisplay(this);
         client = new NetworkClient(this);
-
     }
 
     // Klient - kreslenie
-    public Card getStockCard() {
+    public Card getStockCard(int gameIndex) {
         return stockPile.getCard();
     }
 
     // Klient - kreslenie
-    public Card getWasteCard() {
+    public Card getWasteCard(int gameIndex) {
         return wastePile.getCard();
     }
 
     // Klient - kreslenie
-    public Card getFoundationCard(int index) {
-        if (tableauPiles[index].isEmpty()) return null;
+    // TODO
+    // Funkcia je FoundationCard, ale vracia tableauPile ?? :D :D
+    public Card getFoundationCard(int index, int gameIndex) {
+        if (tableauPiles[index].isEmpty())
+        {
+            return null;
+        }
+
         return tableauPiles[index].getCard();
     }
 
@@ -63,37 +71,56 @@ public class SolitaireClient implements IClientController {
     // Client - send message that stock is clicked
     public void stockClicked() {
         System.out.println("stock clicked");
-        display.unselect();
-        if (!display.isWasteSelected() && !display.isPileSelected()) {
+
+        // TODO - indexy
+        display.unselect(0);
+
+        if (!display.isWasteSelected(0) && !display.isPileSelected(0)) {
 
             client.makeMove(0, 0, 1);
-            display.unselect();
+            display.unselect(0);
         }
 
     }
 
     public void wasteClicked() {
         System.out.println("waste clicked");
+
+        // TODO - indexy
         if (!wastePile.isEmpty()) {
-            if (!display.isWasteSelected()) display.selectWaste();
-            else display.unselect();
+            if (!display.isWasteSelected(0))
+            {
+                display.selectWaste(0);
+            }
+            else
+            {
+                display.unselect(0);
+            }
         }
     }
 
     public void tableauClicked(int index) {
         System.out.println("tableau #" + index + " clicked");
-        if (display.isWasteSelected()) {
+
+        // TODO - indexy
+        if (display.isWasteSelected(0))
+        {
             client.makeMove(0, 1, index + 2);
-            display.unselect();
+            display.unselect(0);
+
             // To server
 //            if (tableauPiles[index].canAdd(wastePile.getCard())) {
 //                tableauPiles[index].pushCard(wastePile.popCard());
 //                display.unselect();
 //            }
         }
-        if (display.isPileSelected()) {
-            client.makeMove(0, 6 + display.selectedPile(), index + 2);
-            display.unselect();
+
+        // TODO - indexy
+        if (display.isPileSelected(0))
+        {
+            client.makeMove(0, 6 + display.selectedPile(0), index + 2);
+            display.unselect(0);
+
 //            FoundationPile selectedPile = foundationPiles[display.selectedPile()];
 //            if (tableauPiles[index].canAdd(selectedPile.getCard())) {
 //                Card temp = selectedPile.popCard();
@@ -107,17 +134,24 @@ public class SolitaireClient implements IClientController {
 
     public void foundationClicked(int index) {
         System.out.println("foundation #" + index + " clicked");
-        if (display.isWasteSelected()) {
+
+        // TODO - indexy
+        if (display.isWasteSelected(0))
+        {
             client.makeMove(0, 1, 6 + index);
-            display.unselect();
+            display.unselect(0);
+
 //            Card temp = wastePile.getCard();
 //            if (foundationPiles[index].canAdd(temp)) {
 //                foundationPiles[index].pushCard(wastePile.popCard());
 //                foundationPiles[index].getCard().turnUp();
 //            }
-        } else if (display.isPileSelected()) {
-            client.makeMove(0, 6 + display.selectedPile(), 6 + index);
-            display.unselect();
+        }
+        else if (display.isPileSelected(0))
+        {
+            client.makeMove(0, 6 + display.selectedPile(0), 6 + index);
+            display.unselect(0);
+
 //            int oldPile = display.selectedPile();
 //            if (index != oldPile) {
 //                Stack<Card> temp = removeFaceUpCards(oldPile);
@@ -133,8 +167,10 @@ public class SolitaireClient implements IClientController {
 //
 //                }
 //            } else display.unselect();
-        } else {
-            display.selectPile(index);
+        }
+        else
+        {
+            display.selectPile(index, 0);
             foundationPiles[index].getCard().turnUp();
         }
     }

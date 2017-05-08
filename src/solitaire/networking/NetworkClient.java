@@ -14,11 +14,6 @@ public class NetworkClient {
     Client client;
     IClientController controller;
 
-    public static void main (String[] args) throws IOException {
-        Log.set(Log.LEVEL_DEBUG);
-        new NetworkClient(null);
-    }
-
     public NetworkClient(IClientController controller) {
 
         this.controller = controller;

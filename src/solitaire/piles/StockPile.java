@@ -21,10 +21,24 @@ public class StockPile extends BasePile {
         for (int i = 1; i <= 4; i++) {
             for (int k = 1; k <= 13; k++) {
                 String suit = "";
-                if (i == 1) suit = "h";
-                if (i == 2) suit = "d";
-                if (i == 3) suit = "c";
-                if (i == 4) suit = "s";
+
+                if (i == 1)
+                {
+                    suit = "h";
+                }
+                if (i == 2)
+                {
+                    suit = "d";
+                }
+                if (i == 3)
+                {
+                    suit = "c";
+                }                
+                if (i == 4)
+                {
+                    suit = "s";
+                }
+
                 Card temp = new Card(k, suit);
                 cards.add(temp);
             }

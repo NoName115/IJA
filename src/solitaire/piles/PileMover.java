@@ -37,7 +37,11 @@ public class PileMover {
     }
 
     public static GameMoveResponse wasteToFoundation(WastePile w, FoundationPile f) {
-        if (w.isEmpty()) return null;
+        if (w.isEmpty())
+        {
+            return null;
+        }
+
         if (f.canAdd(w.getCard())) {
             Card card = w.popCard();
             f.pushCard(card);
@@ -67,11 +71,15 @@ public class PileMover {
 
     public static GameMoveResponse foundationToFoundation(FoundationPile f1, FoundationPile f2) {
         int cardsToTake = f1.howManyCardsToTake(f2.getCard());
-        if (cardsToTake == 0) {
+        if (cardsToTake == 0)
+        {
             return null;
-        } else {
+        }
+        else
+        {
             GameMoveResponse resp = new GameMoveResponse();
             resp.add = new String[cardsToTake];
+
             int i = 0;
             while (i < cardsToTake) {
                 Card card = f1.popCard();
@@ -79,12 +87,14 @@ public class PileMover {
                 resp.add[i] = card.toStringFace();
                 i++;
             }
+
             return resp;
         }
     }
 
     public static GameMoveResponse foundationToTableau(FoundationPile f, TableauPile t) {
-        if (t.canAdd(f.getCard())) {
+        if (t.canAdd(f.getCard()))
+        {
             Card card = f.popCard();
             t.pushCard(card);
             GameMoveResponse resp = new GameMoveResponse();
@@ -98,7 +108,8 @@ public class PileMover {
     }
 
     public static GameMoveResponse tableauToFoundation(TableauPile t, FoundationPile f) {
-        if (f.canAdd(t.getCard())) {
+        if (f.canAdd(t.getCard()))
+        {
             Card card = t.popCard();
             f.pushCard(card);
             GameMoveResponse resp = new GameMoveResponse();

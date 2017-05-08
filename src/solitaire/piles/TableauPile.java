@@ -17,7 +17,11 @@ public class TableauPile extends BasePile {
      * @return true/false
      */
     public boolean canAdd(Card card) {
-        if (pile.isEmpty()) return (card.getRank() == 1);
+        if (pile.isEmpty())
+        {
+            return (card.getRank() == 1);
+        }
+        
         Card top = getCard();
         return (top.getRank() + 1 == card.getRank()) && (top.getSuit().equals(card.getSuit()));
     }
