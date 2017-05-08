@@ -16,25 +16,18 @@ public class SolitaireClient implements IClientController {
         new SolitaireClient();
     }
 
-    private StockPile stockPile; // 0
-    private WastePile wastePile; // 1
-    private TableauPile[] tableauPiles; // 2, 3, 4, 5
-    private FoundationPile[] foundationPiles; // 6, 7, 8, 9, 10, 11, 12
+    private GameInstance[] gi;
 
     private SolitaireDisplay display;
     private NetworkClient client;
 
     public SolitaireClient() {
-        tableauPiles = new TableauPile[4];
-        for (int i = 0; i < tableauPiles.length; i++) {
-            tableauPiles[i] = new TableauPile();
+
+        gi = new GameInstance[4];
+        for (int i = 0; i < gi.length; i++) {
+            gi[i] = new GameInstance();
+            gi[i].deal();
         }
-        foundationPiles = new FoundationPile[7];
-        for (int i = 0; i < foundationPiles.length; i++) {
-            foundationPiles[i] = new FoundationPile();
-        }
-        stockPile = new StockPile();
-        wastePile = new WastePile();
 
         display = new SolitaireDisplay(this);
         client = new NetworkClient(this);
@@ -42,30 +35,30 @@ public class SolitaireClient implements IClientController {
 
     // Klient - kreslenie
     public Card getStockCard(int gameIndex) {
-        return stockPile.getCard();
+        return gi[gameIndex].s().getCard();
     }
 
     // Klient - kreslenie
     public Card getWasteCard(int gameIndex) {
-        return wastePile.getCard();
+        return gi[gameIndex].w().getCard();
     }
 
     // Klient - kreslenie
     // TODO
     // Funkcia je FoundationCard, ale vracia tableauPile ?? :D :D
     public Card getFoundationCard(int index, int gameIndex) {
-        if (tableauPiles[index].isEmpty())
+        if (gi[gameIndex].t(index).isEmpty())
         {
             return null;
         }
 
-        return tableauPiles[index].getCard();
+        return gi[gameIndex].t(index).getCard();
     }
 
     // Klient - kreslenie
     // TODO: add getPile method
     public Stack<Card> getPile(int index) {
-        return foundationPiles[index].getPile();
+        return gi[index].f(index).getPile();
     }
 
     // Client - send message that stock is clicked
@@ -73,12 +66,12 @@ public class SolitaireClient implements IClientController {
         System.out.println("stock clicked");
 
         // TODO - indexy
-        display.unselect(0);
+        display.unselect(gameIndex);
 
-        if (!display.isWasteSelected(0) && !display.isPileSelected(0)) {
+        if (!display.isWasteSelected(gameIndex) && !display.isPileSelected(gameIndex)) {
 
-            client.makeMove(0, 0, 1);
-            display.unselect(0);
+            client.makeMove(gameIndex, 0, 1);
+            display.unselect(gameIndex);
         }
 
     }
@@ -87,14 +80,14 @@ public class SolitaireClient implements IClientController {
         System.out.println("waste clicked");
 
         // TODO - indexy
-        if (!wastePile.isEmpty()) {
-            if (!display.isWasteSelected(0))
+        if (!gi[gameIndex].w().isEmpty()) {
+            if (!display.isWasteSelected(gameIndex))
             {
-                display.selectWaste(0);
+                display.selectWaste(gameIndex);
             }
             else
             {
-                display.unselect(0);
+                display.unselect(gameIndex);
             }
         }
     }
@@ -105,8 +98,8 @@ public class SolitaireClient implements IClientController {
         // TODO - indexy
         if (display.isWasteSelected(0))
         {
-            client.makeMove(0, 1, index + 2);
-            display.unselect(0);
+            client.makeMove(gameIndex, 1, index + 2);
+            display.unselect(gameIndex);
 
             // To server
 //            if (tableauPiles[index].canAdd(wastePile.getCard())) {
@@ -118,8 +111,8 @@ public class SolitaireClient implements IClientController {
         // TODO - indexy
         if (display.isPileSelected(0))
         {
-            client.makeMove(0, 6 + display.selectedPile(0), index + 2);
-            display.unselect(0);
+            client.makeMove(gameIndex, 6 + display.selectedPile(0), index + 2);
+            display.unselect(gameIndex);
 
 //            FoundationPile selectedPile = foundationPiles[display.selectedPile()];
 //            if (tableauPiles[index].canAdd(selectedPile.getCard())) {
@@ -138,8 +131,8 @@ public class SolitaireClient implements IClientController {
         // TODO - indexy
         if (display.isWasteSelected(0))
         {
-            client.makeMove(0, 1, 6 + index);
-            display.unselect(0);
+            client.makeMove(gameIndex, 1, 6 + index);
+            display.unselect(gameIndex);
 
 //            Card temp = wastePile.getCard();
 //            if (foundationPiles[index].canAdd(temp)) {
@@ -149,8 +142,8 @@ public class SolitaireClient implements IClientController {
         }
         else if (display.isPileSelected(0))
         {
-            client.makeMove(0, 6 + display.selectedPile(0), 6 + index);
-            display.unselect(0);
+            client.makeMove(gameIndex, 6 + display.selectedPile(0), 6 + index);
+            display.unselect(gameIndex);
 
 //            int oldPile = display.selectedPile();
 //            if (index != oldPile) {
@@ -170,44 +163,20 @@ public class SolitaireClient implements IClientController {
         }
         else
         {
-            display.selectPile(index, 0);
-            foundationPiles[index].getCard().turnUp();
+            display.selectPile(index, gameIndex);
+            gi[gameIndex].f(index).getCard().turnUp();
         }
     }
 
-    private Stack<Card> removeFaceUpCards(int index) {
-        Stack<Card> cards = new Stack<>();
-        while (!foundationPiles[index].isEmpty() && foundationPiles[index].getCard().isFaceUp()) {
-            cards.push(foundationPiles[index].popCard());
-        }
-        return cards;
-    }
-
-    private void deserialize(UpdatePlayground up) {
-        this.stockPile = new StockPile(up.stock);
-        this.wastePile = new WastePile(up.stock);
-        this.foundationPiles[0] = new FoundationPile(up.foundation0);
-        this.foundationPiles[1] = new FoundationPile(up.foundation1);
-        this.foundationPiles[2] = new FoundationPile(up.foundation2);
-        this.foundationPiles[3] = new FoundationPile(up.foundation3);
-        this.foundationPiles[4] = new FoundationPile(up.foundation4);
-        this.foundationPiles[5] = new FoundationPile(up.foundation5);
-        this.foundationPiles[6] = new FoundationPile(up.foundation6);
-        this.tableauPiles[0] = new TableauPile(up.tableau0);
-        this.tableauPiles[1] = new TableauPile(up.tableau1);
-        this.tableauPiles[2] = new TableauPile(up.tableau2);
-        this.tableauPiles[3] = new TableauPile(up.tableau3);
-    }
-
-    private BasePile getBasePileByIndex(int index) {
+    private BasePile getBasePileByIndex(int gameIndex, int index) {
         if (index == 0) {
-            return stockPile;
+            return gi[gameIndex].s();
         } else if (index == 1) {
-            return wastePile;
+            return gi[gameIndex].w();
         } else if (index > 1 && index < 6) {
-            return tableauPiles[index - 2];
+            return gi[gameIndex].t(index - 2);
         } else {
-            return foundationPiles[index - 6];
+            return gi[gameIndex].f(index - 6);
         }
     }
 
@@ -231,18 +200,20 @@ public class SolitaireClient implements IClientController {
     @Override
     public void addCards(int playground, int to, String[] cards) {
         System.out.println("adding cards");
-        addCardsToPile(getBasePileByIndex(to), cards);
+        addCardsToPile(getBasePileByIndex(playground, to), cards);
+        display.repaint();
     }
 
     @Override
     public void removeCards(int playground, int from, int numberOfCards) {
         System.out.println("removing cards");
-        removeCardsFromPile(getBasePileByIndex(from), numberOfCards);
+        removeCardsFromPile(getBasePileByIndex(playground, from), numberOfCards);
+        display.repaint();
     }
 
     @Override
     public void playgroundUpdate(int index, UpdatePlayground up) {
-        deserialize(up);
+        gi[index].deserialize(up);
         display.repaint();
     }
 
