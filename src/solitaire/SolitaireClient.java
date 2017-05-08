@@ -126,13 +126,19 @@ public class SolitaireClient implements IClientController {
     }
 
     public void undo(int gameIndex) {
-        System.out.println("__G: " + gameIndex + " UNDO");
-
         client.undo(gameIndex);
     }
 
     public void hint(int gameIndex) {
         client.getHint(gameIndex);
+    }
+
+    public void saveGame(int gameIndex) {
+        client.save(gameIndex);
+    }
+
+    public void loadGame(int gameIndex) {
+        client.load(gameIndex);
     }
 
     @Override

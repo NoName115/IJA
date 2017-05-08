@@ -201,11 +201,11 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == loadPlayGround_1)
 		{
-			System.out.println("LOADGAME 1");
+			this.game.loadGame(0);
 		}
 		else if (e.getSource() == savePlayGround_1)
 		{
-			System.out.println("SAVE GAME 1");
+			this.game.saveGame(0);
 		}
 		else if (e.getSource() == undoPlayGround_1)
 		{
@@ -225,11 +225,12 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == loadPlayGround_2)
 		{
+			this.game.loadGame(1);
 			System.out.println("LOADGAME 2");
 		}
 		else if (e.getSource() == savePlayGround_2)
 		{
-			System.out.println("SAVE GAME 2");
+			this.game.saveGame(1);
 		}
 		else if (e.getSource() == undoPlayGround_2)
 		{
@@ -249,11 +250,11 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == loadPlayGround_3)
 		{
-			System.out.println("LOADGAME 3");
+			this.game.loadGame(2);
 		}
 		else if (e.getSource() == savePlayGround_3)
 		{
-			System.out.println("SAVE GAME 3");
+			this.game.saveGame(2);
 		}
 		else if (e.getSource() == undoPlayGround_3)
 		{
@@ -273,11 +274,11 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == loadPlayGround_4)
 		{
-			System.out.println("LOADGAME 4");
+			this.game.loadGame(3);
 		}
 		else if (e.getSource() == savePlayGround_4)
 		{
-			System.out.println("SAVE GAME 4");
+			this.game.saveGame(3);
 		}
 		else if (e.getSource() == undoPlayGround_4)
 		{

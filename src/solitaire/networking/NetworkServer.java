@@ -160,19 +160,22 @@ public class NetworkServer {
 
                     return;
                 }
-//
-//                if (object instanceof SaveRequest) {
-//                    if (connection.uuid == null) return;
-//
-//                    GameInstance game = games.get(connection.uuid);
-//                    if (game.getPlayerID() != game.getPlayerID()) return;
-//
-//                    SaveRequest saveRequest = (SaveRequest) object;
-//
-//                    // TODO: existuje hra? Uloz
-//
-//                    return;
-//                }
+
+                if (object instanceof SaveRequest) {
+
+                    SaveRequest saveRequest = (SaveRequest) object;
+                    sserver.save(saveRequest.index);
+
+                    return;
+                }
+
+                if (object instanceof LoadRequest) {
+                    LoadRequest loadRequest = (LoadRequest) object;
+                    if (sserver.load(loadRequest.index)) {
+                        server.sendToTCP(connection.getID(), sserver.getGameById(loadRequest.index));
+                    }
+
+                }
 
             }
 
