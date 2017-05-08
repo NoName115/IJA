@@ -209,7 +209,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == undoPlayGround_1)
 		{
-			System.out.println("UNDO GAME 1");
+			this.game.undo(0);
 		}
 		else if (e.getSource() == hintPlayGround_1)
 		{
@@ -233,7 +233,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == undoPlayGround_2)
 		{
-			System.out.println("UNDO GAME 2");
+			this.game.undo(1);
 		}
 		else if (e.getSource() == hintPlayGround_2)
 		{
@@ -257,7 +257,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == undoPlayGround_3)
 		{
-			System.out.println("UNDO GAME 3");
+			this.game.undo(2);
 		}
 		else if (e.getSource() == hintPlayGround_3)
 		{
@@ -281,7 +281,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		}
 		else if (e.getSource() == undoPlayGround_4)
 		{
-			System.out.println("UNDO GAME 4");
+			this.game.undo(3);
 		}
 		else if (e.getSource() == hintPlayGround_4)
 		{

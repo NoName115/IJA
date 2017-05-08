@@ -126,6 +126,8 @@ public class SolitaireClient implements IClientController {
     }
 
     public void undo(int gameIndex) {
+        System.out.println("__G: " + gameIndex + " UNDO");
+
         client.undo(gameIndex);
     }
 
