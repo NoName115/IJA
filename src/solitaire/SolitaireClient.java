@@ -96,27 +96,12 @@ public class SolitaireClient implements IClientController {
         {
             client.makeMove(gameIndex, 1, index + 2);
             display.unselect(gameIndex);
-
-            // To server
-//            if (tableauPiles[index].canAdd(wastePile.getCard())) {
-//                tableauPiles[index].pushCard(wastePile.popCard());
-//                display.unselect();
-//            }
         }
 
         if (display.isPileSelected(gameIndex))
         {
-            client.makeMove(gameIndex, 6 + display.selectedPile(0), index + 2);
+            client.makeMove(gameIndex, 6 + display.selectedPile(gameIndex), index + 2);
             display.unselect(gameIndex);
-
-//            FoundationPile selectedPile = foundationPiles[display.selectedPile()];
-//            if (tableauPiles[index].canAdd(selectedPile.getCard())) {
-//                Card temp = selectedPile.popCard();
-//                tableauPiles[index].pushCard(temp);
-//                if (!selectedPile.isEmpty()) selectedPile.getCard().turnUp();
-//                display.unselect();
-//            }
-
         }
     }
 
@@ -128,32 +113,11 @@ public class SolitaireClient implements IClientController {
             client.makeMove(gameIndex, 1, 6 + index);
             display.unselect(gameIndex);
 
-//            Card temp = wastePile.getCard();
-//            if (foundationPiles[index].canAdd(temp)) {
-//                foundationPiles[index].pushCard(wastePile.popCard());
-//                foundationPiles[index].getCard().turnUp();
-//            }
         }
         else if (display.isPileSelected(gameIndex))
         {
             client.makeMove(gameIndex, 6 + display.selectedPile(gameIndex), 6 + index);
             display.unselect(gameIndex);
-
-//            int oldPile = display.selectedPile();
-//            if (index != oldPile) {
-//                Stack<Card> temp = removeFaceUpCards(oldPile);
-//                if (foundationPiles[index].canAdd(temp.peek())) {
-//                    foundationPiles[index].addCards(temp);
-//                    if (!foundationPiles[oldPile].isEmpty()) foundationPiles[oldPile].getCard().turnUp();
-//
-//                    display.unselect();
-//                } else {
-//                    foundationPiles[oldPile].addCards(temp);
-//                    display.unselect();
-//                    display.selectPile(index);
-//
-//                }
-//            } else display.unselect();
         }
         else
         {

@@ -23,6 +23,7 @@ public class SolitaireServer {
     }
 
     public GameMoveResponse makeMove(GameMove move) {
+        System.out.println("playground " + move.playground + " from " + move.from + " to " + move.to);
         return gi[move.playground].makeMove(move);
     }
 

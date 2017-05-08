@@ -42,13 +42,13 @@ public class NetworkClient {
 
                 if (object instanceof GameMoveResponse) {
                     GameMoveResponse resp = (GameMoveResponse) object;
-                    controller.addCards(0, resp.to, resp.add);
-                    controller.removeCards(0, resp.from, resp.add.length);
+                    controller.addCards(resp.playground, resp.to, resp.add);
+                    controller.removeCards(resp.playground, resp.from, resp.add.length);
                 }
 
                 if (object instanceof UpdatePlayground) {
                     UpdatePlayground resp = (UpdatePlayground) object;
-                    controller.playgroundUpdate(0, resp);
+                    controller.playgroundUpdate(resp.playground, resp);
                 }
             }
 

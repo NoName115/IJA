@@ -49,7 +49,6 @@ public class StockPile extends BasePile {
             else {
                 int random = (int) ((double) cards.size() * Math.random());
                 Card card = cards.remove(random);
-                System.out.println("Pushing " + card.toString());
                 pile.push(card);
             }
         }
