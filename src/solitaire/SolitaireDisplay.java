@@ -64,6 +64,8 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 	MenuItem undoPlayGround_4 = new MenuItem("Undo");
 	MenuItem hintPlayGround_4 = new MenuItem("Show hint");
 
+	String gameID;
+
 	public SolitaireDisplay(SolitaireClient game)
 	{
 		this.game = game;
@@ -143,6 +145,24 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		frame.pack();
 		frame.setTitle(GAME_TITLE);
 		frame.setVisible(true);
+
+		String input = (String) JOptionPane.showInputDialog(
+			null,
+			"Name:", "Connect to Solitaire server",
+			JOptionPane.QUESTION_MESSAGE,
+			null,
+			null,
+			"Game_ID"
+			);
+
+		if (input == null || input.trim().length() == 0)
+		{
+			this.game.startGame(null);
+		}
+		else
+		{
+			this.game.startGame(input.trim());
+		}
 	}
 
 	public void setGameRunning(int gameIndex, boolean isRunning)

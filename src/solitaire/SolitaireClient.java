@@ -149,6 +149,10 @@ public class SolitaireClient implements IClientController {
         client.closeGame(gameIndex);
     }
 
+    public void startGame(String gameID) {
+        client.startGame(gameID);
+    }
+
     @Override
     public void addCards(int playground, int to, String[] cards) {
         gi[playground].addCardsToPile(to, cards);

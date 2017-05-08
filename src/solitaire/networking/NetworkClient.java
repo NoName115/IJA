@@ -180,6 +180,10 @@ public class NetworkClient {
         client.sendTCP(req);
     }
 
+    public void startGame(String gameID) {
+        
+    }
+
     /**
      * Method to disconnect
      */
