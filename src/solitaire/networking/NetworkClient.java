@@ -84,6 +84,8 @@ public class NetworkClient {
     }
 
     public void makeMove(int playground, int from, int to) {
+
+        System.out.println("playground " + playground + " from " + from + " to " + to);
         GameMove req = new GameMove();
         req.playground = playground;
         req.from = from;

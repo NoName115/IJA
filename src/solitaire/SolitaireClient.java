@@ -57,8 +57,8 @@ public class SolitaireClient implements IClientController {
 
     // Klient - kreslenie
     // TODO: add getPile method
-    public Stack<Card> getPile(int index) {
-        return gi[index].f(index).getPile();
+    public Stack<Card> getPile(int index, int gameIndex) {
+        return gi[gameIndex].f(index).getPile();
     }
 
     // Client - send message that stock is clicked

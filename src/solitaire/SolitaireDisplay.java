@@ -385,7 +385,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 				CARD_WIDTH[this.gameMod], CARD_HEIGHT[this.gameMod]
 				);
 
-			Stack<Card> pile = game.getPile(i);
+			Stack<Card> pile = game.getPile(i, gameIndex);
 			int offset = 0;
 
 			for (int j = 0; j < pile.size(); ++j)
@@ -532,7 +532,7 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 			col = 6;
 		}
 
-		System.out.println("_G: " + gameIndex + " C: " + col + " R: " + row);
+		//System.out.println("_G: " + gameIndex + " C: " + col + " R: " + row);
 
 		if (row == 0 && col == 0)
 		{
