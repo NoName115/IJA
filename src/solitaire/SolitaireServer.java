@@ -37,4 +37,8 @@ public class SolitaireServer {
     public GameMoveResponse makeUndo(int index) {
         return gi[index].undo();
     }
+
+    public HintResponse getHint(int index) {
+        return gi[index].getHint();
+    }
 }

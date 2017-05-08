@@ -138,6 +138,12 @@ public class GameInstance {
         return undoBuffer.getMove();
     }
 
+    public Network.HintResponse getHint() {
+        Network.HintResponse resp = new Network.HintResponse();
+        // TODO:
+        return null;
+    }
+
     public StockPile s() {
         return stockPile;
     }

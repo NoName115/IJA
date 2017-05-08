@@ -94,6 +94,14 @@ public class NetworkServer {
                     return;
                 }
 
+                if (object instanceof HintRequest) {
+                    System.out.println("HintRequest");
+                    HintRequest req = (HintRequest) object;
+                    HintResponse resp = sserver.getHint(req.index);
+
+                    server.sendToTCP(connection.getID(), resp);
+                }
+
 //                if (object instanceof AddPlayground) {
 //                    if (connection.uuid == null) return;
 //

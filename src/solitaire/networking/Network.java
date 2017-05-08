@@ -23,8 +23,6 @@ public class Network {
         Kryo kryo = endPoint.getKryo();
         kryo.register(RegisterGameRequest.class);
         kryo.register(RegisterGameResponse.class);
-        kryo.register(JoinGameRequest.class);
-        kryo.register(GameStateResponse.class);
         kryo.register(GameMoveResponse.class);
         kryo.register(GameMove.class);
         kryo.register(AddPlayground.class);
@@ -48,20 +46,6 @@ public class Network {
      * Response for creating new game
      */
     static public class RegisterGameResponse {
-        public String uuid;
-    }
-
-    /**
-     * Request for joining game
-     */
-    static public class JoinGameRequest {
-        public String uuid;
-    }
-
-    /**
-     * Response after joining game along with multiple UpdatePlayground
-     */
-    static public class GameStateResponse {
         public boolean spectator;
     }
 
@@ -83,26 +67,6 @@ public class Network {
         public String[] foundation4;
         public String[] foundation5;
         public String[] foundation6;
-
-        @Override
-        public String toString() {
-            return "UpdatePlayground{" +
-                    "playground=" + playground +
-                    ", stock=" + Arrays.toString(stock) +
-                    ", waste=" + Arrays.toString(waste) +
-                    ", tableau0=" + Arrays.toString(tableau0) +
-                    ", tableau1=" + Arrays.toString(tableau1) +
-                    ", tableau2=" + Arrays.toString(tableau2) +
-                    ", tableau3=" + Arrays.toString(tableau3) +
-                    ", foundation0=" + Arrays.toString(foundation0) +
-                    ", foundation1=" + Arrays.toString(foundation1) +
-                    ", foundation2=" + Arrays.toString(foundation2) +
-                    ", foundation3=" + Arrays.toString(foundation3) +
-                    ", foundation4=" + Arrays.toString(foundation4) +
-                    ", foundation5=" + Arrays.toString(foundation5) +
-                    ", foundation6=" + Arrays.toString(foundation6) +
-                    '}';
-        }
     }
     /**
      * Request for moving solitaire.add between solitaire.piles
@@ -169,6 +133,7 @@ public class Network {
      * Response for getting hint
      */
     static public class HintResponse {
-
+        public int index;
+        public String hint;
     }
 }
