@@ -26,4 +26,11 @@ public interface IClientController {
      * @param hint Hint
      */
     void showHint(String hint, int gameIndex);
+
+    /**
+     * Hide game to specatators
+     *
+     * @param gameIndex index of game
+     */ 
+    void removeGame(int gameIndex);
 }

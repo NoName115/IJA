@@ -176,6 +176,14 @@ public class NetworkClient {
         client.sendTCP(req);
     }
 
+    public void enableGame(int index) {
+
+    }
+
+    public void disableGame(int index) {
+        
+    }
+
     /**
      * Method to disconnect
      */
