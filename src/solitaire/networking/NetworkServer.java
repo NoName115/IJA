@@ -143,16 +143,20 @@ public class NetworkServer {
 //
                 if (object instanceof UndoRequest) {
 
+                    System.out.println("UndoRequest");
+
 //                    if (game.getPlayerID() != game.getPlayerID()) return;
 
                     UndoRequest undoRequest = (UndoRequest) object;
 
                     GameMoveResponse resp = sserver.makeUndo(undoRequest.index);
+
+                    System.out.println(resp);
                     if (resp == null) {
                         return;
                     }
 
-                    sendToAllPlayers(resp);
+                    server.sendToTCP(connection.getID(), resp);
 
                     return;
                 }

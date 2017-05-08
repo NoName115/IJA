@@ -135,13 +135,46 @@ public class GameInstance {
     }
 
     public Network.GameMoveResponse undo() {
-        return undoBuffer.getMove();
+        Network.GameMoveResponse resp = undoBuffer.getMove();
+        if (resp == null) return null;
+
+        addCardsToPile(resp.to, resp.add);
+        removeCardsFromPile(resp.from, resp.add.length);
+
+        return resp;
     }
 
     public Network.HintResponse getHint() {
         Network.HintResponse resp = new Network.HintResponse();
         // TODO:
         return null;
+    }
+
+    public void removeCardsFromPile(int from, int numberOfCards) {
+        BasePile pile = getBasePileByIndex(from);
+        for (int i = 0; i < numberOfCards; i++) {
+            pile.popCard();
+        }
+    }
+
+    public void addCardsToPile(int to, String[] cards) {
+        BasePile pile = getBasePileByIndex(to);
+        for (int i = cards.length - 1; i >= 0; i--) {
+            pile.pushCard(new Card(cards[i]));
+        }
+    }
+
+
+    private BasePile getBasePileByIndex(int index) {
+        if (index == 0) {
+            return s();
+        } else if (index == 1) {
+            return w();
+        } else if (index > 1 && index < 6) {
+            return t(index - 2);
+        } else {
+            return f(index - 6);
+        }
     }
 
     public StockPile s() {

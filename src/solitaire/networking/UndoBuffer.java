@@ -1,6 +1,5 @@
 package solitaire.networking;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.LinkedList;
 
 public class UndoBuffer {
@@ -20,6 +19,11 @@ public class UndoBuffer {
     }
 
     public Network.GameMoveResponse getMove() {
-        return buffer.removeLast();
+        if (buffer.size() == 0) return null;
+        Network.GameMoveResponse resp = buffer.removeLast();
+        int t = resp.to;
+        resp.to = resp.from;
+        resp.from = t;
+        return resp;
     }
 }

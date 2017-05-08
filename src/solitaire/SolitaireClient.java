@@ -131,46 +131,15 @@ public class SolitaireClient implements IClientController {
         client.undo(gameIndex);
     }
 
-    private BasePile getBasePileByIndex(int gameIndex, int index) {
-        if (index == 0) {
-            return gi[gameIndex].s();
-        } else if (index == 1) {
-            return gi[gameIndex].w();
-        } else if (index > 1 && index < 6) {
-            return gi[gameIndex].t(index - 2);
-        } else {
-            return gi[gameIndex].f(index - 6);
-        }
-    }
-
-    private void removeCardsFromPile(BasePile pile, int numberOfCards) {
-        for (int i = 0; i < numberOfCards; i++) {
-            pile.popCard();
-        }
-    }
-
-    private void addCardsToPile(BasePile pile, String[] cards) {
-        for (int i = cards.length - 1; i >= 0; i--) {
-            pile.pushCard(new Card(cards[i]));
-        }
-    }
-
-    @Override
-    public void moveCard(int playground, int from, int to, int numberOfCards) {
-
-    }
-
     @Override
     public void addCards(int playground, int to, String[] cards) {
-        System.out.println("adding cards");
-        addCardsToPile(getBasePileByIndex(playground, to), cards);
+        gi[playground].addCardsToPile(to, cards);
         display.repaint();
     }
 
     @Override
     public void removeCards(int playground, int from, int numberOfCards) {
-        System.out.println("removing cards");
-        removeCardsFromPile(getBasePileByIndex(playground, from), numberOfCards);
+        gi[playground].removeCardsFromPile(from, numberOfCards);
         display.repaint();
     }
 

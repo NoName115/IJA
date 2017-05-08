@@ -2,15 +2,6 @@ package solitaire.networking;
 import solitaire.networking.Network.*;
 
 public interface IClientController {
-    /**
-     * Method which controlls moving solitaire.add between solitaire.piles
-     *
-     * @param playground number of playground
-     * @param from source pile index
-     * @param to destination pile index
-     * @param numberOfCards number of solitaire.add
-     */
-    void moveCard(int playground, int from, int to, int numberOfCards);
 
     void addCards(int playground, int to, String[] cards);
 

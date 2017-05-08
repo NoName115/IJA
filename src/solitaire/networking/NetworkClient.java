@@ -34,7 +34,6 @@ public class NetworkClient {
                 System.out.println("Message from server");
                 if (object instanceof RegisterGameResponse) {
                     RegisterGameResponse regResponse = (RegisterGameResponse)object;
-                    System.out.println("Connection ID is: " + regResponse.uuid);
 
                     //client.stop();
                     return;
@@ -42,6 +41,7 @@ public class NetworkClient {
 
                 if (object instanceof GameMoveResponse) {
                     GameMoveResponse resp = (GameMoveResponse) object;
+                    System.out.println(object);
                     controller.addCards(resp.playground, resp.to, resp.add);
                     controller.removeCards(resp.playground, resp.from, resp.add.length);
                 }
@@ -76,11 +76,6 @@ public class NetworkClient {
     public void registerGame() {
         RegisterGameRequest req = new RegisterGameRequest();
         client.sendTCP(req);
-    }
-
-    public void joinGame(String UUID) {
-        JoinGameRequest req = new JoinGameRequest();
-        req.uuid = UUID;
     }
 
     public void makeMove(int playground, int from, int to) {

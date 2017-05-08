@@ -85,6 +85,16 @@ public class Network {
         public String[] add;
         public int from;
         public int to;
+
+        @Override
+        public String toString() {
+            return "GameMoveResponse{" +
+                    "playground=" + playground +
+                    ", add=" + Arrays.toString(add) +
+                    ", from=" + from +
+                    ", to=" + to +
+                    '}';
+        }
     }
 
     /**
