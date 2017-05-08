@@ -86,4 +86,8 @@ public class SolitaireServer {
         }
         return false;
     }
+
+    public boolean isWon(int index) {
+        return gi[index].isWon();
+    }
 }

@@ -297,6 +297,16 @@ public class GameInstance {
         }
     }
 
+    public boolean isWon() {
+        for (TableauPile t : tableauPiles) {
+            if (t.size() != 13) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public StockPile s() {
         return stockPile;
     }

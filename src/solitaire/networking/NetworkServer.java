@@ -69,6 +69,13 @@ public class NetworkServer {
 
                     sendToAllPlayers(resp);
 
+                    if (sserver.isWon(resp.playground)) {
+                        HintResponse hr = new HintResponse();
+                        hr.hint = "You won";
+                        hr.index = resp.playground;
+                        server.sendToTCP(connection.getID(), hr);
+                    }
+
                     return;
                 }
 
