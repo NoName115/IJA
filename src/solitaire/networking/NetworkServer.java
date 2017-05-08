@@ -38,13 +38,19 @@ public class NetworkServer {
 
                 if (object instanceof RegisterGameRequest) {
 
+                    System.out.println("Reg");
                     RegisterGameRequest req = (RegisterGameRequest) object;
                     if (req.uuid == null && connection.uuid == null) {
                         connection.uuid = UUID.randomUUID().toString();
                         games.put(connection.uuid, new SolitaireServer(me, connection.uuid));
                     }
                     else if (req.uuid != null && connection.uuid == null) {
-                        connection.uuid = req.uuid;
+                        if (games.containsKey(req.uuid)) {
+                            connection.uuid = req.uuid;
+                        } else {
+                            connection.uuid = UUID.randomUUID().toString();
+                            games.put(connection.uuid, new SolitaireServer(me, connection.uuid));
+                        }
                     }
 
                     SolitaireServer game = games.get(connection.uuid);
@@ -54,6 +60,9 @@ public class NetworkServer {
                     if (game.getPlayerID() == -1) {
                         reg.uuid = connection.uuid;
                         game.setPlayerID(connection.getID());
+                        HintResponse resp = new HintResponse();
+                        resp.hint = connection.uuid;
+                        server.sendToTCP(connection.getID(), resp);
                     } else {
                         game.getSpectators().add(connection.getID());
                     }
