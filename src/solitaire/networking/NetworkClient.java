@@ -27,7 +27,8 @@ public class NetworkClient {
 
         client.addListener(new Listener() {
             public void connected (Connection connection) {
-                registerGame();
+                //registerGame();
+                registerGame(null);
             }
 
             public void received (Connection connection, Object object) {
@@ -85,8 +86,11 @@ public class NetworkClient {
     /**
      * Function to send register game request
      */
-    public void registerGame() {
+    public void registerGame(String UUID) {
         RegisterGameRequest req = new RegisterGameRequest();
+        if (UUID != null) {
+            req.uuid = UUID;
+        }
         client.sendTCP(req);
     }
 
