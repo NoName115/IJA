@@ -100,8 +100,10 @@ public class GameInstance {
             return null;
         }
 
-        resp.to = move.to;
-        resp.from = move.from;
+        if (resp.from == 0 && resp.to == 0) {
+            resp.to = move.to;
+            resp.from = move.from;
+        }
         resp.playground = move.playground;
 
         undoBuffer.addMove(resp);

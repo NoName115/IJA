@@ -33,6 +33,8 @@ public class PileMover {
             GameMoveResponse resp = new GameMoveResponse();
             resp.add = new String[1];
             resp.add[0] = card.toStringFace();
+            resp.from = 0;
+            resp.to = 1;
 
             return resp;
         }
