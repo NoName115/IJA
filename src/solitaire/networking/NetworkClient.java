@@ -27,8 +27,8 @@ public class NetworkClient {
 
         client.addListener(new Listener() {
             public void connected (Connection connection) {
-                //registerGame();
-                registerGame(null);
+                // registerGame();
+                // registerGame(null);
             }
 
             public void received (Connection connection, Object object) {

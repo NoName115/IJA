@@ -28,8 +28,13 @@ public class SolitaireClient implements IClientController {
             gi[i] = new GameInstance(false);
         }
 
-        display = new SolitaireDisplay(this);
         client = new NetworkClient(this);
+        display = new SolitaireDisplay(this);
+
+        System.out.println("Constructor end");
+        if (client == null) {
+            System.out.println("Client null");
+        }
     }
 
     // Klient - kreslenie
@@ -151,7 +156,12 @@ public class SolitaireClient implements IClientController {
 
     public void startGame(String gameID) {
 
-//        client.registerGame(gameID);
+        System.out.println(gameID);
+        if (client == null) {
+            System.out.println("null je to :O( ");
+            return;
+        }
+        client.registerGame(gameID);
     }
 
     @Override

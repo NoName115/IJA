@@ -1,6 +1,8 @@
 package solitaire;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
@@ -590,8 +592,12 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 	public void showHint(String hint)
 	{
 		JOptionPane.showMessageDialog(this.frame, hint);
+		StringSelection stringSelection = new StringSelection(hint);
+		Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clpbrd.setContents(stringSelection, null);
 	}
 
+	// 573f4cc2-7e8d-4f10-a7c7-b8ebe664e4f1
 	public void unselect(int gameIndex)
 	{
 		selectedRow[gameIndex] = -1;
