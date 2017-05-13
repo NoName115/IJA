@@ -192,5 +192,6 @@ public class SolitaireClient implements IClientController {
     @Override
     public void removeGame(int gameIndex) {
         display.setGameRunning(gameIndex, false);
+        display.repaint();
     }
 }

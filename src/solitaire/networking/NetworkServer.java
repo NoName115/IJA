@@ -169,7 +169,7 @@ public class NetworkServer {
 
                     ClosePlayground req = (ClosePlayground) object;
                     game.deactivate(req.index);
-                    sendToAllSpectators(req, game);
+                    sendToAllPlayers(req, game);
                 }
 
             }

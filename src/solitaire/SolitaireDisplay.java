@@ -597,7 +597,6 @@ public class SolitaireDisplay extends JComponent implements MouseListener, Actio
 		clpbrd.setContents(stringSelection, null);
 	}
 
-	// 573f4cc2-7e8d-4f10-a7c7-b8ebe664e4f1
 	public void unselect(int gameIndex)
 	{
 		selectedRow[gameIndex] = -1;
