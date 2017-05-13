@@ -44,7 +44,14 @@ public class SolitaireClient implements IClientController {
 
     // Klient - kreslenie
     public Card getWasteCard(int gameIndex) {
-        return gi[gameIndex].w().getCard();
+        Card card = gi[gameIndex].w().getCard();
+        if (card == null) {
+            System.out.println("Card is not null");
+        } else {
+            System.out.println("Card is " + card);
+        }
+
+        return card;
     }
 
     // Klient - kreslenie

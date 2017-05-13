@@ -2,6 +2,7 @@ package solitaire.piles;
 
 import solitaire.Card;
 import solitaire.networking.Network.*;
+
 import java.util.Stack;
 
 
@@ -41,8 +42,7 @@ public class PileMover {
     }
 
     public static GameMoveResponse wasteToFoundation(WastePile w, FoundationPile f) {
-        if (w.isEmpty())
-        {
+        if (w.isEmpty()) {
             return null;
         }
 
@@ -75,36 +75,32 @@ public class PileMover {
 
     public static GameMoveResponse foundationToFoundation(FoundationPile f1, FoundationPile f2) {
         int cardsToTake = f1.howManyCardsToTake(f2.getCard());
-        if (cardsToTake == 0)
-        {
+        if (cardsToTake == 0) {
             return null;
         }
-        else
-        {
-            GameMoveResponse resp = new GameMoveResponse();
-            resp.add = new String[cardsToTake];
 
-            Stack<Card> correctCardStack = new Stack<Card>();
-            int i = 0;
-            while (i < cardsToTake) {
-                Card card = f1.popCard();
-                correctCardStack.push(card);
-                resp.add[i] = card.toStringFace();
-                i++;
-            }
+        GameMoveResponse resp = new GameMoveResponse();
+        resp.add = new String[cardsToTake];
 
-            for (Card tempCard : correctCardStack)
-            {
-                f2.pushCard(tempCard);
-            }
-
-            return resp;
+        Stack<Card> correctCardStack = new Stack<>();
+        int i = 0;
+        while (i < cardsToTake) {
+            Card card = f1.popCard();
+            correctCardStack.push(card);
+            resp.add[i] = card.toStringFace();
+            i++;
         }
+
+        while (!correctCardStack.isEmpty()) {
+            f2.pushCard(correctCardStack.pop());
+        }
+
+        return resp;
+
     }
 
     public static GameMoveResponse foundationToTableau(FoundationPile f, TableauPile t) {
-        if (t.canAdd(f.getCard()))
-        {
+        if (t.canAdd(f.getCard())) {
             Card card = f.popCard();
             t.pushCard(card);
             GameMoveResponse resp = new GameMoveResponse();
@@ -118,8 +114,7 @@ public class PileMover {
     }
 
     public static GameMoveResponse tableauToFoundation(TableauPile t, FoundationPile f) {
-        if (f.canAdd(t.getCard()))
-        {
+        if (f.canAdd(t.getCard())) {
             Card card = t.popCard();
             f.pushCard(card);
             GameMoveResponse resp = new GameMoveResponse();

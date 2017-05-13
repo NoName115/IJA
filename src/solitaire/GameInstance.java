@@ -29,7 +29,7 @@ public class GameInstance {
 
     public void deserialize(Network.UpdatePlayground up) {
         this.stockPile = new StockPile(up.stock);
-        this.wastePile = new WastePile(up.stock);
+        this.wastePile = new WastePile(up.waste);
         this.foundationPiles[0] = new FoundationPile(up.foundation0);
         this.foundationPiles[1] = new FoundationPile(up.foundation1);
         this.foundationPiles[2] = new FoundationPile(up.foundation2);
