@@ -2,6 +2,8 @@ package solitaire.piles;
 
 import solitaire.Card;
 import solitaire.networking.Network.*;
+import java.util.Stack;
+
 
 public class PileMover {
     public static GameMoveResponse stockToWaste(StockPile s, WastePile w) {
@@ -80,12 +82,18 @@ public class PileMover {
             GameMoveResponse resp = new GameMoveResponse();
             resp.add = new String[cardsToTake];
 
+            Stack<Card> correctCardStack = new Stack<Card>();
             int i = 0;
             while (i < cardsToTake) {
                 Card card = f1.popCard();
-                f2.pushCard(card);
+                correctCardStack.push(card);
                 resp.add[i] = card.toStringFace();
                 i++;
+            }
+
+            for (Card tempCard : correctCardStack)
+            {
+                f2.pushCard(tempCard);
             }
 
             return resp;
