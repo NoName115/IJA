@@ -93,7 +93,7 @@ public class SolitaireServer {
     }
 
     public boolean load(int index) {
-        File f = new File("save" + UUID + index + ".json");
+        File f = new File("save-" + UUID + "-" + index + ".json");
         if (f.exists() && !f.isDirectory()) {
             Json json = new Json();
             UpdatePlayground pg = json.fromJson(UpdatePlayground.class, f);
