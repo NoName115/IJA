@@ -76,7 +76,7 @@
 
   <target name="doc" description="generate documentation">
     <mkdir dir="doc"/>
-    <javadoc sourcepath="src" destdir="doc"/>
+    <javadoc sourcepath="src" docencoding="utf-8" destdir="doc"/>
   </target>
 
   <target name="compile" depends="libs.download,doc" description="Compile module Java_School">
@@ -93,14 +93,15 @@
 
     <jar destfile="${java_school.jar.client}/ija-client.jar" basedir="${java_school.output.dir}">
       <manifest>
-        <attribute name="Main-Class" value="solitaire.Solitaire"/>
+        <attribute name="Main-Class" value="solitaire.SolitaireClient"/>
       </manifest>
       <zipgroupfileset dir="lib" includes="**/*.jar"/>
+      <fileset dir="src/cards"/>
     </jar>
 
     <jar destfile="${java_school.jar.server}/ija-server.jar" basedir="${java_school.output.dir}">
       <manifest>
-        <attribute name="Main-Class" value="solitaire.networking.SolitaireServer"/>
+        <attribute name="Main-Class" value="solitaire.networking.NetworkServer"/>
       </manifest>
       <zipgroupfileset dir="lib" includes="**/*.jar"/>
     </jar>

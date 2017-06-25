@@ -1,41 +1,29 @@
 package solitaire.networking;
+import solitaire.networking.Network.*;
 
 public interface IClientController {
-    /**
-     * Method which controlls moving cards between piles
-     *
-     * @param playground number of playground
-     * @param from source pile index
-     * @param to destination pile index
-     * @param numberOfCards number of cards
-     */
-    void moveCard(int playground, int from, int to, int numberOfCards);
 
-    /**
-     * Status of last created operation
-     *
-     * @param valid true if valid
-     */
-    void lastOperationStatus(boolean valid);
+    void addCards(int playground, int to, String[] cards);
 
+    void removeCards(int playground, int from, int numberOfCards);
     /**
      * Method updates whole playground
      *
      * @param index index of playground
      */
-    void playgroundUpdate(int index);
-
-    /**
-     * Method to close playground
-     *
-     * @param index index of playground
-     */
-    void closePlayground(int index);
+    void playgroundUpdate(int index, UpdatePlayground up);
 
     /**
      * Method to show hint
      *
      * @param hint Hint
      */
-    void showHint(String hint);
+    void showHint(String hint, int gameIndex);
+
+    /**
+     * Hide game to specatators
+     *
+     * @param gameIndex index of game
+     */ 
+    void removeGame(int gameIndex);
 }
